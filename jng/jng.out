@@ -1,0 +1,53 @@
+The settings for this search are:
+
+Min Period: 5.000000 s, Max Period: 10.000000 s
+Period Interval: 1.000000 s
+Min Phase: 0.000000 rad, Max Phase: 5.235988 rad
+Phase Interval: 1.047198 rad
+Max number of bins: 50
+
+*******************************
+Starting search!
+*******************************
+
+Receiving Search, Period: 5.000000, Phase: 0.000000, Odds: 2443521863861131018240.000000
+Receiving Search, Period: 5.000000, Phase: 1.047198, Odds: inf
+Receiving Search, Period: 5.000000, Phase: 2.094395, Odds: inf
+Receiving Search, Period: 5.000000, Phase: 3.141593, Odds: inf
+Receiving Search, Period: 5.000000, Phase: 4.188790, Odds: inf
+Receiving Search, Period: 5.000000, Phase: 5.235988, Odds: inf
+Receiving Search, Period: 6.000000, Phase: 0.000000, Odds: 0.000000
+Receiving Search, Period: 6.000000, Phase: 1.047198, Odds: 0.000778
+Receiving Search, Period: 6.000000, Phase: 2.094395, Odds: 0.000000
+Receiving Search, Period: 6.000000, Phase: 3.141593, Odds: 0.000778
+Receiving Search, Period: 6.000000, Phase: 4.188790, Odds: 0.000000
+Receiving Search, Period: 6.000000, Phase: 5.235988, Odds: 0.000778
+Receiving Search, Period: 7.000000, Phase: 0.000000, Odds: 0.000000
+Receiving Search, Period: 7.000000, Phase: 1.047198, Odds: 0.000000
+Receiving Search, Period: 7.000000, Phase: 2.094395, Odds: 0.000000
+Receiving Search, Period: 7.000000, Phase: 3.141593, Odds: 0.000000
+Receiving Search, Period: 7.000000, Phase: 4.188790, Odds: 0.000000
+Receiving Search, Period: 7.000000, Phase: 5.235988, Odds: 0.000000
+Receiving Search, Period: 8.000000, Phase: 0.000000, Odds: 0.000000
+Receiving Search, Period: 8.000000, Phase: 1.047198, Odds: 0.095985
+Receiving Search, Period: 8.000000, Phase: 2.094395, Odds: inf
+Receiving Search, Period: 8.000000, Phase: 3.141593, Odds: 0.000000
+Receiving Search, Period: 8.000000, Phase: 4.188790, Odds: 0.095985
+Receiving Search, Period: 8.000000, Phase: 5.235988, Odds: inf
+Receiving Search, Period: 9.000000, Phase: 0.000000, Odds: 0.000000
+Receiving Search, Period: 9.000000, Phase: 1.047198, Odds: 0.000000
+Receiving Search, Period: 9.000000, Phase: 2.094395, Odds: 0.000000
+Receiving Search, Period: 9.000000, Phase: 3.141593, Odds: 0.000000
+Receiving Search, Period: 9.000000, Phase: 4.188790, Odds: 0.000000
+Receiving Search, Period: 9.000000, Phase: 5.235988, Odds: 0.000000
+Receiving Search, Period: 10.000000, Phase: 0.000000, Odds: inf
+Receiving Search, Period: 10.000000, Phase: 1.047198, Odds: inf
+Receiving Search, Period: 10.000000, Phase: 2.094395, Odds: inf
+Receiving Search, Period: 10.000000, Phase: 3.141593, Odds: inf
+Receiving Search, Period: 10.000000, Phase: 4.188790, Odds: inf
+proc 1 terminating
+Receiving Search, Period: 10.000000, Phase: 5.235988, Odds: inf
+
+The best odds are: inf, which occur for a period of 5.000000 and phase of 1.047198
+
+proc 0 terminating
