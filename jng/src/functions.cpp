@@ -1,4 +1,5 @@
 #include <math.h> //for math
+//#include <gmpxx.h> //for precision calculation
 #include <vector> //to hold search results
 #include <algorithm> //compute max of vector
 #include <numeric> //compute sum of vector (accumulate) 
@@ -16,7 +17,7 @@ using namespace std;
 
 //Forward declaration for use in class
 double log_odds_ratio(double *counts, int length, int m_max, 
-					  double period, double phase, double nu, bool verbose);
+					  double nu, double nudot, bool verbose);
 
 //Holds the result of searches, and the displaying functions
 //faster to have vectors of the variables within, 
@@ -24,7 +25,7 @@ double log_odds_ratio(double *counts, int length, int m_max,
 struct SearchResults
 {
 	//the settings of the search
-	vector<double> period, phase;
+	vector<double> nu, nudot;
 	//The odds that this model fits
 	vector<double> odds;
 	//Get average and maximum odds
@@ -36,7 +37,7 @@ struct SearchResults
 	int max_odds_i()
 	{return max_element(odds.begin(), odds.end()) - odds.begin();};
 	//print settings for a specific search
-	void print_settings(int i){printf("%lf\n",period[i]);};
+	void print_settings(int i){printf("%lf\n",nu[i]);};
 	//print all settings
 	void print_stats();
 };
@@ -44,20 +45,17 @@ struct SearchResults
 //This object organizes the entire search
 struct PeakSearch
 {
-	//the bounds on the period search
-	double period_min,period_max; 
-	//interval between searches w.r.t period
-	double d_period; 
+	//the bounds on the nu search
+	double nu_min,nu_max; 
+	//interval between searches w.r.t nu
+	double d_nu; 
 	//the max number of bins
 	int m_max; 
-	//the bounds on the phase search
+	//the bounds on the nudot search
 	//**In terms of radians
-	double phase_min, phase_max;
-	//interval between searches w.r.t phase
-	double d_phase; 
-	//holds the value of nu, which I still don't 
-	//really understand (hence I set to 1)
-	double nu;
+	double nudot_min, nudot_max;
+	//interval between searches w.r.t nudot
+	double d_nudot; 
 	//set default parameters
 	void default_params();
 	//Print all of the above parameters
@@ -83,47 +81,45 @@ void SearchResults::print_stats()
 	//Get position of max
 	int max_i = max_odds_i();
 	printf("The best odds occur for ");
-	printf("a period of %lf seconds ",period[max_i]);
-	printf("and a phase of %lf radians, which ",phase[max_i]);
+	printf("a nu of %lf seconds ",nu[max_i]);
+	printf("and a nudot of %lf radians, which ",nudot[max_i]);
 	printf("give odds of %lf\n",odds[max_i]);
 }
 
 //set defaults
 void PeakSearch::default_params()
 {
-	//the bounds on the period search
-	period_min = 5;
-	period_max = 10;
-	//interval between searches w.r.t period
-	d_period = (period_max-period_min)/30;
+	//the bounds on the nu search
+	//in terms of Hz
+	nu_min = 5;
+	nu_max = 10;
+	//interval between searches w.r.t nu
+	d_nu = (nu_max-nu_min)/30;
 	//the max number of bins
-	m_max = 50;
-	//the bounds on the phase search
-	//**In terms of radians, hence
-	//0->2 pi is a full search
-	phase_min = 0;
-	//interval between searches w.r.t phase
-	d_phase = PI/3;
-	//don't repeat first phase
-	phase_max = 2*PI-d_phase;
-	//set to value that won't effect outcome
-	nu = 1;
+	m_max = 30;
+	//the bounds on the nudot search
+	//In terms of Hz/s
+	nudot_min = 1e-100;
+	//don't repeat first nudot
+	nudot_max = 2e-100;
+	//interval between searches w.r.t nudot
+	d_nudot = 1e-100;
 }
 
 //Print out all settings
 void PeakSearch::print_params()
 {
-	printf("The period is tested from %lf to %lf seconds\n",
-		   period_min,period_max);
-	printf("The interval of this search is %lf seconds\n",d_period);
-	printf("The phase is tested from %lf to %lf radians\n",
-		   phase_min,phase_max);
-	printf("The interval of this search is %lf radians\n",d_phase);
+	printf("The nu is tested from %lf to %lf seconds\n",
+		   nu_min,nu_max);
+	printf("The interval of this search is %lf seconds\n",d_nu);
+	printf("The nudot is tested from %lf to %lf radians\n",
+		   nudot_min,nudot_max);
+	printf("The interval of this search is %lf radians\n",d_nudot);
 	printf("The maximum number of bins in the stepwise model is %d\n"
 		,m_max);
 }
 //double log_odds_ratio(double *counts, int length, int m_max, 
-//					  double period, double phase, double nu)
+//					  double nu, double nudot, double nu)
 //searches through all settings
 //length is the number of counts, and verbose
 //tells the program how much it should talk
@@ -135,24 +131,28 @@ SearchResults PeakSearch::search(double *counts, int length,
 	SearchResults searches;
 	if(verbose)
 		printf("Starting searches\n");
-	//iterate through possible periods and phases
-	for (double period = period_min; period <= period_max; 
-		 period += d_period)
+	//iterate through possible nus and nudots
+	for (double nu = nu_min; nu <= nu_max; 
+		 nu += d_nu)
 	{
-		for (double phase = phase_min; phase <= phase_max;
-			 phase += d_phase)
+		for (double nudot = nudot_min; nudot <= nudot_max;
+			 nudot += d_nudot)
 		{
 			//each setting will be in the same index,
 			//so can be accessed later
-			searches.period.push_back(period);
-			searches.phase.push_back(phase);
-			double odds = log_odds_ratio(counts, length, m_max, 
-										 period, phase, nu, verbose);
+			searches.nu.push_back(nu);
+			searches.nudot.push_back(nudot);
+			//finalodds = 1./nmvals/ log(nu_max/nu_min)/log(nudot_max/nudot_min) * dnu/nu * nudotfrac * moddsratio; 
+			double odds = 1;
+			odds *= 1/m_max/log(nu_max/nu_min)/log(nudot_max/nudot_min)*d_nu/nu*fabs(d_nudot/nudot);
+			odds *= log_odds_ratio(counts, length, m_max, 
+								   nu, nudot, verbose);
+			printf("Odds: %f\n", odds);
 			searches.odds.push_back(odds);
 			if(verbose)
 			{	
-				printf("period=%lf,phase=%lf,odds=%lf\n",
-						period,phase,odds);
+				printf("nu=%lf,nudot=%lf,odds=%lf\n",
+						nu,nudot,odds);
 			}
 		}
 	}
@@ -211,46 +211,100 @@ int num_events(double *counts, int length, double start, double end)
 //Equation from gregory and loredo paper to calcluate odds ratio
 //of m-binned stepwise model w.r.t. constant model
 double log_m_odds_ratio(double *counts, int length, int m, 
-					  double period, double phase_eff, double nu,
+					  double nu, double nudot,
 					  double t_max)
 {
-	//They will be used to normalize all the count times
-	double binWidth = period/((double)m);
-	//All of the nj log factorials together
-	double allnj = 0;
-	//the final log ratio
-	double om1 = 0;
+	//odds to return
+	double om1 = 0.0;
+	//create all the bins, init to zero counts
+	int n[m];
+
+	//declare variables (use of which is declared later on)
+	mpf_t  mpg_time, mpg_phi, mpg_nu, mpg_nudot, mpg_trunc_phi, mpg_d_phi; 
+	//initialize them!
+	mpf_init(mpg_time); 
+	mpf_init(mpg_phi); 
+	mpf_init(mpg_nu); 
+	mpf_init(mpg_nudot); 
+	mpf_init(mpg_trunc_phi); 
+	mpf_init(mpg_d_phi); 
+
+	//set search values
+	mpf_set_d(mpg_nu, nu);
+	mpf_set_d(mpg_nudot, nudot);
+
+	//init to zero
+	for (int j = 0; j < m; j++)
+	{
+		n[j] = 0;
+	}
+
+	//variables used in binnings
+	//gets position in nu
+	long double phi, d_phi;
+	//double phi;
+	//gets bin
+	int k;
+	//bin the photons
+	for (int i = 0; i < length; i++)
+	{
+		
+		/*//set current time
+		mpf_set_d(mpg_time, counts[i]);
+		//calculate changing of bin (dphi = 0.5*t^2*nudot)
+		mpf_mul(mpg_d_phi, mpg_time, mpg_time);
+		mpf_mul(mpg_d_phi, mpg_d_phi, mpg_nudot);
+		mpf_div_2exp(mpg_d_phi, mpg_d_phi, 1);
+		//calculate phase of bin, using changing of bin
+		//(phi = (t*nudot+dphi)mod1)
+		mpf_mul(mpg_phi, mpg_time, mpg_nu);
+		mpf_add(mpg_phi, mpg_phi, mpg_d_phi);
+		//do the mod1 part
+		mpf_trunc(mpg_trunc_phi, mpg_phi);
+		mpf_sub(mpg_phi, mpg_phi, mpg_trunc_phi);
+		phi = mpf_get_d(mpg_phi);
+		//get the corresponding bin
+		k = (int)(phi*m);
+		//one more count to the bin!
+		n[k]++;*/
+		
+		//old normal precision calculation
+		//in period
+		d_phi = 0.5*counts[i]*nudot*counts[i];
+		//get position in nu of photon
+		phi = fmod(counts[i]*nu+d_phi,1);
+		//get corresponding bin	
+		k = (int)(phi*m);
+		//one more count
+		n[k]++;
+		
+		
+		
+	}
+
+	//clean up everything
+	mpf_clear(mpg_time); 
+	mpf_clear(mpg_phi); 
+	mpf_clear(mpg_nu); 
+	mpf_clear(mpg_nudot); 
+	mpf_clear(mpg_trunc_phi); 
+	mpf_clear(mpg_d_phi); 
 
 	//go through all bins
 	for (int j = 0; j < m; j++)
 	{
-		//number of counts in this bin
-		int nj = 0;
-		//start of the first portion of this bin
-		double start = binWidth*((double)j)-period+phase_eff;
-		//Go through all portions of this bin (folded period)
-		for (double t_curr = start; t_curr <= t_max+period+phase_eff; 
-			t_curr += period)
-		{
-			//get the number of events within this portion
-			nj += num_events(counts, length, t_curr, 
-							 t_curr + binWidth);
-		}
-		allnj += logFacts[nj];
-
+		//part of odds equation
+		om1 += logFacts[n[j]];
 	}
-	//calculate the final log ratio
-	om1 += allnj;
-	om1 += ((double)length)*log(m);
-	om1 -= log_choose(length+m-1,length);
-	om1 -= logFacts[length] + log(nu);
+	//final parts of odds equation
+	om1 += logFacts[m-1]-logFacts[length+m-1]+((double)length)*log(m);
 	return om1;
 }
 
 //Equation from gregory and loredo paper to calcluate total odds
 //ratio
 double log_odds_ratio(double *counts, int length, int m_max, 
-					  double period, double phase, double nu, bool verbose)
+					  double nu, double nudot, bool verbose)
 {
 	//normalize the counts with item 0 at t=0.0s
 	normalize_counts(counts, length);
@@ -258,8 +312,6 @@ double log_odds_ratio(double *counts, int length, int m_max,
 	double t_max = counts[length-1];
 	//The total odds ratio
 	double odds = 0;
-	//the actual phase in seconds
-	double phase_eff = phase/2/PI*period;
 	//go through all possible m values
 	for (int m = 2; m <= m_max; m++)
 	{
@@ -267,8 +319,9 @@ double log_odds_ratio(double *counts, int length, int m_max,
 			printf("Testing %d-binned model\n",m);
 		//Add the next om1 value to the total odds ratio.
 		//We also have to remove the log
-		odds += exp(log_m_odds_ratio(counts,length,m,period,
-									 phase_eff,nu,t_max));
+
+		odds += exp(log_m_odds_ratio(counts,length,m,nu,
+									 nudot,t_max));
 	}
 	return odds;
 }

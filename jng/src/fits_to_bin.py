@@ -22,7 +22,7 @@ for x in hdulist[1].data:
 	bin_file.write(bin)
 	i+=1
 	#set limit
-	if i == 10000:
+	if i == 200000:
 		break
 
 #close files

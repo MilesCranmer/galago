@@ -5,8 +5,8 @@ CC = mpic++
 #flags for compiler - try to optimize
 CFLAGS = -c -Wall -g -O 
 
-#Linker settings
-LDFLAGS = 
+#Linker settings (need -lgmpxx -lgmp for gmp)
+LDFLAGS = -lgmpxx -lgmp
 
 #where sources and objects are
 SOURCES = src/main.cpp
