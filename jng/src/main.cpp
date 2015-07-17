@@ -64,8 +64,13 @@ int main(int argc, char * argv[])
 		//load in values from data
 		logFacts = bin_read((char*)"data/log_facs_2.bin");
 		maxFact = bin_size((char*)"data/log_facs_2.bin");
-		counts = bin_read((char*)"data/M28_counts.bin");
-		length = bin_size((char*)"data/M28_counts.bin");
+		counts = bin_read((char*)"data/B1821_counts.bin");
+		length = bin_size((char*)"data/B1821_counts.bin");
+		//normalize the counts
+		normalize_counts(counts, length);
+		printf("Total of %d counts\n", length);
+		//print last count
+		printf("After normalization, the last count is at %lf seconds\n\n", counts[length-1]);
 	}
 
 	//share sizing details - all of the following 
@@ -88,7 +93,7 @@ int main(int argc, char * argv[])
 	MPI_Bcast(&logFacts[0], maxFact, MPI_DOUBLE, 0, comm);
 	MPI_Bcast(&counts[0], length, MPI_DOUBLE, 0, comm);
 	//make sure all processes have the correct data
-	//printf("Proc %d: Log(50!) = %f, num of facts = %d, count 100 = %f\n", 
+	//printf("Proc %d: Log(50!) = %e, num of facts = %d, count 100 = %e\n", 
 	//		rank, logFacts[50], maxFact, counts[99]);
 
 
@@ -98,23 +103,23 @@ int main(int argc, char * argv[])
 		PeakSearch settings;
 		//call default parameters
 		settings.default_params();
-		settings.nu_min = 300;
-		settings.nu_max = 350;
-		settings.d_nu = 0.1;
-		settings.nudot_min = 4e-100;
-		settings.nudot_max = 4e-100;
-		settings.d_nudot = 1;
-		settings.m_max = 100;
+		settings.nu_min = 320.5;
+		settings.nu_max = 331.5;
+		settings.d_nu = 0.0001;
+		settings.nudot_min = 1736.5e-18;
+		settings.nudot_max = 1736.5e-18;
+		settings.d_nudot = 1e-18;
+		settings.m_max = 200;
 
 		//display some initial stats
 		printf("The settings for this search are:\n\n");
-		printf("Min nu: %f Hz, Max nu: %f Hz\n",
+		printf("Min nu: %e Hz, Max nu: %e Hz\n",
 			   settings.nu_min, settings.nu_max);
-		printf("nu Interval: %f Hz\n",
+		printf("nu Interval: %e Hz\n",
 			   settings.d_nu);
-		printf("Min nudot: %f Hz/s, Max nudot: %f Hz/s\n",
+		printf("Min nudot: %e Hz/s, Max nudot: %e Hz/s\n",
 			   settings.nudot_min, settings.nudot_max);
-		printf("nudot Interval: %f Hz/s\n", 
+		printf("nudot Interval: %e Hz/s\n", 
 			   settings.d_nudot);
 		printf("Max number of bins: %d\n", 
 			   settings.m_max);
@@ -171,20 +176,22 @@ int main(int argc, char * argv[])
 					//one more search received
 					recv ++;
 					//some last modifications to the odds
+					//finalodds = 1./nmvals/ log(nu_max/nu_min)/log(nudot_max/nudot_min) * dnu/nu * nudotfrac * moddsratio; 
 					curr_results[2] /= (settings.m_max - 1);
-					//printf("Curr %f\n", curr_results[2]);
+					curr_results[2] *= settings.d_nu/nu;
+					//printf("Curr %e\n", curr_results[2]);
 					//curr_results[2] /= log(settings.nu_max/settings.nu_min);
-					//printf("Curr %f\n", curr_results[2]);
+					//printf("Curr %e\n", curr_results[2]);
 					//curr_results[2] *= settings.d_nu/nu;
-					//printf("Curr %f\n", curr_results[2]);
+					//printf("Curr %e\n", curr_results[2]);
 					//curr_results[2] *= fabs(settings.d_nudot/nudot);
-					//printf("Receiving Search, nu: %f, nudot: -%f, Odds: %f\n", 
-					//		curr_results[0], curr_results[1], curr_results[2]);
+					printf("Receiving Search, nu: %e, nudot: -%e, Odds: %e\n", 
+							curr_results[0], curr_results[1], curr_results[2]);
 					results.nu.push_back(curr_results[0]);
 					results.nudot.push_back(curr_results[1]);
 					results.odds.push_back(curr_results[2]);
 				}
-				//printf("Sending Search to proc %d, nu: %f, nudot: %f\n", 
+				//printf("Sending Search to proc %d, nu: %e, nudot: %e\n", 
 				//	   i, curr_settings[0], curr_settings[1]);
 				//send next settings (non-blocking so can keep working)
 				MPI_Isend(curr_settings, 2, MPI_DOUBLE, i, 
@@ -228,7 +235,7 @@ int main(int argc, char * argv[])
 			MPI_Recv(curr_results, 3, MPI_DOUBLE, i, chan_results, comm, 
 					 &rstatus);
 			//print results
-			printf("Receiving Search, nu: %f, nudot: %f, Odds: %f\n", 
+			printf("Receiving Search, nu: %e, nudot: -%e, Odds: %e\n", 
 					curr_results[0], curr_results[1], curr_results[2]);
 			results.nu.push_back(curr_results[0]);
 			results.nudot.push_back(curr_results[1]);
@@ -292,8 +299,8 @@ int main(int argc, char * argv[])
 	if (rank == 0)
 	{
 		int i = results.max_odds_i();
-		printf("\nThe best odds are: %f, which occur for nu of %f Hz and"
-			   " nudot of -%f Hz/s\n\n",
+		printf("\nThe best odds are: %e, which occur for nu of %e Hz and"
+			   " nudot of -%e Hz/s\n\n",
 				results.odds[i], results.nu[i], results.nudot[i]);
 	}
 	//end MPI

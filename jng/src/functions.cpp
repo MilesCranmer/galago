@@ -248,8 +248,8 @@ double log_m_odds_ratio(double *counts, int length, int m,
 	//bin the photons
 	for (int i = 0; i < length; i++)
 	{
-		
-		/*//set current time
+		/*
+		//set current time
 		mpf_set_d(mpg_time, counts[i]);
 		//calculate changing of bin (dphi = 0.5*t^2*nudot)
 		mpf_mul(mpg_d_phi, mpg_time, mpg_time);
@@ -268,8 +268,10 @@ double log_m_odds_ratio(double *counts, int length, int m,
 		//one more count to the bin!
 		n[k]++;*/
 		
+		
 		//old normal precision calculation
 		//in period
+		
 		d_phi = 0.5*counts[i]*nudot*counts[i];
 		//get position in nu of photon
 		phi = fmod(counts[i]*nu+d_phi,1);

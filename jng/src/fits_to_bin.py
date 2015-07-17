@@ -1,8 +1,8 @@
 import astropy.io.fits as fits #fits input
 import struct #converting to writable binary format
 
-fits_filename = "../../../Downloads/2797/primary/hrcf02797N004_evt2.fits"
-bin_filename = "../data/M28_counts_less.bin"
+fits_filename = "../data/B1821.fits"
+bin_filename = "../data/B1821_counts.bin"
 
 #write to file as binary
 bin_file = open(bin_filename, "wb")
