@@ -103,9 +103,9 @@ int main(int argc, char * argv[])
 		PeakSearch settings;
 		//call default parameters
 		settings.default_params();
-		settings.nu_min = 320.5;
-		settings.nu_max = 331.5;
-		settings.d_nu = 0.0001;
+		settings.nu_min = 200;
+		settings.nu_max = 400;
+		settings.d_nu = 0.00001;
 		settings.nudot_min = 1736.5e-18;
 		settings.nudot_max = 1736.5e-18;
 		settings.d_nudot = 1e-18;
@@ -185,8 +185,8 @@ int main(int argc, char * argv[])
 					//curr_results[2] *= settings.d_nu/nu;
 					//printf("Curr %e\n", curr_results[2]);
 					//curr_results[2] *= fabs(settings.d_nudot/nudot);
-					printf("Receiving Search, nu: %e, nudot: -%e, Odds: %e\n", 
-							curr_results[0], curr_results[1], curr_results[2]);
+					//printf("Receiving Search, nu: %e, nudot: -%e, Odds: %e\n", 
+					//		curr_results[0], curr_results[1], curr_results[2]);
 					results.nu.push_back(curr_results[0]);
 					results.nudot.push_back(curr_results[1]);
 					results.odds.push_back(curr_results[2]);
@@ -235,8 +235,8 @@ int main(int argc, char * argv[])
 			MPI_Recv(curr_results, 3, MPI_DOUBLE, i, chan_results, comm, 
 					 &rstatus);
 			//print results
-			printf("Receiving Search, nu: %e, nudot: -%e, Odds: %e\n", 
-					curr_results[0], curr_results[1], curr_results[2]);
+			//printf("Receiving Search, nu: %e, nudot: -%e, Odds: %e\n", 
+					//curr_results[0], curr_results[1], curr_results[2]);
 			results.nu.push_back(curr_results[0]);
 			results.nudot.push_back(curr_results[1]);
 			results.odds.push_back(curr_results[2]);
