@@ -1,0 +1,65 @@
+Total of 400 counts
+After normalization, the last count is at 49053.402025 seconds
+
+The settings for this search are:
+
+Min nu: 2.000000e+02 Hz, Max nu: 4.000000e+02 Hz
+nu Interval: 1.000000e-05 Hz
+Min nudot: 1.736500e-15 Hz/s, Max nudot: 1.736500e-15 Hz/s
+nudot Interval: 1.000000e-18 Hz/s
+Max number of bins: 200
+
+*******************************
+Starting search!
+*******************************
+
+proc 7 terminating
+proc 8 terminating
+proc 9 terminating
+proc 10 terminating
+proc 11 terminating
+proc 1 terminating
+proc 2 terminating
+proc 3 terminating
+proc 4 terminating
+proc 5 terminating
+proc 6 terminating
+proc 31 terminating
+proc 12 terminating
+proc 32 terminating
+proc 33 terminating
+proc 13 terminating
+proc 14 terminating
+proc 34 terminating
+proc 35 terminating
+proc 36 terminating
+proc 15 terminating
+proc 24 terminating
+proc 37 terminating
+proc 16 terminating
+proc 17 terminating
+proc 25 terminating
+proc 38 terminating
+proc 18 terminating
+proc 26 terminating
+proc 39 terminating
+proc 19 terminating
+proc 27 terminating
+proc 40 terminating
+proc 20 terminating
+proc 28 terminating
+proc 41 terminating
+proc 21 terminating
+proc 29 terminating
+proc 42 terminating
+proc 43 terminating
+proc 30 terminating
+proc 44 terminating
+proc 22 terminating
+proc 45 terminating
+proc 23 terminating
+proc 46 terminating
+proc 47 terminating
+
+The best odds are: 6.323776e+18, which occur for nu of 3.273822e+02 Hz and nudot of -1.736500e-15 Hz/s
+
