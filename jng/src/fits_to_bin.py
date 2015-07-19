@@ -1,8 +1,8 @@
 import astropy.io.fits as fits #fits input
 import struct #converting to writable binary format
 
-fits_filename = "../data/B1821.fits"
-bin_filename = "../data/B1821_counts.bin"
+fits_filename = "../data/47tuc_1_of_15.fits"
+bin_filename = "../data/47tuc_1_of_15.bin"
 
 #write to file as binary
 bin_file = open(bin_filename, "wb")
@@ -11,7 +11,7 @@ bin_file = open(bin_filename, "wb")
 hdulist = fits.open(fits_filename)
 #print some info about the fits to the terminal
 print hdulist.info()
-i = 0
+#i = 0
 #iterate through the data
 for x in hdulist[1].data:
 	#load time of arrival
@@ -20,10 +20,10 @@ for x in hdulist[1].data:
 	bin = struct.pack('d',curr)
 	#write this float to the file
 	bin_file.write(bin)
-	i+=1
+	#i+=1
 	#set limit
-	if i == 200000:
-		break
+	#if i == 200000:
+	#	break
 
 #close files
 hdulist.close()

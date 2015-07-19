@@ -17,7 +17,7 @@ bin_file.write(bin)
 bin_file.write(bin)
 
 #now go up to a max iterator(around desired number of photons)
-for x in range(2, 1000000):
+for x in range(2, 10000000):
 	#next log fact
 	curr += log(float(x))
 	#convert to writable binary

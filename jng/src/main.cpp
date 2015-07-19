@@ -64,8 +64,8 @@ int main(int argc, char * argv[])
 		//load in values from data
 		logFacts = bin_read((char*)"data/log_facs_2.bin");
 		maxFact = bin_size((char*)"data/log_facs_2.bin");
-		counts = bin_read((char*)"data/B1821_counts.bin");
-		length = bin_size((char*)"data/B1821_counts.bin");
+		counts = bin_read((char*)"data/47tuc_1_of_15.bin");
+		length = bin_size((char*)"data/47tuc_1_of_15.bin");
 		//normalize the counts
 		normalize_counts(counts, length);
 		printf("Total of %d counts\n", length);
@@ -105,7 +105,7 @@ int main(int argc, char * argv[])
 		settings.default_params();
 		settings.nu_min = 320.5;
 		settings.nu_max = 331.5;
-		settings.d_nu = 0.0001;
+		settings.d_nu = 0.01;
 		settings.nudot_min = 1736.5e-18;
 		settings.nudot_max = 1736.5e-18;
 		settings.d_nudot = 1e-18;
