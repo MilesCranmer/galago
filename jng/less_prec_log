@@ -1,0 +1,116 @@
+Total of 2539588 counts
+After normalization, the last count is at 50162.666790 seconds
+
+The settings for this search are:
+
+Min nu: 1.000000e+02 Hz, Max nu: 2.000000e+02 Hz
+nu Interval: 2.000000e+00 Hz
+Min nudot: 1.000000e-16 Hz/s, Max nudot: 1.000000e-16 Hz/s
+nudot Interval: 1.000000e-16 Hz/s
+Max number of bins: 200
+
+*******************************
+Starting search!
+*******************************
+
+Receiving Search, nu: 1.840000e+02, nudot: -1.000000e-16, Odds: 1.064358e-07
+Receiving Search, nu: 1.000000e+02, nudot: -1.000000e-16, Odds: 6.760023e-08
+Receiving Search, nu: 1.080000e+02, nudot: -1.000000e-16, Odds: 1.607475e-07
+Receiving Search, nu: 1.460000e+02, nudot: -1.000000e-16, Odds: 3.985706e-08
+Receiving Search, nu: 1.700000e+02, nudot: -1.000000e-16, Odds: 9.356902e-04
+Receiving Search, nu: 1.560000e+02, nudot: -1.000000e-16, Odds: 2.518762e-03
+Receiving Search, nu: 1.220000e+02, nudot: -1.000000e-16, Odds: 9.095274e-04
+Receiving Search, nu: 1.680000e+02, nudot: -1.000000e-16, Odds: 1.608883e-03
+Receiving Search, nu: 1.920000e+02, nudot: -1.000000e-16, Odds: 8.692773e-04
+Receiving Search, nu: 1.600000e+02, nudot: -1.000000e-16, Odds: 8.337186e-04
+Receiving Search, nu: 1.640000e+02, nudot: -1.000000e-16, Odds: 7.894474e-04
+Receiving Search, nu: 1.880000e+02, nudot: -1.000000e-16, Odds: 8.907079e-04
+Receiving Search, nu: 1.780000e+02, nudot: -1.000000e-16, Odds: 4.212035e-03
+Receiving Search, nu: 1.320000e+02, nudot: -1.000000e-16, Odds: 6.355675e-02
+Receiving Search, nu: 1.400000e+02, nudot: -1.000000e-16, Odds: 1.053801e-03
+Receiving Search, nu: 1.160000e+02, nudot: -1.000000e-16, Odds: 9.812591e-04
+Receiving Search, nu: 1.860000e+02, nudot: -1.000000e-16, Odds: 8.740871e-04
+Receiving Search, nu: 1.420000e+02, nudot: -1.000000e-16, Odds: 1.238026e-03
+Receiving Search, nu: 1.720000e+02, nudot: -1.000000e-16, Odds: 8.337386e-04
+Receiving Search, nu: 1.740000e+02, nudot: -1.000000e-16, Odds: 9.418956e-04
+Receiving Search, nu: 1.180000e+02, nudot: -1.000000e-16, Odds: 9.026842e-04
+Receiving Search, nu: 1.540000e+02, nudot: -1.000000e-16, Odds: 7.946945e-04
+Receiving Search, nu: 1.060000e+02, nudot: -1.000000e-16, Odds: 8.497406e-04
+Receiving Search, nu: 1.040000e+02, nudot: -1.000000e-16, Odds: 1.855331e-03
+Receiving Search, nu: 1.140000e+02, nudot: -1.000000e-16, Odds: 1.887680e-03
+Receiving Search, nu: 1.240000e+02, nudot: -1.000000e-16, Odds: 8.676018e-04
+Receiving Search, nu: 1.900000e+02, nudot: -1.000000e-16, Odds: 8.680606e-04
+Receiving Search, nu: 1.500000e+02, nudot: -1.000000e-16, Odds: 9.195652e-04
+Receiving Search, nu: 1.480000e+02, nudot: -1.000000e-16, Odds: 4.295537e-03
+Receiving Search, nu: 1.380000e+02, nudot: -1.000000e-16, Odds: 4.159031e-03
+Receiving Search, nu: 1.200000e+02, nudot: -1.000000e-16, Odds: 8.236680e-04
+Receiving Search, nu: 1.300000e+02, nudot: -1.000000e-16, Odds: 8.983553e-04
+Receiving Search, nu: 1.360000e+02, nudot: -1.000000e-16, Odds: 7.883754e-04
+Receiving Search, nu: 1.120000e+02, nudot: -1.000000e-16, Odds: 9.973433e-04
+Receiving Search, nu: 1.440000e+02, nudot: -1.000000e-16, Odds: 3.264688e-03
+Receiving Search, nu: 1.580000e+02, nudot: -1.000000e-16, Odds: 8.593110e-04
+Receiving Search, nu: 1.820000e+02, nudot: -1.000000e-16, Odds: 8.252969e-04
+Receiving Search, nu: 1.760000e+02, nudot: -1.000000e-16, Odds: 8.851870e-04
+Receiving Search, nu: 1.280000e+02, nudot: -1.000000e-16, Odds: 7.951410e-04
+Receiving Search, nu: 1.800000e+02, nudot: -1.000000e-16, Odds: 1.057479e-03
+Receiving Search, nu: 1.520000e+02, nudot: -1.000000e-16, Odds: 1.159675e-03
+Receiving Search, nu: 1.020000e+02, nudot: -1.000000e-16, Odds: 1.333760e-02
+Receiving Search, nu: 1.620000e+02, nudot: -1.000000e-16, Odds: 2.729244e-03
+Receiving Search, nu: 1.340000e+02, nudot: -1.000000e-16, Odds: 2.105827e-03
+Receiving Search, nu: 1.660000e+02, nudot: -1.000000e-16, Odds: 8.396493e-04
+Receiving Search, nu: 1.260000e+02, nudot: -1.000000e-16, Odds: 1.059648e-03
+Receiving Search, nu: 1.100000e+02, nudot: -1.000000e-16, Odds: 8.416003e-04
+Receiving Search, nu: 1.980000e+02, nudot: -1.000000e-16, Odds: 2.948943e-03
+Receiving Search, nu: 1.940000e+02, nudot: -1.000000e-16, Odds: 1.702922e-03
+Receiving Search, nu: 1.960000e+02, nudot: -1.000000e-16, Odds: 7.944996e-04
+proc 1 terminating
+proc 2 terminating
+proc 3 terminating
+proc 4 terminating
+proc 5 terminating
+proc 6 terminating
+proc 7 terminating
+proc 8 terminating
+proc 9 terminating
+proc 10 terminating
+proc 11 terminating
+Receiving Search, nu: 2.000000e+02, nudot: -1.000000e-16, Odds: 1.250683e-03
+
+The best odds are: 6.355675e-02, which occur for nu of 1.320000e+02 Hz and nudot of -1.000000e-16 Hz/s
+
+proc 31 terminating
+proc 32 terminating
+proc 36 terminating
+proc 33 terminating
+proc 34 terminating
+proc 37 terminating
+proc 35 terminating
+proc 38 terminating
+proc 24 terminating
+proc 39 terminating
+proc 20 terminating
+proc 25 terminating
+proc 40 terminating
+proc 21 terminating
+proc 26 terminating
+proc 41 terminating
+proc 22 terminating
+proc 23 terminating
+proc 27 terminating
+proc 42 terminating
+proc 28 terminating
+proc 43 terminating
+proc 12 terminating
+proc 44 terminating
+proc 13 terminating
+proc 29 terminating
+proc 45 terminating
+proc 14 terminating
+proc 30 terminating
+proc 46 terminating
+proc 15 terminating
+proc 16 terminating
+proc 47 terminating
+proc 17 terminating
+proc 18 terminating
+proc 19 terminating

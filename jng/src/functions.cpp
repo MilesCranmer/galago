@@ -219,6 +219,7 @@ double log_m_odds_ratio(double *counts, int length, int m,
 	//create all the bins, init to zero counts
 	int n[m];
 
+	/*
 	//declare variables (use of which is declared later on)
 	mpf_t  mpg_time, mpg_phi, mpg_nu, mpg_nudot, mpg_trunc_phi, mpg_d_phi; 
 	//initialize them!
@@ -232,6 +233,7 @@ double log_m_odds_ratio(double *counts, int length, int m,
 	//set search values
 	mpf_set_d(mpg_nu, nu);
 	mpf_set_d(mpg_nudot, nudot);
+	*/
 
 	//init to zero
 	for (int j = 0; j < m; j++)
@@ -248,6 +250,7 @@ double log_m_odds_ratio(double *counts, int length, int m,
 	//bin the photons
 	for (int i = 0; i < length; i++)
 	{
+		
 		/*
 		//set current time
 		mpf_set_d(mpg_time, counts[i]);
@@ -266,8 +269,8 @@ double log_m_odds_ratio(double *counts, int length, int m,
 		//get the corresponding bin
 		k = (int)(phi*m);
 		//one more count to the bin!
-		n[k]++;*/
-		
+		n[k]++;
+		*/
 		
 		//old normal precision calculation
 		//in period
@@ -280,10 +283,9 @@ double log_m_odds_ratio(double *counts, int length, int m,
 		//one more count
 		n[k]++;
 		
-		
-		
 	}
 
+	/*
 	//clean up everything
 	mpf_clear(mpg_time); 
 	mpf_clear(mpg_phi); 
@@ -291,6 +293,7 @@ double log_m_odds_ratio(double *counts, int length, int m,
 	mpf_clear(mpg_nudot); 
 	mpf_clear(mpg_trunc_phi); 
 	mpf_clear(mpg_d_phi); 
+	*/
 
 	//go through all bins
 	for (int j = 0; j < m; j++)
