@@ -3,10 +3,10 @@
 CC = mpic++
 
 #flags for compiler - try to optimize
-CFLAGS = -c -Wall -g -O 
+CFLAGS = -c -Wall -g -O -fopenmp
 
 #Linker settings (need -lgmpxx -lgmp for gmp)
-LDFLAGS = -lgmpxx -lgmp
+LDFLAGS = -lgmpxx -lgmp -fopenmp
 
 #where sources and objects are
 SOURCES = src/main.cpp

@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <gmp.h>
 #include <mpi.h> //incorporates mpi capabilities
+#ifdef _OPENMP
+#include <omp.h> //extra parallelization
+#endif
 #include "bin_write.cpp"//read/write of binary files
 #include "bin_read.cpp"
 #include "functions.cpp"//all statistical functions, search class
@@ -104,8 +107,8 @@ int main(int argc, char * argv[])
 		//call default parameters
 		settings.default_params();
 		settings.nu_min = 60;
-		settings.nu_max = 700;
-		settings.d_nu = 0.01;
+		settings.nu_max = 70;
+		settings.d_nu = 1;
 		settings.nudot_min = 1e-30;
 		settings.nudot_max = 1e-30;
 		settings.d_nudot = 1e-16;

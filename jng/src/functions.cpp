@@ -2,7 +2,10 @@
 //#include <gmpxx.h> //for precision calculation
 #include <vector> //to hold search results
 #include <algorithm> //compute max of vector
-#include <numeric> //compute sum of vector (accumulate) 
+#include <numeric> //compute sum of vector (accumulate)
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 //speed not important for final statistics, so optimising this is silly
 #define PI 3.14159265359
 //this file contains the main statistics functions
@@ -248,6 +251,9 @@ double log_m_odds_ratio(double *counts, int length, int m,
 	//gets bin
 	int k;
 	//bin the photons
+#ifdef _OPENMP
+#pragma omp parallel for private(phi, d_phi, k) shared(n)
+#endif
 	for (int i = 0; i < length; i++)
 	{
 		

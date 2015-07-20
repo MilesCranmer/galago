@@ -1,7 +1,8 @@
 #!/bin/bash
-#PBS -l nodes=20:ppn=12
-#PBS -l walltime=00:25:00
+#PBS -l nodes=1:ppn=12
+#PBS -l walltime=00:05:00
 #PBS -V
 #PBS -N jng
 cd $PBS_O_WORKDIR
-mpiexec -n 240 ./jng > log
+export OMP_NUM_THREADS=1
+mpiexec -n 12 ./jng > log
