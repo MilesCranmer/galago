@@ -3,7 +3,7 @@
 CC = mpic++
 
 #flags for compiler - try to optimize
-CFLAGS = -c -Wall -g -O -fopenmp
+CFLAGS = -c -Wall -g -O -fopenmp -I/usr/lib64/
 
 #Linker settings (need -lgmpxx -lgmp for gmp)
 LDFLAGS = -lgmpxx -lgmp -fopenmp

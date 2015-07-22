@@ -5,9 +5,7 @@
 #include <stdlib.h>
 #include <gmp.h>
 #include <mpi.h> //incorporates mpi capabilities
-#ifdef _OPENMP
-#include <omp.h> //extra parallelization
-#endif
+//#include <omp.h> //extra parallelization
 #include "bin_write.cpp"//read/write of binary files
 #include "bin_read.cpp"
 #include "functions.cpp"//all statistical functions, search class
@@ -67,8 +65,8 @@ int main(int argc, char * argv[])
 		//load in values from data
 		logFacts = bin_read((char*)"data/log_facs_2.bin");
 		maxFact = bin_size((char*)"data/log_facs_2.bin");
-		counts = bin_read((char*)"data/47tuc_1_of_15.bin");
-		length = bin_size((char*)"data/47tuc_1_of_15.bin");
+		counts = bin_read((char*)"data/47tuc_1_of_15_less.bin");
+		length = bin_size((char*)"data/47tuc_1_of_15_less.bin");
 		//normalize the counts
 		normalize_counts(counts, length);
 		printf("Total of %d counts\n", length);

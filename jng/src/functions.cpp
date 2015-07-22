@@ -3,9 +3,7 @@
 #include <vector> //to hold search results
 #include <algorithm> //compute max of vector
 #include <numeric> //compute sum of vector (accumulate)
-#ifdef _OPENMP
 #include <omp.h>
-#endif
 //speed not important for final statistics, so optimising this is silly
 #define PI 3.14159265359
 //this file contains the main statistics functions
@@ -222,85 +220,50 @@ double log_m_odds_ratio(double *counts, int length, int m,
 	//create all the bins, init to zero counts
 	int n[m];
 
-	/*
-	//declare variables (use of which is declared later on)
-	mpf_t  mpg_time, mpg_phi, mpg_nu, mpg_nudot, mpg_trunc_phi, mpg_d_phi; 
-	//initialize them!
-	mpf_init(mpg_time); 
-	mpf_init(mpg_phi); 
-	mpf_init(mpg_nu); 
-	mpf_init(mpg_nudot); 
-	mpf_init(mpg_trunc_phi); 
-	mpf_init(mpg_d_phi); 
-
-	//set search values
-	mpf_set_d(mpg_nu, nu);
-	mpf_set_d(mpg_nudot, nudot);
-	*/
-
 	//init to zero
-	for (int j = 0; j < m; j++)
+	/*for (int j = 0; j < m; j++)
 	{
-		n[j] = 0;
-	}
+		ng[j] = 0;
+	}*/
+	
+	//split up into threads
+	//#pragma omp parallel default(shared)
+	//{
+		//create temp bins for thread
+	//	int n[m];
+		for (int j = 0; j < m; j++)
+		{
+			n[j] = 0;
+		}
 
-	//variables used in binnings
-	//gets position in nu
-	long double phi, d_phi;
-	//double phi;
-	//gets bin
-	int k;
-	//bin the photons
-#ifdef _OPENMP
-#pragma omp parallel for private(phi, d_phi, k) shared(n)
-#endif
-	for (int i = 0; i < length; i++)
-	{
-		
-		/*
-		//set current time
-		mpf_set_d(mpg_time, counts[i]);
-		//calculate changing of bin (dphi = 0.5*t^2*nudot)
-		mpf_mul(mpg_d_phi, mpg_time, mpg_time);
-		mpf_mul(mpg_d_phi, mpg_d_phi, mpg_nudot);
-		mpf_div_2exp(mpg_d_phi, mpg_d_phi, 1);
-		//calculate phase of bin, using changing of bin
-		//(phi = (t*nudot+dphi)mod1)
-		mpf_mul(mpg_phi, mpg_time, mpg_nu);
-		mpf_add(mpg_phi, mpg_phi, mpg_d_phi);
-		//do the mod1 part
-		mpf_trunc(mpg_trunc_phi, mpg_phi);
-		mpf_sub(mpg_phi, mpg_phi, mpg_trunc_phi);
-		phi = mpf_get_d(mpg_phi);
-		//get the corresponding bin
-		k = (int)(phi*m);
-		//one more count to the bin!
-		n[k]++;
-		*/
-		
-		//old normal precision calculation
-		//in period
-		
-		d_phi = 0.5*counts[i]*nudot*counts[i];
-		//get position in nu of photon
-		phi = fmod(counts[i]*nu+d_phi,1);
-		//get corresponding bin	
-		k = (int)(phi*m);
-		//one more count
-		n[k]++;
-		
-	}
+		//variables used in binnings
+		//gets position in nu
+		long double phi, d_phi;
+		//double phi;
+		//gets bin
+		int k;
+		//bin the photons
+		//#pragma omp for 
+		for (int i = 0; i < length; i++)
+		{
+			
+			d_phi = 0.5*counts[i]*nudot*counts[i];
+			//get position in nu of photon
+			phi = fmod(counts[i]*nu+d_phi,1);
+			//get corresponding bin	
+			k = (int)(phi*m);
+			//one more count
+			n[k]++;
+			
+		}
 
-	/*
-	//clean up everything
-	mpf_clear(mpg_time); 
-	mpf_clear(mpg_phi); 
-	mpf_clear(mpg_nu); 
-	mpf_clear(mpg_nudot); 
-	mpf_clear(mpg_trunc_phi); 
-	mpf_clear(mpg_d_phi); 
-	*/
-
+		//combine n values
+		//#pragma omp critical
+		/*for (int j = 0; j < m; j++)
+		{
+			ng[j] += n[j];
+		}*/
+	//}
 	//go through all bins
 	for (int j = 0; j < m; j++)
 	{
