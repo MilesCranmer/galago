@@ -215,22 +215,20 @@ double log_m_odds_ratio(double *counts, int length, int m,
 					  double nu, double nudot,
 					  double t_max)
 {
-	//odds to return
-	double om1 = 0.0;
 	//create all the bins, init to zero counts
-	int n[m];
+	unsigned int ng[m];
 
 	//init to zero
-	/*for (int j = 0; j < m; j++)
+	for (int j = 0; j < m; j++)
 	{
 		ng[j] = 0;
-	}*/
+	}
 	
 	//split up into threads
-	//#pragma omp parallel default(shared)
-	//{
+	#pragma omp parallel default(shared)
+	{
 		//create temp bins for thread
-	//	int n[m];
+		unsigned int n[m];
 		for (int j = 0; j < m; j++)
 		{
 			n[j] = 0;
@@ -238,37 +236,40 @@ double log_m_odds_ratio(double *counts, int length, int m,
 
 		//variables used in binnings
 		//gets position in nu
-		long double phi, d_phi;
+		//long double phi, d_phi;
 		//double phi;
 		//gets bin
-		int k;
+		//int k;
 		//bin the photons
-		//#pragma omp for 
+		#pragma omp for 
 		for (int i = 0; i < length; i++)
 		{
 			
-			d_phi = 0.5*counts[i]*nudot*counts[i];
+			//d_phi = 0.5*counts[i]*nudot*counts[i];
 			//get position in nu of photon
-			phi = fmod(counts[i]*nu+d_phi,1);
+			//phi = fmod(counts[i]*nu+d_phi,1);
 			//get corresponding bin	
-			k = (int)(phi*m);
+			//k = (int)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m);
 			//one more count
-			n[k]++;
+			n[(int)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m)]++;
 			
 		}
 
 		//combine n values
-		//#pragma omp critical
-		/*for (int j = 0; j < m; j++)
+		#pragma omp critical
+		for (int j = 0; j < m; j++)
 		{
 			ng[j] += n[j];
-		}*/
-	//}
+		}
+	}
+	//odds to return
+	double om1 = 0.0;
 	//go through all bins
 	for (int j = 0; j < m; j++)
 	{
+	
 		//part of odds equation
-		om1 += logFacts[n[j]];
+		om1 += logFacts[ng[j]];
 	}
 	//final parts of odds equation
 	om1 += logFacts[m-1]-logFacts[length+m-1]+((double)length)*log(m);
@@ -285,7 +286,7 @@ double log_odds_ratio(double *counts, int length, int m_max,
 	//the following assumes the counts are ordered
 	double t_max = counts[length-1];
 	//The total odds ratio
-	double odds = 0;
+	double odds = 0.0;
 	//go through all possible m values
 	for (int m = 2; m <= m_max; m++)
 	{
