@@ -215,7 +215,7 @@ int num_events(double *counts, int length, double start, double end)
 
 //Equation from gregory and loredo paper to calcluate odds ratio
 //of m-binned stepwise model w.r.t. constant model
-double log_m_odds_ratio(double *counts, int length, int m, 
+__global__ double log_m_odds_ratio(double *counts, int length, int m, 
 					  double nu, double nudot,
 					  double t_max)
 {

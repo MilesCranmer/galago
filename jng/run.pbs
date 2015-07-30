@@ -1,9 +1,9 @@
 #!/bin/bash
 #PBS -l nodes=2:ppn=12
-#PBS -l walltime=00:03:00
+#PBS -l walltime=00:05:00
 #PBS -V
 #PBS -N jng
 cd $PBS_O_WORKDIR
 export IPATH_NO_CPUAFFINITY=1
-export OMP_NUM_THREADS=6
-mpiexec -n 4 --map-by socket:PE=6 ./jng > log
+export OMP_NUM_THREADS=1
+mpiexec -n 24 --map-by socket:PE=1 ./jng > log
