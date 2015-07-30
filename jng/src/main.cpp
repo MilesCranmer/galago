@@ -29,7 +29,7 @@ int main(int argc, char * argv[])
 	int length;
 	//current search settings
 	double nu, nudot;
-	int m_max = 100;
+	int m_max = 15;
 	//MPI variables (rank == proc number, size is num proc)
 	int rank, size;
 	//settings/results packed into arrays:
@@ -110,7 +110,7 @@ int main(int argc, char * argv[])
 		settings.nudot_min = 1.7365e-15; 
 		settings.nudot_max = 1.7365e-15;
 		settings.d_nudot = 1e-16;
-		settings.m_max = 50;
+		settings.m_max = 15;
 
 		//display some initial stats
 		printf("The settings for this search are:\n\n");

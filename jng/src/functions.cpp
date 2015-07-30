@@ -101,7 +101,7 @@ void PeakSearch::default_params()
 	//interval between searches w.r.t nu
 	d_nu = (nu_max-nu_min)/30;
 	//the max number of bins
-	m_max = 30;
+	m_max = 15;
 	//the bounds on the nudot search
 	//In terms of Hz/s
 	nudot_min = 1e-100;
@@ -291,15 +291,31 @@ double log_odds_ratio(double *counts, int length, int m_max,
 	double t_max = counts[length-1];
 	//The total odds ratio
 	double odds = 0.0;
+	int mvals[15];
+	mvals[0] = 2;
+	mvals[1] = 3;
+	mvals[2] = 4;
+	mvals[3] = 6;
+	mvals[4] = 9;
+	mvals[5] = 13;
+	mvals[6] = 19;
+	mvals[7] = 28;
+	mvals[8] = 42;
+	mvals[9] = 63;
+	mvals[10] = 94;
+	mvals[11] = 127;
+	mvals[12] = 141;
+	mvals[13] = 211;
+	mvals[14] = 256;
 	//go through all possible m values
-	for (int m = 2; m <= m_max; m++)
+	for (int m = 2-2; m <= m_max-2; m++)
 	{
 		if (verbose)
 			printf("Testing %d-binned model\n",m);
 		//Add the next om1 value to the total odds ratio.
 		//We also have to remove the log
 
-		odds += exp(log_m_odds_ratio(counts,length,m,nu,
+		odds += exp(log_m_odds_ratio(counts,length,mvals[m],nu,
 									 nudot,t_max));
 	}
 	return odds;
