@@ -9,7 +9,7 @@ CFLAGS = -c -Wall -g -O3 -fopenmp -I/usr/lib64/
 LDFLAGS = -lgmpxx -lgmp -fopenmp
 
 #where sources and objects are
-SOURCES = src/main.cpp
+SOURCES = src/main.cu
 OBJ = build/main.o
 #final executable
 EXE = jng

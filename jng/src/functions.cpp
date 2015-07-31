@@ -275,6 +275,7 @@ double log_m_odds_ratio(double *counts, int length, int m,
 		//part of odds equation
 		om1 += logFacts[ng[j]];
 	}
+	//printf("Lf\n",logFacts[length+m-1]);
 	//final parts of odds equation
 	om1 += logFacts[m-1]-logFacts[length+m-1]+((double)length)*log(m);
 	return om1;

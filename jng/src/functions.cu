@@ -1,6 +1,7 @@
 #include <math.h> //for math
 //#include <gmpxx.h> //for precision calculation
 #include <vector> //to hold search results
+#include <stdio.h>
 #include <algorithm> //compute max of vector
 #include <numeric> //compute sum of vector (accumulate)
 #include <omp.h>
@@ -213,9 +214,58 @@ int num_events(double *counts, int length, double start, double end)
 	return num;
 }
 
+//CUDA kernel to create n_mvals*length matrix of bins
+__global__ void create_binnings(double *counts, int length, int *mvals,
+								int n_mvals, double nu, double nudot,
+								unsigned char **binning)
+{
+	//threads=length
+	int idx = blockIdx.x*blockDim.x+threadIdx.x;
+	double t = counts[idx];
+	unsigned char tmp_bin = 0;
+	for (int i = 0; i < n_mvals; i++)
+	{
+		tmp_bin = (unsigned char)((int)(fmod(t*(nu+0.5*t*nudot),1)*mvals[i]));
+		binning[i][idx] = tmp_bin;
+	}
+	//n[(int)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m)]++;
+}
+
+//function makes CUDA calls
+void get_ratio (double *counts, int length, int *mvals,
+	  		    int n_mvals, double nu, double nudot)
+{
+	unsigned char binning_h[n_mvals][length];
+	unsigned char binning_d[n_mvals][length];
+	size_t width = n_mvals;
+	size_t height = length;
+	size_t pitch = 0;
+	//unsigned char **binning_d;
+	cudaMallocPitch((void***)&binning_d, &pitch, width, height);
+	cudaFree(binning_d);
+	
+	//the counts and logfacts should already be loaded
+	//to the GPU!
+	//host memory of bins
+	/*
+	unsigned char **binning_h = new unsigned char*[n_mvals];
+	//allocate memory for bins
+	for (int i = 0; i < n_mvals; i++)
+	{
+		binning[h] = new unsigned char[length];
+	}
+	size_t width = n_mvals;
+	size_t height = length;
+	size_t pitch = 0;
+	unsigned char **binning_d;
+	cudaMallocPitch((void***)&binning_d, &pitch, width, height);
+	cudaFree(binning_d);
+	*/
+}
+
 //Equation from gregory and loredo paper to calcluate odds ratio
 //of m-binned stepwise model w.r.t. constant model
-__global__ double log_m_odds_ratio(double *counts, int length, int m, 
+double log_m_odds_ratio(double *counts, int length, int m, 
 					  double nu, double nudot,
 					  double t_max)
 {

@@ -2,7 +2,7 @@ from numpy import log
 import struct #converting to writable binary format
 
 #file to write
-bin_filename = "../data/log_facs_2.bin"
+bin_filename = "../data/log_facs_3.bin"
 
 #write to file as binary
 bin_file = open(bin_filename, "wb")
@@ -17,7 +17,7 @@ bin_file.write(bin)
 bin_file.write(bin)
 
 #now go up to a max iterator(around desired number of photons)
-for x in range(2, 10000000):
+for x in range(2, 44000000):
 	#next log fact
 	curr += log(float(x))
 	#convert to writable binary

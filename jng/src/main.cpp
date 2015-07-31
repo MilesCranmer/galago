@@ -63,10 +63,10 @@ int main(int argc, char * argv[])
 	if (rank == 0)
 	{
 		//load in values from data
-		logFacts = bin_read((char*)"data/log_facs_2.bin");
-		maxFact = bin_size((char*)"data/log_facs_2.bin");
-		counts = bin_read((char*)"data/B1821_counts.bin");
-		length = bin_size((char*)"data/B1821_counts.bin");
+		logFacts = bin_read((char*)"data/log_facs_3.bin");
+		maxFact = bin_size((char*)"data/log_facs_3.bin");
+		counts = bin_read((char*)"data/bary.bin");
+		length = bin_size((char*)"data/bary.bin");
 		//normalize the counts
 		normalize_counts(counts, length);
 		printf("Total of %d counts\n", length);
@@ -104,12 +104,12 @@ int main(int argc, char * argv[])
 		PeakSearch settings;
 		//call default parameters
 		settings.default_params();
-		settings.nu_min = 325;
-		settings.nu_max = 330;
+		settings.nu_min = 327;
+		settings.nu_max = 328;
 		settings.d_nu = 0.00001;
-		settings.nudot_min = 1.7365e-15; 
-		settings.nudot_max = 1.7365e-15;
-		settings.d_nudot = 1e-16;
+		settings.nudot_min = 1.70e-80;//365e-15; 
+		settings.nudot_max = 1.70e-80;
+		settings.d_nudot = 1e-81;
 		settings.m_max = 15;
 
 		//display some initial stats
