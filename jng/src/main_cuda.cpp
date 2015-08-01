@@ -8,7 +8,8 @@
 //#include <omp.h> //extra parallelization
 #include "bin_write.cpp"//read/write of binary files
 #include "bin_read.cpp"
-#include "functions.cu"//all statistical functions, search class
+//#include "functions.cu"//all statistical functions, search class
+#include "structures.h"
 
 //Import the list of log factorials
 double *logFacts;
@@ -16,10 +17,9 @@ double *logFacts;
 //of the binary list
 int maxFact;
 
-//int MPI_Send(const void *buf, int count, MPI_Datatype datatype, int dest, int tag,
-//             MPI_Comm comm)
-//int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
-//             MPI_Comm comm, MPI_Status *status)
+double log_odds_ratio(double*,int,int,double,double,bool); 
+void normalize_counts(double*,int);
+struct SearchResults;
 
 int main(int argc, char * argv[])
 {
@@ -103,7 +103,7 @@ int main(int argc, char * argv[])
 		//set up search
 		PeakSearch settings;
 		//call default parameters
-		settings.default_params();
+		//settings.default_params();
 		settings.nu_min = 327;
 		settings.nu_max = 328;
 		settings.d_nu = 0.00001;

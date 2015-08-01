@@ -8,7 +8,7 @@
 //#include <omp.h> //extra parallelization
 #include "bin_write.cpp"//read/write of binary files
 #include "bin_read.cpp"
-#include "functions.cpp"//all statistical functions, search class
+//#include "functions.cpp"//all statistical functions, search class
 
 //Import the list of log factorials
 double *logFacts;

@@ -5,6 +5,7 @@
 #include <algorithm> //compute max of vector
 #include <numeric> //compute sum of vector (accumulate)
 #include <omp.h>
+//#include "structures.h"
 //speed not important for final statistics, so optimising this is silly
 #define PI 3.14159265359
 //this file contains the main statistics functions
@@ -25,6 +26,7 @@ using namespace std;
 double log_odds_ratio(double *counts, int length, int m_max, 
 					  double nu, double nudot, bool verbose);
 
+/*
 //Holds the result of searches, and the displaying functions
 //faster to have vectors of the variables within, 
 //rather than a vector of the class
@@ -58,7 +60,7 @@ struct PeakSearch
 	//the max number of bins
 	int m_max; 
 	//the bounds on the nudot search
-	//**In terms of radians
+	//In terms of radians
 	double nudot_min, nudot_max;
 	//interval between searches w.r.t nudot
 	double d_nudot; 
@@ -165,6 +167,7 @@ SearchResults PeakSearch::search(double *counts, int length,
 	//return all computed searches
 	return searches;
 }
+*/
 
 //This function returns the choose function
 double log_choose(int first, int second)
@@ -383,13 +386,3 @@ double min_interval(double *counts, int length)
 	return smallest;
 }
 
-/*
-//compute search start to finish
-void log_search(double *counts, int length,
-				double nu_max, double nu_min, double d_nu,
-				double nud_max, double nud_min, double d_nud,
-				int *mvals, int n_mvals)
-{
-
-}
-*/
