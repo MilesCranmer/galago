@@ -8,7 +8,7 @@
 //#include <omp.h> //extra parallelization
 #include "bin_write.cpp"//read/write of binary files
 #include "bin_read.cpp"
-//#include "functions.cu"//all statistical functions, search class
+#include "functions.cu"//all statistical functions, search class
 
 //Import the list of log factorials
 double *logFacts;
@@ -20,18 +20,6 @@ int maxFact;
 //             MPI_Comm comm)
 //int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
 //             MPI_Comm comm, MPI_Status *status)
-double log_odds_ratio(double*,int,int,double,double,bool);
-struct SearchResults;
-struct PeakSearch;
-//double SearchResults::avg_odds();
-//void SearchResults::print_stats();
-//void PeakSearch::default_params();
-//void PeakSearch::print_params();
-//SearchResults PeakSearch::search(double*,int,bool);
-void normalize_counts(double*,int);
-double log_odds_ratio(double*,int,int,double,double,bool);
-double avg_interval(double*,int);
-double min_interval(double*,int);
 
 int main(int argc, char * argv[])
 {

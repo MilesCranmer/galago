@@ -14,16 +14,7 @@
 //guillimin
 #define BLOCK_SIZE = 1024
 
-//extern tells the compiler that this variable is global and
-//is already initialized elsewhere
-extern double *logFacts;
-extern int maxFact;
-
 using namespace std;
-
-//Forward declaration for use in class
-double log_odds_ratio(double *counts, int length, int m_max, 
-					  double nu, double nudot, bool verbose);
 
 //Holds the result of searches, and the displaying functions
 //faster to have vectors of the variables within, 
