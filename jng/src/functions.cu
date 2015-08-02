@@ -217,6 +217,7 @@ int num_events(double *counts, int length, double start, double end)
 	return num;
 }
 
+/*
 //CUDA kernel to create n_mvals*length matrix of bins
 __global__ void create_binnings(double *counts, int *mvals,
 								int n_mvals, double nu, double nudot,
@@ -230,30 +231,98 @@ __global__ void create_binnings(double *counts, int *mvals,
 	{
 		tmp_bin = (unsigned char)((int)(fmod(t*(nu+0.5*t*nudot),1)*mvals[i]));
 		binning[i][idx] = tmp_bin;
+		binning[i][idx] = 54;
 
 	}
 	//n[(int)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m)]++;
 }
+*/
+__global__ void create_binnings(double *counts, int *mvals,
+								int length,
+								int n_mvals, double nu, double nudot,
+								unsigned char *binning)
+{
+	int idx = blockIdx.x*blockDim.x+threadIdx.x;
+	if (idx < length)
+	{
+		int index = idx;
+		double t = counts[0];
+		for (int i = 0; i < n_mvals && t < 1e100; i ++)
+		{
+			binning[index] = 42;
+			index += length;
+		}
+	}
+}
+/*
+{
+
+	//threads=length
+	int idx = blockIdx.x*blockDim.x+threadIdx.x;
+	int index = idx;
+	double t = counts[idx];
+	unsigned char tmp_bin = 0;
+	for (int i = 0; i < n_mvals; i++)
+	{
+		tmp_bin = (unsigned char)((int)(fmod(t*(nu+0.5*t*nudot),1)*mvals[i]));
+		binning[index] = tmp_bin;
+		index += length;
+
+	}
+	binning[10000]=5;
+	//n[(int)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m)]++;
+}*/
 
 //function makes CUDA calls
 double get_ratio (double *counts, int length, 
-				int *mvals_d, int n_mvals, double nu, double nudot)
+				  int *mvals, int n_mvals, double nu, double nudot)
 {
+	unsigned char *binning_h;
+	binning_h = new unsigned char [n_mvals*length];
+	unsigned char *binning_d;
+	binning_h[0] = 100;
+	printf("%u\n",binning_h[0]);
+	cudaError_t error;
+	error = cudaMalloc((void**)&binning_d,n_mvals*length);
+	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
+	else {printf("Memory Allocated!\n");}
+	create_binnings<<<40285,1024>>>(counts, mvals, length, n_mvals, nu, nudot, binning_d);
+	//error = cudaThreadSynchronize();	
+	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
+	error = cudaMemcpy(binning_h,binning_d,n_mvals*length*sizeof(unsigned char),
+			   cudaMemcpyDeviceToHost);
+	//error = cudaGetLastError();
+	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
+	printf("%u\n",binning_h[0]);
+	cudaFree(binning_d);
+	free(binning_h);
+	/*
 	unsigned char binning_h[n_mvals][length];
 	unsigned char **binning_d;//[n_mvals][length];
-	size_t width = n_mvals*sizeof(unsigned char);
+	size_t width = n_mvals*sizeof(char);
 	size_t height = length;
 	size_t pitch = 0, pitch2 = 0;
+	cudaError_t error;
+	binning_h[10][1000] = 100;
 	//unsigned char **binning_d;
-	cudaMallocPitch(&binning_d, &pitch, width, height);
+	error = cudaMallocPitch(&binning_d, &pitch,1, length);
+	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
+	*/
+	/*
+
 	create_binnings<<<length,1>>>(counts, mvals_d, n_mvals, nu, nudot, binning_d);
+	cudaThreadSynchronize();
 	cudaMemcpy2D(binning_h,pitch,binning_d,pitch,width,height,
 				 cudaMemcpyDeviceToHost);
+	error = cudaGetLastError();
+	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
 	printf("%u\n",binning_h[10][1000]);
+	*/
 
 	//cudaMemcpy(binning_h,binning_d,*sizeof(double),
 			   //cudaMemcpyDeviceToHost);
-	cudaFree(binning_d);
+	//cudaFree(binning_d);
+	
 	
 	//the counts and logfacts should already be loaded
 	//to the GPU!
@@ -279,12 +348,24 @@ double get_ratio (double *counts, int length,
 void upload_data(double *counts_h, double *counts_d, int length,
 				 int *mvals_h, int *mvals_d, int n_mvals)
 {
+	unsigned char *binning_d;
+	cudaMalloc((void**)&binning_d,n_mvals*length);
 	cudaMalloc((void**)&counts_d,length*sizeof(double));		
 	cudaMalloc((void**)&mvals_d,n_mvals*sizeof(double));
 	cudaMemcpy(counts_d,counts_h,length*sizeof(double),
 			   cudaMemcpyHostToDevice);
 	cudaMemcpy(mvals_d,mvals_h,n_mvals*sizeof(double),
 			   cudaMemcpyHostToDevice);
+	cudaError_t error = cudaGetLastError();
+	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
+	else{printf("Static data uploaded!\n");}
+	cudaFree(binning_d);
+}
+
+void free_data(double *counts_d, int *mvals_d)
+{
+	cudaFree(mvals_d);
+	cudaFree(counts_d);
 }
 
 				

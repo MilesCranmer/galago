@@ -22,6 +22,7 @@ void normalize_counts(double*,int);
 struct SearchResults;
 void upload_data(double*,double*,int,int*,int*,int);
 double get_ratio(double*,int,int*,int,double,double);
+void free_data(double*,int*);
 
 int main(int argc, char * argv[])
 {
@@ -305,6 +306,7 @@ int main(int argc, char * argv[])
 			MPI_Iprobe(0, chan_terminate, comm, &termination_flag, 
 					   &rstatus);
 		}
+		free_data(counts_d,mvals_d);
 	}
 	if (rank != 0)
 	{
