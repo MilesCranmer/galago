@@ -242,17 +242,29 @@ __global__ void create_binnings(double *counts, int *mvals,
 								int n_mvals, double nu, double nudot,
 								unsigned char *binning)
 {
+	double t = counts[1000];
+	if (t  < 20)
+	{
+		binning[0] = 55;
+	}
+	else
+	{
+		binning[0] = 23;
+	}
+	/*
 	int idx = blockIdx.x*blockDim.x+threadIdx.x;
 	if (idx < length)
 	{
 		int index = idx;
-		double t = counts[0];
-		for (int i = 0; i < n_mvals && t < 1e100; i ++)
+	//	double t = counts[0];
+		for (int i = 0; i < n_mvals; i ++)
 		{
 			binning[index] = 42;
 			index += length;
 		}
 	}
+	*/
+	
 }
 /*
 {
@@ -278,15 +290,15 @@ double get_ratio (double *counts, int length,
 				  int *mvals, int n_mvals, double nu, double nudot)
 {
 	unsigned char *binning_h;
-	binning_h = new unsigned char [n_mvals*length];
 	unsigned char *binning_d;
+	binning_h = new unsigned char [n_mvals*length];
 	binning_h[0] = 100;
-	printf("%u\n",binning_h[0]);
 	cudaError_t error;
 	error = cudaMalloc((void**)&binning_d,n_mvals*length);
 	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
 	else {printf("Memory Allocated!\n");}
-	create_binnings<<<40285,1024>>>(counts, mvals, length, n_mvals, nu, nudot, binning_d);
+	//create_binnings<<<1,1>>>(counts, mvals, length, n_mvals, nu, nudot, binning_d);
+	//create_binnings<<<40285,1024>>>(counts, mvals, length, n_mvals, nu, nudot, binning_d);
 	//error = cudaThreadSynchronize();	
 	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
 	error = cudaMemcpy(binning_h,binning_d,n_mvals*length*sizeof(unsigned char),
@@ -348,8 +360,7 @@ double get_ratio (double *counts, int length,
 void upload_data(double *counts_h, double *counts_d, int length,
 				 int *mvals_h, int *mvals_d, int n_mvals)
 {
-	unsigned char *binning_d;
-	cudaMalloc((void**)&binning_d,n_mvals*length);
+	printf("1000 toa = %f\n",counts_h[1000]);
 	cudaMalloc((void**)&counts_d,length*sizeof(double));		
 	cudaMalloc((void**)&mvals_d,n_mvals*sizeof(double));
 	cudaMemcpy(counts_d,counts_h,length*sizeof(double),
@@ -359,7 +370,6 @@ void upload_data(double *counts_h, double *counts_d, int length,
 	cudaError_t error = cudaGetLastError();
 	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
 	else{printf("Static data uploaded!\n");}
-	cudaFree(binning_d);
 }
 
 void free_data(double *counts_d, int *mvals_d)
