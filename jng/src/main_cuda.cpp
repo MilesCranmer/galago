@@ -17,9 +17,11 @@ double *logFacts;
 //of the binary list
 int maxFact;
 
-double log_odds_ratio(double*,int,int,double,double,bool); 
+double log_odds_ratio(double*,int,int*,int,double,double,bool); 
 void normalize_counts(double*,int);
 struct SearchResults;
+void upload_data(double*,double*,int,int*,int*,int);
+double get_ratio(double*,int,int*,int,double,double);
 
 int main(int argc, char * argv[])
 {
@@ -35,6 +37,9 @@ int main(int argc, char * argv[])
 	//settings/results packed into arrays:
 	double curr_settings[2];
 	double curr_results[3];
+	//declare the mvalues to search
+	int n_mvals = 15;
+	int mvals[15] = {2,3,4,6,9,13,19,28,42,63,94,141,191,211,256};
 	//holds all results (used by root node)
 	SearchResults results;
 	//whether or not start of 
@@ -178,7 +183,7 @@ int main(int argc, char * argv[])
 					recv ++;
 					//some last modifications to the odds
 					//finalodds = 1./nmvals/ log(nu_max/nu_min)/log(nudot_max/nudot_min) * dnu/nu * nudotfrac * moddsratio; 
-					curr_results[2] /= (settings.m_max - 1);
+					curr_results[2] /= n_mvals;
 					curr_results[2] *= settings.d_nu/nu;
 					//printf("Curr %e\n", curr_results[2]);
 					//curr_results[2] /= log(settings.nu_max/settings.nu_min);
@@ -260,6 +265,11 @@ int main(int argc, char * argv[])
 	}
 	else //the bulk search processes
 	{
+		double *counts_d;
+		int *mvals_d;
+		//upload static data to GPU
+		upload_data(counts, counts_d, length, mvals, 
+					mvals_d, n_mvals);
 		//go until told to terminate
 		while(!termination_flag)
 		{
@@ -275,10 +285,15 @@ int main(int argc, char * argv[])
 				//Eventually OpenMP should do something
 				//to parallelize the log odds ratio
 				//////////////////////////////////////s
-				curr_results[2] = log_odds_ratio(counts, length, m_max, 
+				curr_results[2] = log_odds_ratio(counts, length, mvals,
+											n_mvals,
 										 	curr_settings[0], 
 										 	curr_settings[1], 
 										 	0);
+				curr_results[2] = get_ratio(counts_d, length, mvals_d,
+											n_mvals,
+											curr_settings[0],
+											curr_settings[1]);
 				curr_results[0] = curr_settings[0];
 				curr_results[1] = curr_settings[1];
 				//send back results of search

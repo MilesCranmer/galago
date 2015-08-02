@@ -218,7 +218,7 @@ int num_events(double *counts, int length, double start, double end)
 }
 
 //CUDA kernel to create n_mvals*length matrix of bins
-__global__ void create_binnings(double *counts, int length, int *mvals,
+__global__ void create_binnings(double *counts, int *mvals,
 								int n_mvals, double nu, double nudot,
 								unsigned char **binning)
 {
@@ -230,21 +230,29 @@ __global__ void create_binnings(double *counts, int length, int *mvals,
 	{
 		tmp_bin = (unsigned char)((int)(fmod(t*(nu+0.5*t*nudot),1)*mvals[i]));
 		binning[i][idx] = tmp_bin;
+
 	}
 	//n[(int)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m)]++;
 }
 
 //function makes CUDA calls
-void get_ratio (double *counts, int length, int *mvals,
-	  		    int n_mvals, double nu, double nudot)
+double get_ratio (double *counts, int length, 
+				int *mvals_d, int n_mvals, double nu, double nudot)
 {
 	unsigned char binning_h[n_mvals][length];
-	unsigned char binning_d[n_mvals][length];
-	size_t width = n_mvals;
+	unsigned char **binning_d;//[n_mvals][length];
+	size_t width = n_mvals*sizeof(unsigned char);
 	size_t height = length;
-	size_t pitch = 0;
+	size_t pitch = 0, pitch2 = 0;
 	//unsigned char **binning_d;
-	cudaMallocPitch((void***)&binning_d, &pitch, width, height);
+	cudaMallocPitch(&binning_d, &pitch, width, height);
+	create_binnings<<<length,1>>>(counts, mvals_d, n_mvals, nu, nudot, binning_d);
+	cudaMemcpy2D(binning_h,pitch,binning_d,pitch,width,height,
+				 cudaMemcpyDeviceToHost);
+	printf("%u\n",binning_h[10][1000]);
+
+	//cudaMemcpy(binning_h,binning_d,*sizeof(double),
+			   //cudaMemcpyDeviceToHost);
 	cudaFree(binning_d);
 	
 	//the counts and logfacts should already be loaded
@@ -264,7 +272,22 @@ void get_ratio (double *counts, int length, int *mvals,
 	cudaMallocPitch((void***)&binning_d, &pitch, width, height);
 	cudaFree(binning_d);
 	*/
+	return 0;
 }
+
+//function uploads static data to the GPU at start of MPI proc
+void upload_data(double *counts_h, double *counts_d, int length,
+				 int *mvals_h, int *mvals_d, int n_mvals)
+{
+	cudaMalloc((void**)&counts_d,length*sizeof(double));		
+	cudaMalloc((void**)&mvals_d,n_mvals*sizeof(double));
+	cudaMemcpy(counts_d,counts_h,length*sizeof(double),
+			   cudaMemcpyHostToDevice);
+	cudaMemcpy(mvals_d,mvals_h,n_mvals*sizeof(double),
+			   cudaMemcpyHostToDevice);
+}
+
+				
 
 //Equation from gregory and loredo paper to calcluate odds ratio
 //of m-binned stepwise model w.r.t. constant model
@@ -335,7 +358,7 @@ double log_m_odds_ratio(double *counts, int length, int m,
 
 //Equation from gregory and loredo paper to calcluate total odds
 //ratio
-double log_odds_ratio(double *counts, int length, int m_max, 
+double log_odds_ratio(double *counts, int length, int *mvals, int n_mvals, 
 					  double nu, double nudot, bool verbose)
 {
 	//normalize the counts with item 0 at t=0.0s
@@ -345,14 +368,14 @@ double log_odds_ratio(double *counts, int length, int m_max,
 	//The total odds ratio
 	double odds = 0.0;
 	//go through all possible m values
-	for (int m = 2; m <= m_max; m++)
+	for (int i = 0; i <= n_mvals; i++)
 	{
 		if (verbose)
-			printf("Testing %d-binned model\n",m);
+			printf("Testing %d-binned model\n",i);
 		//Add the next om1 value to the total odds ratio.
 		//We also have to remove the log
 
-		odds += exp(log_m_odds_ratio(counts,length,m,nu,
+		odds += exp(log_m_odds_ratio(counts,length,mvals[i],nu,
 									 nudot,t_max));
 	}
 	return odds;
