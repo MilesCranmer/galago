@@ -249,10 +249,9 @@ __global__ void create_binnings(double *counts, int *mvals,
 		double t = counts[idx];
 		int index = idx;
 		unsigned char tmp_bin = 0;
-		for (int i = 0; i < n_mvals; i ++)
+		for (int i = 0; i < n_mvals; i++)
 		{
-
-			tmp_bin = ((int)(fmod(t*(nu+0.5*t*nudot),1)*mvals[i]));
+			tmp_bin = (int)(fmod(t*(nu+0.5*t*nudot),1)*mvals[i]);
 			binning[index] = tmp_bin;
 			index += length;
 		}
@@ -260,8 +259,8 @@ __global__ void create_binnings(double *counts, int *mvals,
 }
 
 //function makes CUDA calls
-double get_ratio (double *counts_d, int length, double *counts_h,
-				  int *mvals_d, int *mvals_h, int n_mvals, double nu, double nudot)
+unsigned char *get_bins(double *counts_d, int length, double *counts_h,
+						  int *mvals_d, int *mvals_h, int n_mvals, double nu, double nudot)
 {
 	unsigned char *binning_h;
 	unsigned char *binning_d;
@@ -286,58 +285,10 @@ double get_ratio (double *counts_d, int length, double *counts_h,
 			   cudaMemcpyDeviceToHost);
 	//error = cudaGetLastError();
 	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
-	for (int i = 0; i < 50; i ++)
-		printf("bin is %u\n", binning_h[i*10+length*2]);
 	cudaFree(binning_d);
-	free(binning_h);
 	cudaFree(counts_d);
 	cudaFree(mvals_d);
-	/*
-	unsigned char binning_h[n_mvals][length];
-	unsigned char **binning_d;//[n_mvals][length];
-	size_t width = n_mvals*sizeof(char);
-	size_t height = length;
-	size_t pitch = 0, pitch2 = 0;
-	cudaError_t error;
-	binning_h[10][1000] = 100;
-	//unsigned char **binning_d;
-	error = cudaMallocPitch(&binning_d, &pitch,1, length);
-	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
-	*/
-	/*
-
-	create_binnings<<<length,1>>>(counts, mvals_d, n_mvals, nu, nudot, binning_d);
-	cudaThreadSynchronize();
-	cudaMemcpy2D(binning_h,pitch,binning_d,pitch,width,height,
-				 cudaMemcpyDeviceToHost);
-	error = cudaGetLastError();
-	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
-	printf("%u\n",binning_h[10][1000]);
-	*/
-
-	//cudaMemcpy(binning_h,binning_d,*sizeof(double),
-			   //cudaMemcpyDeviceToHost);
-	//cudaFree(binning_d);
-	
-	
-	//the counts and logfacts should already be loaded
-	//to the GPU!
-	//host memory of bins
-	/*
-	unsigned char **binning_h = new unsigned char*[n_mvals];
-	//allocate memory for bins
-	for (int i = 0; i < n_mvals; i++)
-	{
-		binning[h] = new unsigned char[length];
-	}
-	size_t width = n_mvals;
-	size_t height = length;
-	size_t pitch = 0;
-	unsigned char **binning_d;
-	cudaMallocPitch((void***)&binning_d, &pitch, width, height);
-	cudaFree(binning_d);
-	*/
-	return 0;
+	return binning_h;
 }
 
 //function uploads static data to the GPU at start of MPI proc
@@ -360,6 +311,34 @@ void free_data(double *counts_d, int *mvals_d)
 {
 	//cudaFree(mvals_d);
 	//cudaFree(counts_d);
+}
+
+double bins_to_odds(unsigned char *bins, int length, 
+					int *mvals, int n_mvals)
+{
+	double odds = 0;
+	for (int i = 0; i < n_mvals; i ++)
+	{
+		double om1 = 0;
+		int m = mvals[i];	
+		int n[m];
+		for (int j = 0; j < m; j ++)
+		{
+			n[j] = 0;
+		}
+		for (int k = i*length; k < (i+1)*length; k++)
+		{
+			n[bins[k]]++;
+		}
+		for (int l = 0; l < m; l++)
+		{
+			//part of odds equation
+			om1 += logFacts[n[l]];
+		}
+		om1 += logFacts[m-1]-logFacts[length+m-1]+((double)length)*log(m);
+		odds += exp(om1);
+	}
+	return odds;
 }
 
 				

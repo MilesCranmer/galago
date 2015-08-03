@@ -21,8 +21,9 @@ double log_odds_ratio(double*,int,int*,int,double,double,bool);
 void normalize_counts(double*,int);
 struct SearchResults;
 void upload_data(double*,double*,int,int*,int*,int);
-double get_ratio(double*,int,double*,int*,int*,int,double,double);
+unsigned char *get_bins(double*,int,double*,int*,int*,int,double,double);
 void free_data(double*,int*);
+double bins_to_odds(unsigned char*,int,int*,int);
 
 int main(int argc, char * argv[])
 {
@@ -185,7 +186,7 @@ int main(int argc, char * argv[])
 					//some last modifications to the odds
 					//finalodds = 1./nmvals/ log(nu_max/nu_min)/log(nudot_max/nudot_min) * dnu/nu * nudotfrac * moddsratio; 
 					curr_results[2] /= n_mvals;
-					curr_results[2] *= settings.d_nu/nu;
+					curr_results[2] *= settings.d_nu/curr_results[0];
 					//printf("Curr %e\n", curr_results[2]);
 					//curr_results[2] /= log(settings.nu_max/settings.nu_min);
 					//printf("Curr %e\n", curr_results[2]);
@@ -286,17 +287,21 @@ int main(int argc, char * argv[])
 				//Eventually OpenMP should do something
 				//to parallelize the log odds ratio
 				//////////////////////////////////////s
-				curr_results[2] = log_odds_ratio(counts, length, mvals,
+				/*curr_results[2] = log_odds_ratio(counts, length, mvals,
 											n_mvals,
 										 	curr_settings[0], 
 										 	curr_settings[1], 
 										 	0);
-				curr_results[2] = get_ratio(counts_d, length, counts,
-											mvals_d,
-											mvals,
-											n_mvals,
-											curr_settings[0],
-											curr_settings[1]);
+											*/
+				unsigned char *bins;
+				bins = get_bins(counts_d, length, counts,
+								mvals_d,
+								mvals,
+								n_mvals,
+								curr_settings[0],
+								curr_settings[1]);
+				curr_results[2] = bins_to_odds(bins, length,
+											   mvals, n_mvals);
 				curr_results[0] = curr_settings[0];
 				curr_results[1] = curr_settings[1];
 				//send back results of search
