@@ -237,34 +237,27 @@ __global__ void create_binnings(double *counts, int *mvals,
 	//n[(int)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m)]++;
 }
 */
+
 __global__ void create_binnings(double *counts, int *mvals,
 								int length,
 								int n_mvals, double nu, double nudot,
 								unsigned char *binning)
 {
-	double t = counts[1000];
-	if (t  < 20)
-	{
-		binning[0] = 55;
-	}
-	else
-	{
-		binning[0] = 23;
-	}
-	/*
 	int idx = blockIdx.x*blockDim.x+threadIdx.x;
 	if (idx < length)
 	{
+		double t = counts[idx];
 		int index = idx;
-	//	double t = counts[0];
+		unsigned char tmp_bin = 0;
 		for (int i = 0; i < n_mvals; i ++)
 		{
-			binning[index] = 42;
+
+			tmp_bin = (unsigned char)((int)(fmod(t*(nu+0.5*t*nudot),1)*mvals[i]));
+			binning[index] = tmp_bin;
 			index += length;
 		}
 	}
-	*/
-	
+	binning[100] = 54;
 }
 /*
 {
@@ -286,28 +279,37 @@ __global__ void create_binnings(double *counts, int *mvals,
 }*/
 
 //function makes CUDA calls
-double get_ratio (double *counts, int length, 
-				  int *mvals, int n_mvals, double nu, double nudot)
+double get_ratio (double *counts_d, int length, double *counts_h,
+				  int *mvals_d, int *mvals_h, int n_mvals, double nu, double nudot)
 {
 	unsigned char *binning_h;
 	unsigned char *binning_d;
 	binning_h = new unsigned char [n_mvals*length];
 	binning_h[0] = 100;
 	cudaError_t error;
+	printf("Where am I lol %f, %d\n",counts_h[1000],mvals_h[5]);
+	cudaMalloc((void**)&counts_d,length*sizeof(double));		
+	cudaMalloc((void**)&mvals_d,n_mvals*sizeof(double));
+	cudaMemcpy(counts_d,counts_h,length*sizeof(double),
+	 		   cudaMemcpyHostToDevice);
+	cudaMemcpy(mvals_d,mvals_h,n_mvals*sizeof(double),
+	 		   cudaMemcpyHostToDevice);
 	error = cudaMalloc((void**)&binning_d,n_mvals*length);
 	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
 	else {printf("Memory Allocated!\n");}
-	//create_binnings<<<1,1>>>(counts, mvals, length, n_mvals, nu, nudot, binning_d);
-	//create_binnings<<<40285,1024>>>(counts, mvals, length, n_mvals, nu, nudot, binning_d);
+	create_binnings<<<40285,1024>>>(counts_d, mvals_d, length, n_mvals, nu, nudot, binning_d);
+	//create_binnings<<<40285,1024>>>(counts_d, mvals, length, n_mvals, nu, nudot, binning_d);
 	//error = cudaThreadSynchronize();	
 	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
 	error = cudaMemcpy(binning_h,binning_d,n_mvals*length*sizeof(unsigned char),
 			   cudaMemcpyDeviceToHost);
 	//error = cudaGetLastError();
 	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
-	printf("%u\n",binning_h[0]);
+	printf("%f %f %u\n",nu, nudot, binning_h[100]);
 	cudaFree(binning_d);
 	free(binning_h);
+	cudaFree(counts_d);
+	cudaFree(mvals_d);
 	/*
 	unsigned char binning_h[n_mvals][length];
 	unsigned char **binning_d;//[n_mvals][length];
@@ -361,12 +363,12 @@ void upload_data(double *counts_h, double *counts_d, int length,
 				 int *mvals_h, int *mvals_d, int n_mvals)
 {
 	printf("1000 toa = %f\n",counts_h[1000]);
-	cudaMalloc((void**)&counts_d,length*sizeof(double));		
-	cudaMalloc((void**)&mvals_d,n_mvals*sizeof(double));
-	cudaMemcpy(counts_d,counts_h,length*sizeof(double),
-			   cudaMemcpyHostToDevice);
-	cudaMemcpy(mvals_d,mvals_h,n_mvals*sizeof(double),
-			   cudaMemcpyHostToDevice);
+	//cudaMalloc((void**)&counts_d,length*sizeof(double));		
+	//cudaMalloc((void**)&mvals_d,n_mvals*sizeof(double));
+	//cudaMemcpy(counts_d,counts_h,length*sizeof(double),
+	// 		   cudaMemcpyHostToDevice);
+	//cudaMemcpy(mvals_d,mvals_h,n_mvals*sizeof(double),
+	//		   cudaMemcpyHostToDevice);
 	cudaError_t error = cudaGetLastError();
 	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
 	else{printf("Static data uploaded!\n");}
@@ -374,8 +376,8 @@ void upload_data(double *counts_h, double *counts_d, int length,
 
 void free_data(double *counts_d, int *mvals_d)
 {
-	cudaFree(mvals_d);
-	cudaFree(counts_d);
+	//cudaFree(mvals_d);
+	//cudaFree(counts_d);
 }
 
 				

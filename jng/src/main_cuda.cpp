@@ -21,7 +21,7 @@ double log_odds_ratio(double*,int,int*,int,double,double,bool);
 void normalize_counts(double*,int);
 struct SearchResults;
 void upload_data(double*,double*,int,int*,int*,int);
-double get_ratio(double*,int,int*,int,double,double);
+double get_ratio(double*,int,double*,int*,int*,int,double,double);
 void free_data(double*,int*);
 
 int main(int argc, char * argv[])
@@ -291,7 +291,9 @@ int main(int argc, char * argv[])
 										 	curr_settings[0], 
 										 	curr_settings[1], 
 										 	0);
-				curr_results[2] = get_ratio(counts_d, length, mvals_d,
+				curr_results[2] = get_ratio(counts_d, length, counts,
+											mvals_d,
+											mvals,
 											n_mvals,
 											curr_settings[0],
 											curr_settings[1]);
