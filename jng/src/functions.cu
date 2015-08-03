@@ -252,31 +252,12 @@ __global__ void create_binnings(double *counts, int *mvals,
 		for (int i = 0; i < n_mvals; i ++)
 		{
 
-			tmp_bin = (unsigned char)((int)(fmod(t*(nu+0.5*t*nudot),1)*mvals[i]));
+			tmp_bin = ((int)(fmod(t*(nu+0.5*t*nudot),1)*mvals[i]));
 			binning[index] = tmp_bin;
 			index += length;
 		}
 	}
-	binning[100] = 54;
 }
-/*
-{
-
-	//threads=length
-	int idx = blockIdx.x*blockDim.x+threadIdx.x;
-	int index = idx;
-	double t = counts[idx];
-	unsigned char tmp_bin = 0;
-	for (int i = 0; i < n_mvals; i++)
-	{
-		tmp_bin = (unsigned char)((int)(fmod(t*(nu+0.5*t*nudot),1)*mvals[i]));
-		binning[index] = tmp_bin;
-		index += length;
-
-	}
-	binning[10000]=5;
-	//n[(int)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m)]++;
-}*/
 
 //function makes CUDA calls
 double get_ratio (double *counts_d, int length, double *counts_h,
@@ -305,7 +286,8 @@ double get_ratio (double *counts_d, int length, double *counts_h,
 			   cudaMemcpyDeviceToHost);
 	//error = cudaGetLastError();
 	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
-	printf("%f %f %u\n",nu, nudot, binning_h[100]);
+	for (int i = 0; i < 50; i ++)
+		printf("bin is %u\n", binning_h[i*10+length*2]);
 	cudaFree(binning_d);
 	free(binning_h);
 	cudaFree(counts_d);
