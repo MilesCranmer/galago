@@ -227,7 +227,14 @@ double log_m_odds_ratio(double *counts, int length, int m,
 	{
 		ng[j] = 0;
 	}
-	
+		
+	for (int i = 0; i < length; i++)
+	{
+
+		ng[(unsigned char)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m)]++;
+
+	}
+	/*
 	//split up into threads
 	#pragma omp parallel default(shared)
 	{
@@ -255,7 +262,7 @@ double log_m_odds_ratio(double *counts, int length, int m,
 			//get corresponding bin	
 			//k = (int)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m);
 			//one more count
-			n[(int)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m)]++;
+			n[(unsigned char)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m)]++;
 			
 		}
 
@@ -266,6 +273,7 @@ double log_m_odds_ratio(double *counts, int length, int m,
 			ng[j] += n[j];
 		}
 	}
+	*/
 	//odds to return
 	double om1 = 0.0;
 	//go through all bins
