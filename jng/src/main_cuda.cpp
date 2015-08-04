@@ -83,6 +83,7 @@ int main(int argc, char * argv[])
 
 	//share sizing details - all of the following 
 	//must be blocking to insure nothing funny happens
+	//as consistency of this data is crucial
 	MPI_Bcast(&maxFact, 1, MPI_INT, 0, comm);
 	MPI_Bcast(&length, 1, MPI_INT, 0, comm);
 	if(rank != 0)
@@ -283,10 +284,6 @@ int main(int argc, char * argv[])
 				MPI_Recv(curr_settings, 2, MPI_DOUBLE,
 						 0, chan_settings, comm, &rstatus);
 				//new search settings. Perform search.
-				///////////////////////////////////////
-				//Eventually OpenMP should do something
-				//to parallelize the log odds ratio
-				//////////////////////////////////////s
 				/*curr_results[2] = log_odds_ratio(counts, length, mvals,
 											n_mvals,
 										 	curr_settings[0], 
@@ -294,6 +291,9 @@ int main(int argc, char * argv[])
 										 	0);
 											*/
 				unsigned char *bins;
+				//this function should wait until
+				//a flag is closed on the GPU,
+				//then send the new data
 				bins = get_bins(counts_d, length, counts,
 								mvals_d,
 								mvals,

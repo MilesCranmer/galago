@@ -267,16 +267,19 @@ unsigned char *get_bins(double *counts_d, int length, double *counts_h,
 	binning_h = new unsigned char [n_mvals*length];
 	binning_h[0] = 100;
 	cudaError_t error;
-	printf("Where am I lol %f, %d\n",counts_h[1000],mvals_h[5]);
 	cudaMalloc((void**)&counts_d,length*sizeof(double));		
 	cudaMalloc((void**)&mvals_d,n_mvals*sizeof(double));
+	error = cudaMalloc((void**)&binning_d,n_mvals*length);
+	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
+	printf("Copying data...\n");
 	cudaMemcpy(counts_d,counts_h,length*sizeof(double),
 	 		   cudaMemcpyHostToDevice);
 	cudaMemcpy(mvals_d,mvals_h,n_mvals*sizeof(double),
 	 		   cudaMemcpyHostToDevice);
-	error = cudaMalloc((void**)&binning_d,n_mvals*length);
+	error = cudaGetLastError();
 	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
 	else {printf("Memory Allocated!\n");}
+	printf("Binning data...\n");
 	create_binnings<<<40285,1024>>>(counts_d, mvals_d, length, n_mvals, nu, nudot, binning_d);
 	//create_binnings<<<40285,1024>>>(counts_d, mvals, length, n_mvals, nu, nudot, binning_d);
 	//error = cudaThreadSynchronize();	
@@ -285,6 +288,7 @@ unsigned char *get_bins(double *counts_d, int length, double *counts_h,
 			   cudaMemcpyDeviceToHost);
 	//error = cudaGetLastError();
 	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
+	printf("Done GPU. Cleaning up...\n");
 	cudaFree(binning_d);
 	cudaFree(counts_d);
 	cudaFree(mvals_d);
@@ -330,6 +334,26 @@ double bins_to_odds(unsigned char *bins, int length,
 		{
 			n[bins[k]]++;
 		}
+		/*
+		#pragma omp parallel
+		{
+			int ni[m];
+			for (int r = 0; r < m; r ++)
+			{
+				ni[r] = 0;
+			}
+			#pragma omp for
+			for (int k = i*length; k < (i+1)*length; k++)
+			{
+				ni[bins[k]]++;
+			}
+			#pragma omp critical
+			for (int q = 0; q < m; q++)
+			{
+				n[q] += ni[q];	
+			}
+		}
+		*/
 		for (int l = 0; l < m; l++)
 		{
 			//part of odds equation
