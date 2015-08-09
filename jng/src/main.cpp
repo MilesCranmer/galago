@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <gmp.h>
 #include <mpi.h> //incorporates mpi capabilities
+#include <fstream> //file writing
+#include <iomanip> //setprecision()
 //#include <omp.h> //extra parallelization
 #include "bin_write.cpp"//read/write of binary files
 #include "bin_read.cpp"
@@ -23,6 +25,8 @@ int maxFact;
 
 int main(int argc, char * argv[])
 {
+	//results file
+	ofstream results_file("analysis_data_47TucD.csv");
 	//read in some counts to practice on
 	double *counts;
 	//Get the total number of counts
@@ -100,16 +104,17 @@ int main(int argc, char * argv[])
 
 	if (rank == 0)
 	{
+		results_file << "F0,F1,Odds\n";
 		//set up search
 		PeakSearch settings;
 		//call default parameters
 		settings.default_params();
-		settings.nu_min = 327.00000;
-		settings.nu_max = 327.00020;
-		settings.d_nu = 0.00001;
-		settings.nudot_min = 1.70e-80;//365e-15; 
-		settings.nudot_max = 1.70e-80;
-		settings.d_nudot = 1e-81;
+		settings.nu_min = 186.65166;
+		settings.nu_max = 186.65167;
+		settings.d_nu = 5.6796546455e-7;
+		settings.nudot_min = 1.1915694e-15;//365e-15; 
+		settings.nudot_max = 1.1915694e-15;
+		settings.d_nudot = 1e-8;
 		settings.m_max = 15;
 
 		//display some initial stats
@@ -186,8 +191,15 @@ int main(int argc, char * argv[])
 					//curr_results[2] *= settings.d_nu/nu;
 					//printf("Curr %e\n", curr_results[2]);
 					//curr_results[2] *= fabs(settings.d_nudot/nudot);
-					printf("Receiving Search, nu: %e, nudot: -%e, Odds: %e\n", 
-							curr_results[0], curr_results[1], curr_results[2]);
+					//if (recv%100==0)
+					{
+						printf("Receiving Search, nu: %e, nudot: -%e, Odds: %e\n", 
+								curr_results[0], curr_results[1], curr_results[2]);
+					}
+					results_file << scientific << setprecision(10) << curr_results[0] << ",";
+					results_file << scientific << -curr_results[1] << ",";
+					results_file << scientific << curr_results[2] << ",";
+					results_file << "\n";
 					results.nu.push_back(curr_results[0]);
 					results.nudot.push_back(curr_results[1]);
 					results.odds.push_back(curr_results[2]);
@@ -235,9 +247,15 @@ int main(int argc, char * argv[])
 			//a message was sent from probe)
 			MPI_Recv(curr_results, 3, MPI_DOUBLE, i, chan_results, comm, 
 					 &rstatus);
+			curr_results[2] /= (settings.m_max - 1);
+			curr_results[2] *= settings.d_nu/nu;
 			//print results
 			printf("Receiving Search, nu: %e, nudot: -%e, Odds: %e\n", 
 					curr_results[0], curr_results[1], curr_results[2]);
+			results_file << scientific << setprecision(8) << curr_results[0] << ",";
+			results_file << scientific << -curr_results[1] << ",";
+			results_file << scientific << curr_results[2] << ",";
+			results_file << "\n";
 			results.nu.push_back(curr_results[0]);
 			results.nudot.push_back(curr_results[1]);
 			results.odds.push_back(curr_results[2]);
@@ -256,7 +274,8 @@ int main(int argc, char * argv[])
 			MPI_Isend(&size, 1, MPI_INT,
 					  i, chan_terminate, comm,
 					  &srequest);
-		}
+		}	
+		results_file.close();
 	}
 	else //the bulk search processes
 	{

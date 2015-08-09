@@ -12,7 +12,7 @@ LDFLAGS = -fopenmp
 SOURCES = src/main.cu
 OBJ = build/main.o
 #final executable
-EXE = jng
+EXE = jng200
 
 all: $(EXE)
 

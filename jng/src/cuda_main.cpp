@@ -112,9 +112,9 @@ int main(int argc, char * argv[])
 		PeakSearch settings;
 		//call default parameters
 		//settings.default_params();
-		settings.nu_min = 327;
-		settings.nu_max = 328;
-		settings.d_nu = 0.00001;
+		settings.nu_min = 30.00;
+		settings.nu_max = 30.01;
+		settings.d_nu = 1/counts[length-1];
 		settings.nudot_min = 1.70e-80;//365e-15; 
 		settings.nudot_max = 1.70e-80;
 		settings.d_nudot = 1e-81;

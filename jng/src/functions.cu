@@ -1,3 +1,4 @@
+#include <thrust/sort.h>
 #include <math.h> //for math
 //#include <gmpxx.h> //for precision calculation
 #include <vector> //to hold search results
@@ -237,6 +238,8 @@ __global__ void create_binnings(double *counts, int *mvals,
 	//n[(int)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m)]++;
 }
 */
+//function gets decimal portion of double
+__device__ double get_decimal (double x) {return x - (int)x;}
 
 __global__ void create_binnings(double *counts, int *mvals,
 								int length,
@@ -251,7 +254,7 @@ __global__ void create_binnings(double *counts, int *mvals,
 		unsigned char tmp_bin = 0;
 		for (int i = 0; i < n_mvals; i++)
 		{
-			tmp_bin = (int)(fmod(t*(nu+0.5*t*nudot),1)*mvals[i]);
+			tmp_bin = (int)(get_decimal(t*(nu+0.5*t*nudot))*mvals[i]);
 			binning[index] = tmp_bin;
 			index += length;
 		}
@@ -281,7 +284,7 @@ unsigned char *get_bins(double *counts_d, int length, double *counts_h,
 	else {printf("Memory Allocated!\n");}
 	printf("Binning data...\n");
 	create_binnings<<<40285,1024>>>(counts_d, mvals_d, length, n_mvals, nu, nudot, binning_d);
-	//create_binnings<<<40285,1024>>>(counts_d, mvals, length, n_mvals, nu, nudot, binning_d);
+	thrust::sort(counts_d,counts_d+length);
 	//error = cudaThreadSynchronize();	
 	if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
 	error = cudaMemcpy(binning_h,binning_d,n_mvals*length*sizeof(unsigned char),

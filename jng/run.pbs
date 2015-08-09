@@ -1,9 +1,10 @@
 #!/bin/bash
-#PBS -l nodes=4:ppn=16:mics=2
-#PBS -l walltime=00:05:00
+#PBS -l nodes=100:ppn=12
+#PBS -l walltime=05:00:00
+#PBS -A apa-511-aa
 #PBS -V
-#PBS -N jng
+#PBS -N jng200
 cd $PBS_O_WORKDIR
 export IPATH_NO_CPUAFFINITY=1
-export OMP_NUM_THREADS=4
-mpiexec -n 4 -npernode 4 ./jng > log
+export OMP_NUM_THREADS=6
+mpiexec -n 200 --map-by socket:PE=6 ./jng450
