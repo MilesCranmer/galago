@@ -10,6 +10,7 @@
 #include "bin_read.cpp"
 //#include "functions.cu"//all statistical functions, search class
 #include "structures.h"
+#define MVALS 99
 
 //Import the list of log factorials
 double *logFacts;
@@ -34,15 +35,16 @@ int main(int argc, char * argv[])
 	int length;
 	//current search settings
 	double nu, nudot;
-	int m_max = 8;
+	int m_max = MVALS;
 	//MPI variables (rank == proc number, size is num proc)
 	int rank, size;
 	//settings/results packed into arrays:
 	double curr_settings[2];
 	double curr_results[3];
 	//declare the mvalues to search
-	int n_mvals = 8;
-	int mvals[8] = {2,4,8,16,32,64,128,255};
+	int n_mvals = MVALS;
+	int mvals[MVALS] = {2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50};
+	//int mvals[8] = {2,4,8,16,32,64,128,255};
 	//holds all results (used by root node)
 	SearchResults results;
 	//whether or not start of 
@@ -73,8 +75,8 @@ int main(int argc, char * argv[])
 		//load in values from data
 		logFacts = bin_read((char*)"data/log_facs_3.bin");
 		maxFact = bin_size((char*)"data/log_facs_3.bin");
-		counts = bin_read((char*)"data/B1821_counts.bin");
-		length = bin_size((char*)"data/B1821_counts.bin");
+		counts = bin_read((char*)"data/M28_counts.bin");
+		length = bin_size((char*)"data/M28_counts.bin");
 		//normalize the counts
 		normalize_counts(counts, length);
 		printf("Total of %d counts\n", length);
@@ -113,13 +115,13 @@ int main(int argc, char * argv[])
 		PeakSearch settings;
 		//call default parameters
 		//settings.default_params();
-		settings.nu_min = 327.3;
-		settings.nu_max = 327.4;
+		settings.nu_min = 327.38;
+		settings.nu_max = 327.39;
 		settings.d_nu = 1/counts[length-1];
-		settings.nudot_min = 1.70e-80;//365e-15; 
-		settings.nudot_max = 1.70e-80;
-		settings.d_nudot = 1e-81;
-		settings.m_max = 8;
+		settings.nudot_min = 1.7365e-15;//365e-15; 
+		settings.nudot_max = 1.7365e-15;
+		settings.d_nudot = 1e-8;
+		settings.m_max = MVALS;
 
 		//display some initial stats
 		printf("The settings for this search are:\n\n");
