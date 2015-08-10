@@ -34,15 +34,15 @@ int main(int argc, char * argv[])
 	int length;
 	//current search settings
 	double nu, nudot;
-	int m_max = 15;
+	int m_max = 8;
 	//MPI variables (rank == proc number, size is num proc)
 	int rank, size;
 	//settings/results packed into arrays:
 	double curr_settings[2];
 	double curr_results[3];
 	//declare the mvalues to search
-	int n_mvals = 15;
-	int mvals[15] = {2,3,4,6,9,13,19,28,42,63,94,141,191,211,256};
+	int n_mvals = 8;
+	int mvals[8] = {2,4,8,16,32,64,128,255};
 	//holds all results (used by root node)
 	SearchResults results;
 	//whether or not start of 
@@ -73,8 +73,8 @@ int main(int argc, char * argv[])
 		//load in values from data
 		logFacts = bin_read((char*)"data/log_facs_3.bin");
 		maxFact = bin_size((char*)"data/log_facs_3.bin");
-		counts = bin_read((char*)"data/bary.bin");
-		length = bin_size((char*)"data/bary.bin");
+		counts = bin_read((char*)"data/B1821_counts.bin");
+		length = bin_size((char*)"data/B1821_counts.bin");
 		//normalize the counts
 		normalize_counts(counts, length);
 		printf("Total of %d counts\n", length);
@@ -113,13 +113,13 @@ int main(int argc, char * argv[])
 		PeakSearch settings;
 		//call default parameters
 		//settings.default_params();
-		settings.nu_min = 30.00;
-		settings.nu_max = 30.01;
+		settings.nu_min = 327.3;
+		settings.nu_max = 327.4;
 		settings.d_nu = 1/counts[length-1];
 		settings.nudot_min = 1.70e-80;//365e-15; 
 		settings.nudot_max = 1.70e-80;
 		settings.d_nudot = 1e-81;
-		settings.m_max = 15;
+		settings.m_max = 8;
 
 		//display some initial stats
 		printf("The settings for this search are:\n\n");
@@ -269,11 +269,11 @@ int main(int argc, char * argv[])
 	}
 	else //the bulk search processes
 	{
-		double *counts_d;
-		int *mvals_d;
+	//	double *counts_d;
+	//	int *mvals_d;
 		//upload static data to GPU
-		upload_data(counts, counts_d, length, mvals, 
-					mvals_d, n_mvals);
+	//	upload_data(counts, counts_d, length, mvals, 
+	//				mvals_d, n_mvals);
 		//go until told to terminate
 		while(!termination_flag)
 		{
@@ -291,7 +291,7 @@ int main(int argc, char * argv[])
 										 	curr_settings[1], 
 										 	0);
 											*/
-				unsigned char *bins;
+				//unsigned char *bins;
 				//this function should wait until
 				//a flag is closed on the GPU,
 				//then send the new data
@@ -318,7 +318,7 @@ int main(int argc, char * argv[])
 			MPI_Iprobe(0, chan_terminate, comm, &termination_flag, 
 					   &rstatus);
 		}
-		free_data(counts_d,mvals_d);
+		//free_data(counts_d,mvals_d);
 	}
 	if (rank != 0)
 	{

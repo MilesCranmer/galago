@@ -358,12 +358,13 @@ double t_odds(double *counts_h, int length,
 			//thrust::sort(&t_binning[i*length],&t_binning[i*length + length]);
 			thrust::advance(iter_start,length);
 		}
-		cout << (int)t_binning[length-1] << endl;
 		
-	/*	//bin these!!!!
 		double odds = 0;
+		iter_start = t_binning.begin();
+		iter_end = t_binning.begin();
 		for (int i = 0; i < n_mvals; i++)
 		{
+			thrust::advance(iter_end,length);
 			thrust::device_vector<int> histogram(mvals_h[i],0);
 			thrust::host_vector<unsigned char> histo_vals_h(mvals_h[i],0);
 			for (unsigned char j = 0; j < mvals_h[i]; j++)
@@ -371,11 +372,11 @@ double t_odds(double *counts_h, int length,
 				histo_vals_h[j] = j;
 			}
 			thrust::device_vector<unsigned char> histo_vals=histo_vals_h;
-			thrust::reduce_by_key(t_binning.begin()+i*length,
-					t_binning.end()+(i+1)*length,
-					thrust::constant_iterator<unsigned char>(1),
+			thrust::reduce_by_key(iter_start, iter_end,	
+					thrust::constant_iterator<int>(1),
 					histo_vals.begin(),
 					histogram.begin());
+			thrust::advance(iter_start,length);
 			//load these values back to the host, as has been binned
 			thrust::host_vector<int> binned = histogram;
 			double om1 = 0;
@@ -385,11 +386,8 @@ double t_odds(double *counts_h, int length,
 			}
 			om1  += logFacts[mvals_h[i]-1]-logFacts[length+mvals_h[i]-1]+((double)length)*log(mvals_h[i]);
 			odds += exp(om1);
-
 		}
 		return odds;
-		*/
-		return 0;
 	}
 	catch(thrust::system_error &err)
 	{
