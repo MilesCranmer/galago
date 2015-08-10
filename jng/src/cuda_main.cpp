@@ -24,6 +24,7 @@ void upload_data(double*,double*,int,int*,int*,int);
 unsigned char *get_bins(double*,int,double*,int*,int*,int,double,double);
 void free_data(double*,int*);
 double bins_to_odds(unsigned char*,int,int*,int);
+double t_odds(double*,int,double,double,int*,int);
 
 int main(int argc, char * argv[])
 {
@@ -294,14 +295,18 @@ int main(int argc, char * argv[])
 				//this function should wait until
 				//a flag is closed on the GPU,
 				//then send the new data
-				bins = get_bins(counts_d, length, counts,
+				/*bins = get_bins(counts_d, length, counts,
 								mvals_d,
 								mvals,
 								n_mvals,
 								curr_settings[0],
-								curr_settings[1]);
-				curr_results[2] = bins_to_odds(bins, length,
-											   mvals, n_mvals);
+								curr_settings[1]);*/
+				//curr_results[2] = bins_to_odds(bins, length,
+				//							   mvals, n_mvals);
+				curr_results[2] = t_odds(counts,length,
+										 curr_settings[0],
+										 curr_settings[1],
+										 mvals, n_mvals);
 				curr_results[0] = curr_settings[0];
 				curr_results[1] = curr_settings[1];
 				//send back results of search

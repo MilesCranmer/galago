@@ -1,4 +1,9 @@
+#include <thrust/advance.h>
+#include <thrust/system_error.h>
 #include <thrust/sort.h>
+#include <thrust/host_vector.h>
+#include <thrust/device_vector.h>
+#include <thrust/iterator/constant_iterator.h>
 #include <math.h> //for math
 //#include <gmpxx.h> //for precision calculation
 #include <vector> //to hold search results
@@ -267,6 +272,7 @@ unsigned char *get_bins(double *counts_d, int length, double *counts_h,
 {
 	unsigned char *binning_h;
 	unsigned char *binning_d;
+	//initialize thrust arrays
 	binning_h = new unsigned char [n_mvals*length];
 	binning_h[0] = 100;
 	cudaError_t error;
@@ -296,6 +302,101 @@ unsigned char *get_bins(double *counts_d, int length, double *counts_h,
 	cudaFree(counts_d);
 	cudaFree(mvals_d);
 	return binning_h;
+}
+
+/*__global__ void t_bin_counts(thrust::device_vector<double> counts,
+							 thrust::device_vector<unsigned char> t_binning,
+							 double nu, double nudot,
+							 thrust::device_vector<int> mvals)
+							 */
+__global__ void t_bin_counts(double* counts, int length,
+							 unsigned char* t_binning,
+							 double nu, double nudot,
+							 int* mvals, int n_mvals)
+{
+	int idx = blockIdx.x*blockDim.x+threadIdx.x;
+	if (idx < length)
+	{
+		double t = counts[idx];
+		int index = idx;
+		unsigned char tmp_bin = 0;
+		for (int i = 0; i < n_mvals; i++)
+		{
+			tmp_bin = (unsigned char)(get_decimal(t*(nu+0.5*t*nudot))*mvals[i]);
+			t_binning[index] = tmp_bin;
+			index += length;
+		}
+	}
+}
+
+
+double t_odds(double *counts_h, int length,
+		double nu, double nudot,
+		int *mvals_h, int n_mvals)
+{
+	try
+	{
+		thrust::device_vector<double> counts_d(counts_h, counts_h+length);
+		thrust::device_vector<unsigned char> t_binning(length*n_mvals,0);
+		thrust::device_vector<int> mvals_d(mvals_h, mvals_h+n_mvals);
+		double *counts_d_pointer = thrust::raw_pointer_cast(counts_d.data());
+		unsigned char *t_binning_pointer = thrust::raw_pointer_cast(t_binning.data());
+		int *mvals_d_pointer = thrust::raw_pointer_cast(mvals_d.data());
+		t_bin_counts<<<40285,1024>>>(counts_d_pointer, length, t_binning_pointer, nu, nudot, 
+									 mvals_d_pointer, n_mvals);
+		//clear up space
+		counts_d.clear();
+		counts_d.shrink_to_fit();
+		//iterate through segments of array
+		thrust::device_vector<unsigned char>::iterator iter_start = t_binning.begin();
+		thrust::device_vector<unsigned char>::iterator iter_end   = t_binning.begin();
+		//sort parts of array
+		for (int i = 0; i < n_mvals; i++)
+		{
+			thrust::advance(iter_end,length);
+			thrust::sort(iter_start, iter_end);
+			//thrust::sort(&t_binning[i*length],&t_binning[i*length + length]);
+			thrust::advance(iter_start,length);
+		}
+		cout << (int)t_binning[length-1] << endl;
+		
+	/*	//bin these!!!!
+		double odds = 0;
+		for (int i = 0; i < n_mvals; i++)
+		{
+			thrust::device_vector<int> histogram(mvals_h[i],0);
+			thrust::host_vector<unsigned char> histo_vals_h(mvals_h[i],0);
+			for (unsigned char j = 0; j < mvals_h[i]; j++)
+			{
+				histo_vals_h[j] = j;
+			}
+			thrust::device_vector<unsigned char> histo_vals=histo_vals_h;
+			thrust::reduce_by_key(t_binning.begin()+i*length,
+					t_binning.end()+(i+1)*length,
+					thrust::constant_iterator<unsigned char>(1),
+					histo_vals.begin(),
+					histogram.begin());
+			//load these values back to the host, as has been binned
+			thrust::host_vector<int> binned = histogram;
+			double om1 = 0;
+			for (int j = 0; j < binned.size(); j++)
+			{
+				om1+=logFacts[binned[j]];
+			}
+			om1  += logFacts[mvals_h[i]-1]-logFacts[length+mvals_h[i]-1]+((double)length)*log(mvals_h[i]);
+			odds += exp(om1);
+
+		}
+		return odds;
+		*/
+		return 0;
+	}
+	catch(thrust::system_error &err)
+	{
+		std::cerr << "Error doing this: " << err.what() << std::endl;
+		exit(-1);
+	}
+
 }
 
 //function uploads static data to the GPU at start of MPI proc
