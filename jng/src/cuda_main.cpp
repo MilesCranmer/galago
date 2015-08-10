@@ -10,7 +10,7 @@
 #include "bin_read.cpp"
 //#include "functions.cu"//all statistical functions, search class
 #include "structures.h"
-#define MVALS 99
+#define MVALS 8
 
 //Import the list of log factorials
 double *logFacts;
@@ -43,7 +43,7 @@ int main(int argc, char * argv[])
 	double curr_results[3];
 	//declare the mvalues to search
 	int n_mvals = MVALS;
-	int mvals[MVALS] = {2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50};
+	int mvals[MVALS] = {2,4,8,16,32,64,128,255};
 	//int mvals[8] = {2,4,8,16,32,64,128,255};
 	//holds all results (used by root node)
 	SearchResults results;
@@ -75,8 +75,8 @@ int main(int argc, char * argv[])
 		//load in values from data
 		logFacts = bin_read((char*)"data/log_facs_3.bin");
 		maxFact = bin_size((char*)"data/log_facs_3.bin");
-		counts = bin_read((char*)"data/M28_counts.bin");
-		length = bin_size((char*)"data/M28_counts.bin");
+		counts = bin_read((char*)"data/B1821_counts.bin");
+		length = bin_size((char*)"data/B1821_counts.bin");
 		//normalize the counts
 		normalize_counts(counts, length);
 		printf("Total of %d counts\n", length);
@@ -109,6 +109,8 @@ int main(int argc, char * argv[])
 	//		rank, logFacts[50], maxFact, counts[99]);
 
 
+	int sent = 0;
+	int recv = 0;
 	if (rank == 0)
 	{
 		//set up search
@@ -143,8 +145,6 @@ int main(int argc, char * argv[])
 		//iterator to go through all processes in an
 		//even fashion (equal distribution of work)
 		int i = 1;
-		int sent = 0;
-		int recv = 0;
 		//go through all settings
 		for (nu =  settings.nu_min;
 			 nu <= settings.nu_max;
@@ -330,6 +330,7 @@ int main(int argc, char * argv[])
 	MPI_Barrier(comm);
 	if (rank == 0)
 	{
+		results.odds[recv-1] = 0;
 		int i = results.max_odds_i();
 		printf("\nThe best odds are: %e, which occur for nu of %e Hz and"
 			   " nudot of -%e Hz/s\n\n",
