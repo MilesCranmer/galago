@@ -26,6 +26,7 @@ unsigned char *get_bins(double*,int,double*,int*,int*,int,double,double);
 void free_data(double*,int*);
 double bins_to_odds(unsigned char*,int,int*,int);
 double t_odds(double*,int,double,double,int*,int);
+double t_odds_two(double*,int,double,double);
 
 int main(int argc, char * argv[])
 {
@@ -75,8 +76,8 @@ int main(int argc, char * argv[])
 		//load in values from data
 		logFacts = bin_read((char*)"data/log_facs_3.bin");
 		maxFact = bin_size((char*)"data/log_facs_3.bin");
-		counts = bin_read((char*)"data/B1821_counts.bin");
-		length = bin_size((char*)"data/B1821_counts.bin");
+		counts = bin_read((char*)"data/M28_counts.bin");
+		length = bin_size((char*)"data/M28_counts.bin");
 		//normalize the counts
 		normalize_counts(counts, length);
 		printf("Total of %d counts\n", length);
@@ -305,10 +306,13 @@ int main(int argc, char * argv[])
 								curr_settings[1]);*/
 				//curr_results[2] = bins_to_odds(bins, length,
 				//							   mvals, n_mvals);
-				curr_results[2] = t_odds(counts,length,
+				curr_results[2] = t_odds_two(counts,length,
+										 	 curr_settings[0],
+										 	 curr_settings[1]);
+				/*curr_results[2] = t_odds(counts,length,
 										 curr_settings[0],
 										 curr_settings[1],
-										 mvals, n_mvals);
+										 mvals, n_mvals);*/
 				curr_results[0] = curr_settings[0];
 				curr_results[1] = curr_settings[1];
 				//send back results of search
