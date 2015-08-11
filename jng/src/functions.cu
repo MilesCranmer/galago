@@ -372,7 +372,7 @@ double t_odds_two(double *counts_h, int length,
 		}
 		thrust::device_vector<unsigned char> histo_vals=histo_vals_h;
 		thrust::reduce_by_key(t_binning.begin(), t_binning.end(),	
-				thrust::constant_iterator<int>(1),
+				thrust::constant_iterator<unsigned char>(1),
 				histo_vals.begin(),
 				histogram.begin());
 		//load these values back to the host, as has been binned
