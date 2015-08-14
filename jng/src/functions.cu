@@ -1,13 +1,20 @@
 #include <thrust/advance.h>
 #include <thrust/system_error.h>
+#include <thrust/transform.h>
+#include <thrust/functional.h>
 #include <thrust/sort.h>
+#include <thrust/copy.h>
+#include <thrust/binary_search.h>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
+#include <thrust/adjacent_difference.h>
 #include <thrust/iterator/constant_iterator.h>
+#include <thrust/iterator/counting_iterator.h>
 #include <math.h> //for math
 //#include <gmpxx.h> //for precision calculation
 #include <vector> //to hold search results
 #include <stdio.h>
+#include <iterator>
 #include <algorithm> //compute max of vector
 #include <numeric> //compute sum of vector (accumulate)
 #include <omp.h>
@@ -333,7 +340,7 @@ __global__ void t_bin_counts_two(double* counts, int length,
 							 unsigned char* t_binning,
 							 double nu, double nudot)
 {
-	int idx = threadIdx.x;
+	int idx = blockIdx.x*blockDim.x+threadIdx.x;
 	if (idx < length)
 	{
 		t_binning[idx] = (unsigned char)(get_decimal(counts[idx]*(nu+0.5*counts[idx]*nudot))*256);
@@ -368,12 +375,19 @@ __global__ void reduce_bins_two(int* bins)
 	bins[idx] = bins[2*idx]+bins[2*idx+1];
 }
 
+__global__ void fake_bins(unsigned char *t_binning, int length)
+{
+	int idx = threadIdx.x;
+	t_binning[length+idx] = (unsigned char) idx;
+}
+
 double t_odds_two(double *counts_h, int length,
 		double nu, double nudot)
 {
 	//the entered mvals should be 2^1 up to 2^8
 	try
 	{
+		//printf("Length: %d\n",length);
 		thrust::device_vector<double> counts_d(counts_h, counts_h+length);
 		thrust::device_vector<unsigned char> t_binning(length,0);
 		double *counts_d_pointer = thrust::raw_pointer_cast(counts_d.data());
@@ -384,40 +398,54 @@ double t_odds_two(double *counts_h, int length,
 		//sort bins to be binned
 		counts_d.shrink_to_fit();
 		thrust::sort(t_binning.begin(), t_binning.end());
-		
+		//thrust::device_vector<int> histogram(256,0);
 		thrust::device_vector<int> histogram(256,0);
-		thrust::device_vector<int> histogram_ss(256*2,-1);
+		//thrust::device_vector<int> histo_vals(num_bins,0);
+		thrust::counting_iterator<int> search_begin(0);
+		thrust::upper_bound(t_binning.begin(), t_binning.end(),
+							search_begin, search_begin + 256,
+							histogram.begin());
+		thrust::adjacent_difference(histogram.begin(), histogram.end(),
+								    histogram.begin());
+				/*
+		thrust::reduce_by_key(t_binning.begin(), t_binning.end(),
+							  thrust::constant_iterator<unsigned char>(1),
+							  histo_vals.begin(),
+							  histogram.begin());
+							  */
+		/*
 		thrust::host_vector<unsigned char> histo_vals_h(256,0);
 		for (int j = 0; j < 256; j++)
 		{
 			histo_vals_h[j] = j;
 		}
+		
 		thrust::device_vector<unsigned char> histo_vals=histo_vals_h;
-		int *histogram_ss_pointer = thrust::raw_pointer_cast(histogram_ss);
-		int *histogram_pointer = thrust::raw_pointer_cast(histogram);
-		count_bins<<<40285,1024>>>(t_binning_pointer, histogram_ss_pointer);
-		get_histo(histogram_ss_pointer,histogram_pointer,length);
-		/*thrust::reduce_by_key(t_binning.begin(), t_binning.end(),	
-				thrust::constant_iterator<unsigned char>(1),
+		thrust::reduce_by_key(t_binning.begin(), t_binning.end(),	
+				thrust::constant_iterator<int>(1),
 				histo_vals.begin(),
-				histogram.begin());*/
+				histogram.begin());
+			*/	
 		//load these values back to the host, as has been binned
 		thrust::host_vector<int> binned = histogram;
-		histo_vals_h = histo_vals;
+		//for (int j = 0; j < 256; j++)
+			//printf("%d,",binned[j]);
+		//printf("\n");
 		double odds = 0;
 		double om1 = 0;
-		for (int j = 0; j < 256; j++)
+		for (int j = 0; j < binned.size(); j++)
 		{
 			om1+=logFacts[binned[j]];
 		}
 		om1  += logFacts[255]-logFacts[length+255]+((double)length)*log(256);
 		odds += exp(om1);
 		//keep reducing bins
+		
 		int m = 256;
 		for (int k = 1; k < 8; k++)
 		{
 			m = m >> 1;
-			printf("m=%d\n",m);
+			//printf("m=%d\n",m);
 			//make the pointers
 			int *bins_d = thrust::raw_pointer_cast(histogram.data());
 			reduce_bins_two<<<1,m>>>(bins_d);
@@ -425,9 +453,9 @@ double t_odds_two(double *counts_h, int length,
 			binned.resize(m);
 			binned = histogram;
 			double om1 = 0;
-			for (int j = 0; j < m; j++)
-				printf("%d,",binned[j]);
-			printf("\n");
+			//for (int j = 0; j < m; j++)
+				//printf("%d,",binned[j]);
+			//printf("\n");
 			for (int j = 0; j < m; j++)
 			{
 				om1+=logFacts[binned[j]];
@@ -435,6 +463,7 @@ double t_odds_two(double *counts_h, int length,
 			om1  += logFacts[m-1]-logFacts[length+m-1]+((double)length)*log(m);
 			odds += exp(om1);
 		}
+		
 		return odds;
 	}
 	catch(thrust::system_error &err)
