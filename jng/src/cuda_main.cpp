@@ -76,8 +76,8 @@ int main(int argc, char * argv[])
 		//load in values from data
 		logFacts = bin_read((char*)"data/log_facs_3.bin");
 		maxFact = bin_size((char*)"data/log_facs_3.bin");
-		counts = bin_read((char*)"data/B1821_counts.bin");
-		length = bin_size((char*)"data/B1821_counts.bin");
+		counts = bin_read((char*)"data/M28_counts.bin");
+		length = bin_size((char*)"data/M28_counts.bin");
 		//normalize the counts
 		normalize_counts(counts, length);
 		printf("Total of %d counts\n", length);

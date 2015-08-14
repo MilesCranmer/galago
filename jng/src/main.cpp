@@ -26,7 +26,7 @@ int maxFact;
 int main(int argc, char * argv[])
 {
 	//results file
-	ofstream results_file("analysis_data_47TucD.csv");
+	ofstream results_file("del_me.csv");
 	//read in some counts to practice on
 	double *counts;
 	//Get the total number of counts

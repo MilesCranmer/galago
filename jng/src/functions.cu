@@ -366,19 +366,19 @@ double t_odds_two(double *counts_h, int length,
 		
 		thrust::device_vector<int> histogram(256,0);
 		thrust::host_vector<unsigned char> histo_vals_h(256,0);
-		for (unsigned char j = 0; j < 256; j++)
+		for (int j = 0; j < 256; j++)
 		{
 			histo_vals_h[j] = j;
 		}
 		thrust::device_vector<unsigned char> histo_vals=histo_vals_h;
-		thrust::reduce_by_key(t_binning.begin(), t_binning.end(),	
+		count_bins<4096,1>>>
+		/*thrust::reduce_by_key(t_binning.begin(), t_binning.end(),	
 				thrust::constant_iterator<unsigned char>(1),
 				histo_vals.begin(),
-				histogram.begin());
+				histogram.begin());*/
 		//load these values back to the host, as has been binned
 		thrust::host_vector<int> binned = histogram;
-		for (int j = 0; j < 256; j++)
-			printf("%d,",binned[j]);
+		histo_vals_h = histo_vals;
 		double odds = 0;
 		double om1 = 0;
 		for (int j = 0; j < 256; j++)
