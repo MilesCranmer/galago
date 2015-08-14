@@ -340,6 +340,27 @@ __global__ void t_bin_counts_two(double* counts, int length,
 	}
 }
 
+__global__ void count_bins(unsigned char *bins, int *histogram_ss, int length)
+{
+
+	int idx = blockIdx.x*blockDim.x+threadIdx.x;
+	if (idx < length-1)
+	{
+		if (bins[idx] != bins[idx+1])
+		{
+			//log end of one
+			histogram_ss[256+bins[idx]] = idx;
+			//log start of other
+			histogram_ss[bins[idx+1]] = idx+1;
+		}
+	}
+}
+__global__ void get_histo (int *histogram, int *histogram_ss)
+{
+	int idx = threadIdx.x;
+	if (histogram_ss[256+idx] != -1 && histogram_ss[idx] != -1)
+		histogram[idx] = histogram_ss[256+idx] - histogram[idx];
+}
 //function reduces bins by a factor of two
 __global__ void reduce_bins_two(int* bins)
 {
@@ -365,13 +386,17 @@ double t_odds_two(double *counts_h, int length,
 		thrust::sort(t_binning.begin(), t_binning.end());
 		
 		thrust::device_vector<int> histogram(256,0);
+		thrust::device_vector<int> histogram_ss(256*2,-1);
 		thrust::host_vector<unsigned char> histo_vals_h(256,0);
 		for (int j = 0; j < 256; j++)
 		{
 			histo_vals_h[j] = j;
 		}
 		thrust::device_vector<unsigned char> histo_vals=histo_vals_h;
-		count_bins<4096,1>>>
+		int *histogram_ss_pointer = thrust::raw_pointer_cast(histogram_ss);
+		int *histogram_pointer = thrust::raw_pointer_cast(histogram);
+		count_bins<<<40285,1024>>>(t_binning_pointer, histogram_ss_pointer);
+		get_histo(histogram_ss_pointer,histogram_pointer,length);
 		/*thrust::reduce_by_key(t_binning.begin(), t_binning.end(),	
 				thrust::constant_iterator<unsigned char>(1),
 				histo_vals.begin(),
