@@ -3,16 +3,16 @@
 CC = mpic++
 
 #flags for compiler - try to optimize
-CFLAGS = -c -Wall -g -O3 -fopenmp -I/usr/lib64/
+CFLAGS = -c -Wall -g -O3 -I/usr/lib64/
 
-#Linker settings (need -lgmpxx -lgmp for gmp)
-LDFLAGS = -fopenmp
+#Linker settings (need -lgmpxx -lgmp for gmp, -fopenmp for omp)
+LDFLAGS = 
 
 #where sources and objects are
-SOURCES = src/main.cu
+SOURCES = src/main.cpp
 OBJ = build/main.o
 #final executable
-EXE = jng200
+EXE = jng
 
 all: $(EXE)
 

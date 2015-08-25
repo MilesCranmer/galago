@@ -3,7 +3,6 @@
 #include <vector> //to hold search results
 #include <algorithm> //compute max of vector
 #include <numeric> //compute sum of vector (accumulate)
-#include <omp.h>
 //speed not important for final statistics, so optimising this is silly
 #define PI 3.14159265359
 //this file contains the main statistics functions
@@ -237,14 +236,14 @@ double log_m_odds_ratio(double *counts, int length, int m,
 	}
 */	
 	//split up into threads
-	#pragma omp parallel default(shared)
+	//#pragma omp parallel default(shared)
 	{
 		//create temp bins for thread
-		unsigned int n[m];
-		for (int j = 0; j < m; j++)
+		//unsigned int n[m];
+		/*for (int j = 0; j < m; j++)
 		{
 			n[j] = 0;
-		}
+		}*/
 
 		//variables used in binnings
 		//gets position in nu
@@ -253,7 +252,7 @@ double log_m_odds_ratio(double *counts, int length, int m,
 		//gets bin
 		//int k;
 		//bin the photons
-		#pragma omp for 
+		//#pragma omp for 
 		for (int i = 0; i < length; i++)
 		{
 			
@@ -263,16 +262,16 @@ double log_m_odds_ratio(double *counts, int length, int m,
 			//get corresponding bin	
 			//k = (int)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m);
 			//one more count
-			n[(unsigned char)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m)]++;
+			ng[(unsigned char)(fmod(counts[i]*(nu+0.5*counts[i]*nudot),1)*m)]++;
 			
 		}
 
 		//combine n values
-		#pragma omp critical
+		/*#pragma omp critical
 		for (int j = 0; j < m; j++)
 		{
 			ng[j] += n[j];
-		}
+		}*/
 	}
 	
 	//odds to return

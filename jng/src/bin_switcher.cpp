@@ -7,6 +7,12 @@
 
 using namespace std;
 
+bool is_file_exist(const char *fileName)
+{
+    ifstream infile(fileName);
+    return infile.good();
+}
+
 int main()
 {
 	ifstream file;
@@ -17,7 +23,14 @@ int main()
 		cout << "Error opening file" << endl; 
 		return 0;
 	}
-	
+	//Broadcast max, min of nu, nudot
+	//broadcast logfacts
+	//
+	//send a process a list of times
+	//
+	//MPI_Procs should now only get
+	//
+	//
 	while (getline(file, curr_settings))
 	{
 		int x, y;
@@ -30,11 +43,16 @@ int main()
 		ss << y;
 		ss << ".bin";
 		string filename = ss.str();
-		cout << filename << endl;
-		//char filename[] = "/Users/miles/Downloads/11819_package/merged2/grid/grid_"+to_string(x)+"_"+to_string(y)+".bin";
-		int length = bin_size((char*)filename.c_str());
-		//int length = bin_size((char*)"/Users/miles/Downloads/11819_package/merged2/grid/grid_313_229.bin");
-		printf("File size of %d\n", length);
+		if (is_file_exist(filename.c_str()))
+		{
+			//cout << filename << endl;
+			//char filename[] = "/Users/miles/Downloads/11819_package/merged2/grid/grid_"+to_string(x)+"_"+to_string(y)+".bin";
+			int length = bin_size((char*)filename.c_str());
+			//int length = bin_size((char*)"/Users/miles/Downloads/11819_package/merged2/grid/grid_313_229.bin");
+			printf("File is %d doubles long\n", length);
+		}
+
+
 		//grid_316_227.bin
 	}
 	file.close();

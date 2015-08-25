@@ -11,7 +11,6 @@
 #include "bin_write.cpp"//read/write of binary files
 #include "bin_read.cpp"
 #include "functions.cpp"//all statistical functions, search class
-
 //Import the list of log factorials
 double *logFacts;
 //Get the number of factorials, using the length
@@ -67,10 +66,10 @@ int main(int argc, char * argv[])
 	if (rank == 0)
 	{
 		//load in values from data
-		logFacts = bin_read((char*)"data/log_facs_3.bin");
-		maxFact = bin_size((char*)"data/log_facs_3.bin");
-		counts = bin_read((char*)"data/bary.bin");
-		length = bin_size((char*)"data/bary.bin");
+		logFacts = bin_read((char*)"data/log_facs_2.bin");
+		maxFact = bin_size((char*)"data/log_facs_2.bin");
+		counts = bin_read((char*)"data/B1821_counts.bin");
+		length = bin_size((char*)"data/B1821_counts.bin");
 		//normalize the counts
 		normalize_counts(counts, length);
 		printf("Total of %d counts\n", length);
@@ -109,11 +108,11 @@ int main(int argc, char * argv[])
 		PeakSearch settings;
 		//call default parameters
 		settings.default_params();
-		settings.nu_min = 186.65166;
-		settings.nu_max = 186.65167;
+		settings.nu_min = 327.00;//327.4055946921
+		settings.nu_max = 327.00;
 		settings.d_nu = 5.6796546455e-7;
-		settings.nudot_min = 1.1915694e-15;//365e-15; 
-		settings.nudot_max = 1.1915694e-15;
+		settings.nudot_min = 1736.5e-16;//-1736.5e-16 
+		settings.nudot_max = 1736.5e-16;
 		settings.d_nudot = 1e-8;
 		settings.m_max = 15;
 
