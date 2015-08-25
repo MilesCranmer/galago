@@ -40,16 +40,6 @@ int main(int argc, char * argv[])
 	double curr_results[3];
 	//holds all results (used by root node)
 	SearchResults results;
-	//whether or not start of 
-	bool initialized = 0;
-	//flags used in communication
-	//data checks if new data available, while
-	//termination flag tells processes to terminate
-	int data_flag = 0, termination_flag = 0;
-	//two channels are for data to be sent, the other
-	//is to check if terminated
-	int chan_results = 2, chan_settings = 1;
-	int chan_terminate = 0;
 	//one communication channel - everything
 	MPI_Comm comm = MPI_COMM_WORLD;
 	//start up MPI
@@ -58,9 +48,6 @@ int main(int argc, char * argv[])
 	MPI_Comm_rank(comm,&rank);
 	//get the number of processes
 	MPI_Comm_size(comm,&size);
-	//receiver status
-	MPI_Status rstatus;
-	MPI_Request srequest;
 
 	//as the root process, read in the data
 	if (rank == 0)
@@ -88,6 +75,9 @@ int main(int argc, char * argv[])
 	//make sure all processes have the correct data
 	//printf("Proc %d: Log(50!) = %e, num of facts = %d, count 100 = %e\n", 
 	//		rank, logFacts[50], maxFact, counts[99]);
+
+	//split up MPI processes into different files
+	//they pick the n*rank file, then the (n+1)*rank file,and so on.
 	if (rank == 0)
 	{
 		counts = bin_read((char*)"data/B1821_counts.bin");
@@ -131,13 +121,8 @@ int main(int argc, char * argv[])
 	printf("\n*******************************\n");
 	printf("Starting search!\n");
 	printf("*******************************\n\n");
-
-	//iterator to go through all processes in an
-	//even fashion (equal distribution of work)
-	int i = 1;
-	int sent = 0;
-	int recv = 0;
 	//go through all settings
+	int i = 0;
 	for (nu =  settings.nu_min;
 		 nu <= settings.nu_max;
 		 nu += settings.d_nu)
@@ -149,94 +134,31 @@ int main(int argc, char * argv[])
 			 nudot += settings.d_nudot)
 		{
 			double odds = log_odds_ratio(counts, length, m_max, 
-									 	 curr_settings[0], 
-									 	 curr_settings[1], 
-									 	 0);
+									 	 nu, nudot, 0);
 			//some last modifications to the odds
 			//finalodds = 1./nmvals/ log(nu_max/nu_min)/log(nudot_max/nudot_min) * dnu/nu * nudotfrac * moddsratio; 
 			odds /= (settings.m_max - 1);
 			odds *= settings.d_nu/nu;
+			if (odds > 1e-2)
 			{
-				printf("Receiving Search, nu: %e, nudot: -%e, Odds: %e\n", 
-						nu, nudot, odds);
+				printf("Receiving Good Search, nu: %.9e, nudot: -%.9e, Odds: %.3e\n", 
+				nu, nudot, odds);
+				results_file << scientific << setprecision(10) << nu << ",";
+				results_file << scientific << -nudot << ",";
+				results_file << scientific << odds << ",";
+				results_file << "\n";
+				results.nu.push_back(curr_results[0]);
+				results.nudot.push_back(curr_results[1]);
+				results.odds.push_back(curr_results[2]);
 			}
-			results_file << scientific << setprecision(10) << nu << ",";
-			results_file << scientific << -nudot << ",";
-			results_file << scientific << odds << ",";
-			results_file << "\n";
-			results.nu.push_back(curr_results[0]);
-			results.nudot.push_back(curr_results[1]);
-			results.odds.push_back(curr_results[2]);
-			//printf("Sending Search to proc %d, nu: %e, nudot: %e\n", 
-			//	   i, curr_settings[0], curr_settings[1]);
-			//send next settings (non-blocking so can keep working)
-			MPI_Isend(curr_settings, 2, MPI_DOUBLE, i, 
-					  chan_settings, comm, &srequest);
-			//one more search started
-			sent ++;
-
-			//awaiting next data
-			data_flag = 0;
-			//go to next proc
 			i++;
-			//check if all processes started, and if true, 
-			//then the program has been initialized
-			if (!initialized && i == size){initialized = 1;}
-			//modulate the iterator
-			if(i == size){i = 1;}
 		}
-		//end everything
-		for (i = 1; i < size; i++)
-		{
-			//variable sent does not matter
-			//this will trigger
-			//termination of all other processes
-			//than root
-			MPI_Isend(&size, 1, MPI_INT,
-					  i, chan_terminate, comm,
-					  &srequest);
-		}	
-		results_file.close();
-	}
-			if (data_flag)
-			{
-				curr_results[2] = log_odds_ratio(counts, length, m_max, 
-										 	curr_settings[0], 
-										 	curr_settings[1], 
-										 	0);
-				curr_results[0] = curr_settings[0];
-				curr_results[1] = curr_settings[1];
-				//send back results of search
-				MPI_Isend(curr_results, 3, MPI_DOUBLE,
-						  0, chan_results, comm, &srequest);
-				data_flag = 0;
-			}
-			//check for shutdown
-			MPI_Iprobe(0, chan_terminate, comm, &termination_flag, 
-					   &rstatus);
-		}
-	}
-	if (rank != 0)
-	{
-		printf("proc %d terminating\n", rank);
-	}
-	//so results message is last
-	MPI_Barrier(comm);
-	if (rank == 0)
-	{
-		int i = results.max_odds_i();
-		printf("\nThe best odds are: %e, which occur for nu of %e Hz and"
-			   " nudot of -%e Hz/s\n\n",
-				results.odds[i], results.nu[i], results.nudot[i]);
 	}
 	//end MPI
+	results_file << "There were " << i << " total searches\n";
+	printf("Total searches: %d\n", i);
 	MPI_Finalize();
-	if (rank != 0)
-	{
-		//free the worker process memory of
-		//the logarithmic factorials and list of counts
-		free(logFacts);
-		free(counts);
-	}
+	free(logFacts);
+	free(counts);
 	return 0;
 }
