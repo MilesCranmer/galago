@@ -120,8 +120,8 @@ int main(int argc, char * argv[])
 	//length = bin_size((char*)"data/B1821_counts.bin");
 	for (int file_i = 0; file_i < filenames.size(); file_i ++)
 	{
-		counts = bin_read((char*)filenames[file_i]);
-		length = bin_size((char*)filenames[file_i]);
+		counts = bin_read((char*)filenames[file_i].c_str());
+		length = bin_size((char*)filenames[file_i].c_str());
 		//normalize the counts
 		normalize_counts(counts, length);
 
