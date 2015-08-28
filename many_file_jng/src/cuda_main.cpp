@@ -34,7 +34,6 @@ double t_odds_two(double*,int,double,double);
 
 int main(int argc, char * argv[])
 {
-	ofstream results_file("del_me.csv");
 	//read in some counts to practice on
 	double *counts;
 	//Get the total number of counts
@@ -69,6 +68,8 @@ int main(int argc, char * argv[])
 	vector<string> filenames;
 	string null_s;
 	
+	ofstream results_file(to_string(rank)+"_results.csv");
+
 	while (filenames_file.good())
 	{
 		for (int i = 0; i < rank; i++)
@@ -130,15 +131,19 @@ int main(int argc, char * argv[])
 		PeakSearch settings;
 		//call default parameters
 		settings.default_params();
-		settings.nu_min = 327.2;
-		settings.nu_max = 327.5;
+		settings.nu_min = 50;
+		settings.nu_max = 500;
 		settings.d_nu = 1/counts[length-1];
 		settings.nudot_min = 1736.5e-16;//-1736.5e-16 
 		settings.nudot_max = 1736.5e-16;
 		settings.d_nudot = 1e-8;
 		settings.m_max = 15;
+		int i = t_odds_two(counts, length, 
+						   settings.nu_min, settings.nu_max,
+						   settings.nudot_min, settings.nudot_max)
 
 		//display some initial stats
+		/*
 		printf("The settings for this search are:\n\n");
 		printf("Min nu: %e Hz, Max nu: %e Hz\n",
 			   settings.nu_min, settings.nu_max);
@@ -154,7 +159,9 @@ int main(int argc, char * argv[])
 		printf("\n*******************************\n");
 		printf("Starting search!\n");
 		printf("*******************************\n\n");
+		*/
 		//go through all settings
+		/*
 		int i = 0;
 		for (nu =  settings.nu_min;
 			 nu <= settings.nu_max;
@@ -191,6 +198,7 @@ int main(int argc, char * argv[])
 		//end MPI
 		results_file << "There were " << i << " total searches in " << filenames[file_i] << "\n";
 		printf("Total searches: %d\n", i);
+		*/
 	}
 	MPI_Finalize();
 	free(logFacts);
