@@ -30,7 +30,7 @@ unsigned char *get_bins(double*,int,double*,int*,int*,int,double,double);
 void free_data(double*,int*);
 double bins_to_odds(unsigned char*,int,int*,int);
 double t_odds(double*,int,double,double,int*,int);
-double t_odds_two(double*,int,double,double);
+double t_odds_two(double*,int,double,double,double,double);
 
 int main(int argc, char * argv[])
 {
@@ -66,10 +66,14 @@ int main(int argc, char * argv[])
 	//get filenames
 	ifstream filenames_file("data/filenames.txt");
 	vector<string> filenames;
-	string null_s;
-	
-	ofstream results_file(to_string(rank)+"_results.csv");
 
+	//char * srank;
+	//sprintf(srank,"%d",rank);
+	//string null_s(srank);
+	//null_s += "_results.csv";
+	//ofstream results_file(null_s.c_str());
+
+	string null_s = "";
 	while (filenames_file.good())
 	{
 		for (int i = 0; i < rank; i++)
@@ -98,7 +102,8 @@ int main(int argc, char * argv[])
 	}
 	//share sizing details - all of the following 
 	//must be blocking to insure nothing funny happens
-	MPI_Bcast(&maxFact, 1, MPI_INT, 0, comm);
+	if (size > 1)	
+		MPI_Bcast(&maxFact, 1, MPI_INT, 0, comm);
 	if(rank != 0)
 	{
 		//allocate memory to hold the entered data
@@ -131,16 +136,19 @@ int main(int argc, char * argv[])
 		PeakSearch settings;
 		//call default parameters
 		settings.default_params();
-		settings.nu_min = 50;
-		settings.nu_max = 500;
+		settings.nu_min = 327.5;
+		settings.nu_max = 327.8;
 		settings.d_nu = 1/counts[length-1];
 		settings.nudot_min = 1736.5e-16;//-1736.5e-16 
 		settings.nudot_max = 1736.5e-16;
 		settings.d_nudot = 1e-8;
 		settings.m_max = 15;
+		
 		int i = t_odds_two(counts, length, 
 						   settings.nu_min, settings.nu_max,
-						   settings.nudot_min, settings.nudot_max)
+						   settings.nudot_min, settings.nudot_max);
+		printf("%d\n",i);
+						   
 
 		//display some initial stats
 		/*

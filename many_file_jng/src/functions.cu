@@ -400,11 +400,14 @@ double t_odds_two(double *counts_h, int length,
 		double odds = 0;
 		double om1 = 0;
 		int m;
-		for (nu =  nu_min;
+		return 0;
+		for (double
+		     nu =  nu_min;
 			 nu <= nu_max;
 			 nu += d_nu)
 		{
-			for (nudot =  nudot_min;
+			for (double
+				 nudot =  nudot_min;
 				 nudot <= nudot_max;
 				 nudot += d_nudot)
 			{
