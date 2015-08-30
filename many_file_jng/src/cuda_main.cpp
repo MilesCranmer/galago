@@ -7,6 +7,7 @@
 #include <mpi.h> //incorporates mpi capabilities
 #include <fstream> //file writing
 #include <iomanip> //setprecision()
+#include <iostream>
 #include <string>
 #include <vector>
 //#include <omp.h> //extra parallelization
@@ -30,7 +31,7 @@ unsigned char *get_bins(double*,int,double*,int*,int*,int,double,double);
 void free_data(double*,int*);
 double bins_to_odds(unsigned char*,int,int*,int);
 double t_odds(double*,int,double,double,int*,int);
-double t_odds_two(double*,int,double,double,double,double);
+double t_odds_two(double*,int,double,double,double,double,int);
 
 int main(int argc, char * argv[])
 {
@@ -130,10 +131,23 @@ int main(int argc, char * argv[])
 	PeakSearch settings;
 	//call default parameters
 	settings.default_params();
-	settings.nu_min = 50; 
-	settings.nu_max = 500;
-	settings.nudot_min = 2.5e-19;//-1736.5e-16 
-	settings.nudot_max = 2.5e-11;//1736.5e-16;
+	int verbosity = 0;
+	if (argc == 6)
+	{
+		settings.nu_min = atof(argv[1]);
+		settings.nu_max = atof(argv[2]);
+		settings.nudot_min = atof(argv[3]);//-1736.5e-16 
+		settings.nudot_max = atof(argv[4]);//1736.5e-16;
+		verbosity = atoi(argv[5]);
+	}
+	else
+	{
+		printf("You entered %d args\n",argc);
+		settings.nu_min = 50; 
+		settings.nu_max = 500;
+		settings.nudot_min = 2.5e-19;//-1736.5e-16 
+		settings.nudot_max = 2.5e-11;//1736.5e-16;
+	}
 	settings.d_nudot = 1e-8;
 	settings.m_max = 15;
 	for (int file_i = 0; file_i < filenames.size(); file_i ++)
@@ -149,7 +163,8 @@ int main(int argc, char * argv[])
 		
 		int i = t_odds_two(counts, length, 
 						   settings.nu_min, settings.nu_max,
-						   settings.nudot_min, settings.nudot_max);
+						   settings.nudot_min, settings.nudot_max,
+						   verbosity);
 
 		//display some initial stats
 		/*

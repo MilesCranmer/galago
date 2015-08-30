@@ -383,7 +383,8 @@ __global__ void fake_bins(unsigned char *t_binning, int length)
 
 double t_odds_two(double *counts_h, int length,
 				  double nu_min, double nu_max,
-				  double nudot_min, double nudot_max)
+				  double nudot_min, double nudot_max,
+				  int verbosity)
 {
 	//the entered mvals should be 2^1 up to 2^8
 	try
@@ -472,10 +473,16 @@ double t_odds_two(double *counts_h, int length,
 				//if (odds > 1e-3)
 				odds /= 8;
 				odds *= d_nu/nu;
-				if (counter %50000==0 || odds > 1e-4)
+				//if (counter %50000==0 || odds > 1e-4)
+				if (verbosity == 2 || (verbosity == 1 && odds > 1e-3) || (verbosity == 0 && odds > 1e-1))
 				{
 					printf("Search %d gives odds of %e for nu %.9e and nudot -%.9e\n",counter,odds,nu,nudot);
 				}
+				else if (verbosity == 1 && counter%50000==0)
+				{
+					printf("On search %d\n",counter);	
+				}
+				
 			}
 		}
 		//clear up space
