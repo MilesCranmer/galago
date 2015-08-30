@@ -95,7 +95,7 @@ int main(int argc, char * argv[])
 	}
 
 	//as the root process, read in the data
-	if (rank == 0)
+	//if (rank == 0)
 	{
 		//load in values from data
 		logFacts = bin_read((char*)"data/log_facs.bin");
@@ -103,6 +103,7 @@ int main(int argc, char * argv[])
 	}
 	//share sizing details - all of the following 
 	//must be blocking to insure nothing funny happens
+	/*
 	if (size > 1)	
 		MPI_Bcast(&maxFact, 1, MPI_INT, 0, comm);
 	if(rank != 0)
@@ -115,10 +116,11 @@ int main(int argc, char * argv[])
 		/////////////////////////////////////////////////
 		logFacts = new double[maxFact];
 	}
+	*/
 	//load in the data - these are blocking broadcasts, 
 	//so act as barriers
-	if (size > 1)
-		MPI_Bcast(&logFacts[0], maxFact, MPI_DOUBLE, 0, comm);
+	//if (size > 1)
+		//MPI_Bcast(&logFacts[0], maxFact, MPI_DOUBLE, 0, comm);
 
 
 
