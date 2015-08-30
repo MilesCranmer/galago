@@ -133,7 +133,7 @@ int main(int argc, char * argv[])
 	PeakSearch settings;
 	//call default parameters
 	settings.default_params();
-	int verbosity = 0;
+	int verbosity = 1;
 	if (argc == 6)
 	{
 		settings.nu_min = atof(argv[1]);
