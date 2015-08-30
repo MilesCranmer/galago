@@ -389,6 +389,7 @@ double t_odds_two(double *counts_h, int length,
 	try
 	{
 		double d_nu = 1/counts_h[length-1];
+		//double d_nu = 1e-5;
 		double d_nudot = 1e-8;
 		//printf("Length: %d\n",length);
 		thrust::device_vector<double> counts_d(counts_h, counts_h+length);
@@ -405,10 +406,14 @@ double t_odds_two(double *counts_h, int length,
 			 nu <= nu_max;
 			 nu += d_nu)
 		{
-			for (double
-				 nudot =  nudot_min;
-				 nudot <= nudot_max;
-				 nudot += d_nudot)
+		//	for (double
+		//		 nudot =  nudot_min;
+		//		 nudot <= nudot_max;
+		//		 nudot += d_nudot)
+			
+			double nudot = nudot_min;
+			double d_nudot;
+			while (nudot <= nudot_max)
 			{
 				t_bin_counts_two<<<blocks,1024>>>(counts_d_pointer, length, t_binning_pointer, nu, nudot);
 				thrust::sort(t_binning.begin(), t_binning.end());
@@ -432,6 +437,11 @@ double t_odds_two(double *counts_h, int length,
 				odds += exp(om1);
 				for (int k = 1; k < 8; k++)
 				{
+					for (int x = 0; x < m; x ++)
+					{
+						//printf("%d,",binned[x]);
+					}
+					//printf("\n");
 					m = m >> 1;
 					//printf("m=%d\n",m);
 					//make the pointers
@@ -451,9 +461,11 @@ double t_odds_two(double *counts_h, int length,
 					om1  += logFacts[m-1]-logFacts[length+m-1]+((double)length)*log(m);
 					odds += exp(om1);
 				}
+				odds /= 8;
+				odds *= d_nu/nu;
 				if (odds > 1e-3)
 				{
-					printf("Odds of %.3e for nu %.9e and nudot -%.9e\n",odds,nu,nudot);
+					printf("Odds of %e for nu %.9e and nudot -%.9e\n",odds,nu,nudot);
 				}
 			}
 		}
