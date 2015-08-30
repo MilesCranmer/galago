@@ -407,7 +407,7 @@ double t_odds_two(double *counts_h, int length,
 		for (double
 		     nu =  nu_min;
 			 nu <= nu_max;
-			 nu += 1e-5)
+			 nu += d_nu)
 		{
 		//	for (double
 		//		 nudot =  nudot_min;
@@ -449,9 +449,9 @@ double t_odds_two(double *counts_h, int length,
 				{
 					for (int x = 0; x < m; x ++)
 					{
-						//printf("%d,",binned[x]);
+						printf("%d,",binned[x]);
 					}
-					//printf("\n");
+					printf("\n");
 					m = m >> 1;
 					//printf("m=%d\n",m);
 					//make the pointers
@@ -484,7 +484,7 @@ double t_odds_two(double *counts_h, int length,
 				}
 				else if (verbosity == 1 && counter%50000==0)
 				{
-					printf("On search %d\n",counter);	
+					printf("On search %d, and nu=%.9e Hz\n",counter,nu);	
 				}
 				
 			}

@@ -52,7 +52,6 @@ int main(int argc, char * argv[])
 	int mvals[MVALS] = {2,4,8,16,32,64,128,255};
 	//int mvals[8] = {2,4,8,16,32,64,128,255};
 	//holds all results (used by root node)
-	SearchResults results;
 	//one communication channel - everything
 	MPI_Comm comm = MPI_COMM_WORLD;
 	//start up MPI
@@ -130,42 +129,37 @@ int main(int argc, char * argv[])
 	//counts = bin_read((char*)"data/B1821_counts.bin");
 	//length = bin_size((char*)"data/B1821_counts.bin");
 	//set up search
-	PeakSearch settings;
-	//call default parameters
-	settings.default_params();
 	int verbosity = 1;
+	double nu_min,nu_max,nudot_min,nudot_max;
 	if (argc == 6)
 	{
-		settings.nu_min = atof(argv[1]);
-		settings.nu_max = atof(argv[2]);
-		settings.nudot_min = atof(argv[3]);//-1736.5e-16 
-		settings.nudot_max = atof(argv[4]);//1736.5e-16;
+		nu_min = atof(argv[1]);
+		nu_max = atof(argv[2]);
+		nudot_min = atof(argv[3]);//-1736.5e-16 
+		nudot_max = atof(argv[4]);//1736.5e-16;
 		verbosity = atoi(argv[5]);
 	}
 	else
 	{
 		printf("You entered %d args\n",argc);
-		settings.nu_min = 50; 
-		settings.nu_max = 500;
-		settings.nudot_min = 2.5e-19;//-1736.5e-16 
-		settings.nudot_max = 2.5e-11;//1736.5e-16;
+		nu_min = 50; 
+		nu_max = 500;
+		nudot_min = 2.5e-19;//-1736.5e-16 
+		nudot_max = 2.5e-11;//1736.5e-16;
 	}
-	settings.d_nudot = 1e-8;
-	settings.m_max = 15;
 	for (int file_i = 0; file_i < filenames.size(); file_i ++)
 	{
 		counts = bin_read((char*)filenames[file_i].c_str());
 		length = bin_size((char*)filenames[file_i].c_str());
 		//normalize the counts
 		normalize_counts(counts, length);
-		settings.d_nu = 1/counts[length-1];
 
 
 		
 		
 		int i = t_odds_two(counts, length, 
-						   settings.nu_min, settings.nu_max,
-						   settings.nudot_min, settings.nudot_max,
+						   nu_min,nu_max,
+						   nudot_min,nudot_max,
 						   verbosity);
 
 		//display some initial stats
