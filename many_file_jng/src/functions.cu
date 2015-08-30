@@ -400,7 +400,6 @@ double t_odds_two(double *counts_h, int length,
 		double odds = 0;
 		double om1 = 0;
 		int m;
-		return 0;
 		for (double
 		     nu =  nu_min;
 			 nu <= nu_max;
@@ -438,8 +437,8 @@ double t_odds_two(double *counts_h, int length,
 					//make the pointers
 					int *bins_d = thrust::raw_pointer_cast(histogram.data());
 					reduce_bins_two<<<1,m>>>(bins_d);
-					//histogram.resize(m);
-					//binned.resize(m);
+				//	histogram.resize(m);
+				//	binned.resize(m);
 					binned = histogram;
 					om1 = 0;
 					//for (int j = 0; j < m; j++)
@@ -452,7 +451,7 @@ double t_odds_two(double *counts_h, int length,
 					om1  += logFacts[m-1]-logFacts[length+m-1]+((double)length)*log(m);
 					odds += exp(om1);
 				}
-				if (odds > 1e-8)
+				if (odds > 1e-3)
 				{
 					printf("Odds of %.3e for nu %.9e and nudot -%.9e\n",odds,nu,nudot);
 				}

@@ -116,7 +116,9 @@ int main(int argc, char * argv[])
 	}
 	//load in the data - these are blocking broadcasts, 
 	//so act as barriers
-	MPI_Bcast(&logFacts[0], maxFact, MPI_DOUBLE, 0, comm);
+	if (size > 1)
+		MPI_Bcast(&logFacts[0], maxFact, MPI_DOUBLE, 0, comm);
+
 
 
 
@@ -124,31 +126,30 @@ int main(int argc, char * argv[])
 	//they pick the n*rank file, then the (n+1)*rank file,and so on.
 	//counts = bin_read((char*)"data/B1821_counts.bin");
 	//length = bin_size((char*)"data/B1821_counts.bin");
+	//set up search
+	PeakSearch settings;
+	//call default parameters
+	settings.default_params();
+	settings.nu_min = 327.3;
+	settings.nu_max = 327.8;
+	settings.nudot_min = 1736.5e-16;//-1736.5e-16 
+	settings.nudot_max = 1736.5e-16;
+	settings.d_nudot = 1e-8;
+	settings.m_max = 15;
 	for (int file_i = 0; file_i < filenames.size(); file_i ++)
 	{
 		counts = bin_read((char*)filenames[file_i].c_str());
 		length = bin_size((char*)filenames[file_i].c_str());
 		//normalize the counts
 		normalize_counts(counts, length);
-
-
-		//set up search
-		PeakSearch settings;
-		//call default parameters
-		settings.default_params();
-		settings.nu_min = 327.5;
-		settings.nu_max = 327.8;
 		settings.d_nu = 1/counts[length-1];
-		settings.nudot_min = 1736.5e-16;//-1736.5e-16 
-		settings.nudot_max = 1736.5e-16;
-		settings.d_nudot = 1e-8;
-		settings.m_max = 15;
+
+
+		
 		
 		int i = t_odds_two(counts, length, 
 						   settings.nu_min, settings.nu_max,
 						   settings.nudot_min, settings.nudot_max);
-		printf("%d\n",i);
-						   
 
 		//display some initial stats
 		/*
