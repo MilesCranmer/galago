@@ -97,8 +97,8 @@ int main(int argc, char * argv[])
 	if (rank == 0)
 	{
 		//load in values from data
-		logFacts = bin_read((char*)"data/log_facs_2.bin");
-		maxFact = bin_size((char*)"data/log_facs_2.bin");
+		logFacts = bin_read((char*)"data/log_facs.bin");
+		maxFact = bin_size((char*)"data/log_facs.bin");
 	}
 	//share sizing details - all of the following 
 	//must be blocking to insure nothing funny happens
@@ -130,10 +130,10 @@ int main(int argc, char * argv[])
 	PeakSearch settings;
 	//call default parameters
 	settings.default_params();
-	settings.nu_min = 327.3;
-	settings.nu_max = 327.8;
-	settings.nudot_min = 1736.5e-16;//-1736.5e-16 
-	settings.nudot_max = 1736.5e-16;
+	settings.nu_min = 50; 
+	settings.nu_max = 500;
+	settings.nudot_min = 2.5e-19;//-1736.5e-16 
+	settings.nudot_max = 2.5e-11;//1736.5e-16;
 	settings.d_nudot = 1e-8;
 	settings.m_max = 15;
 	for (int file_i = 0; file_i < filenames.size(); file_i ++)

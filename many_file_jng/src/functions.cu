@@ -390,7 +390,7 @@ double t_odds_two(double *counts_h, int length,
 	{
 		double d_nu = 1/counts_h[length-1];
 		//double d_nu = 1e-5;
-		double d_nudot = 1e-8;
+		//double d_nudot = 1e-8;
 		//printf("Length: %d\n",length);
 		thrust::device_vector<double> counts_d(counts_h, counts_h+length);
 		thrust::device_vector<unsigned char> t_binning(length,0);
@@ -401,6 +401,7 @@ double t_odds_two(double *counts_h, int length,
 		double odds = 0;
 		double om1 = 0;
 		int m;
+		int counter = 0;
 		for (double
 		     nu =  nu_min;
 			 nu <= nu_max;
@@ -411,10 +412,17 @@ double t_odds_two(double *counts_h, int length,
 		//		 nudot <= nudot_max;
 		//		 nudot += d_nudot)
 			
-			double nudot = nudot_min;
-			double d_nudot;
-			while (nudot <= nudot_max)
+			//double d_pdot = d_nu*d_nu/(nu_max*nu);
+			double d_nudot = nu*d_nu*d_nu/(nu_max);
+			//nudot=-Pdot/P^2=-v^2*Pdot
+			//d_nudot=-nu^2*d_nudot
+			//dPdot=Pmin/T^2*P=1/(numax*T^2*nu)
+			for (double
+				 nudot =  nudot_min;
+				 nudot <= nudot_max;
+				 nudot += d_nudot)
 			{
+				counter ++;
 				t_bin_counts_two<<<blocks,1024>>>(counts_d_pointer, length, t_binning_pointer, nu, nudot);
 				thrust::sort(t_binning.begin(), t_binning.end());
 				thrust::device_vector<int> histogram(256,0);
@@ -461,11 +469,12 @@ double t_odds_two(double *counts_h, int length,
 					om1  += logFacts[m-1]-logFacts[length+m-1]+((double)length)*log(m);
 					odds += exp(om1);
 				}
+				//if (odds > 1e-3)
 				odds /= 8;
 				odds *= d_nu/nu;
-				if (odds > 1e-3)
+				if (counter %50000==0 || odds > 1e-4)
 				{
-					printf("Odds of %e for nu %.9e and nudot -%.9e\n",odds,nu,nudot);
+					printf("Search %d gives odds of %e for nu %.9e and nudot -%.9e\n",counter,odds,nu,nudot);
 				}
 			}
 		}
@@ -474,6 +483,7 @@ double t_odds_two(double *counts_h, int length,
 		//sort bins to be binned
 		counts_d.shrink_to_fit();
 		//keep reducing bins
+		printf("%d searches completed\n",counter);
 		return 0;
 	}
 	catch(thrust::system_error &err)
