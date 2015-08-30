@@ -66,13 +66,13 @@ int main(int argc, char * argv[])
 	if (rank == 0)
 	{
 		//load in values from data
-		logFacts = bin_read((char*)"data/log_facs_2.bin");
-		maxFact = bin_size((char*)"data/log_facs_2.bin");
-		counts = bin_read((char*)"data/O1.bin");
+		logFacts = bin_read((char*)"data/log_facs.bin");
+		maxFact = bin_size((char*)"data/log_facs.bin");
+		counts = bin_read((char*)"data/O2.bin");
 		length = bin_size((char*)"data/O2.bin");
 		//normalize the counts
 		normalize_counts(counts, length);
-		printf("Total of %d counts\n", length);
+		printf("Total of %d counts and %d logfacts\n", length, maxFact);
 		//print last count
 		printf("After normalization, the last count is at %lf seconds\n\n", counts[length-1]);
 	}
@@ -109,7 +109,7 @@ int main(int argc, char * argv[])
 		//call default parameters
 		settings.default_params();
 		settings.nu_min = 378.25;//327.4055946921
-		settings.nu_max = 328.40;
+		settings.nu_max = 378.40;
 		settings.d_nu = 1/counts[length-1];
 		settings.nudot_min = 1736.5e-15;//-1736.5e-16 
 		settings.nudot_max = 1736.5e-15;
@@ -191,17 +191,19 @@ int main(int argc, char * argv[])
 					//printf("Curr %e\n", curr_results[2]);
 					//curr_results[2] *= fabs(settings.d_nudot/nudot);
 					//if (recv%100==0)
+			//		if (curr_results[2] > 1e-4)
 					{
 						printf("Receiving Search, nu: %e, nudot: -%e, Odds: %e\n", 
 								curr_results[0], curr_results[1], curr_results[2]);
+
+						results_file << scientific << setprecision(10) << curr_results[0] << ",";
+						results_file << scientific << -curr_results[1] << ",";
+						results_file << scientific << curr_results[2] << ",";
+						results_file << "\n";
+						results.nu.push_back(curr_results[0]);
+						results.nudot.push_back(curr_results[1]);
+						results.odds.push_back(curr_results[2]);
 					}
-					results_file << scientific << setprecision(10) << curr_results[0] << ",";
-					results_file << scientific << -curr_results[1] << ",";
-					results_file << scientific << curr_results[2] << ",";
-					results_file << "\n";
-					results.nu.push_back(curr_results[0]);
-					results.nudot.push_back(curr_results[1]);
-					results.odds.push_back(curr_results[2]);
 				}
 				//printf("Sending Search to proc %d, nu: %e, nudot: %e\n", 
 				//	   i, curr_settings[0], curr_settings[1]);
@@ -249,15 +251,18 @@ int main(int argc, char * argv[])
 			curr_results[2] /= (settings.m_max - 1);
 			curr_results[2] *= settings.d_nu/nu;
 			//print results
-			printf("Receiving Search, nu: %e, nudot: -%e, Odds: %e\n", 
-					curr_results[0], curr_results[1], curr_results[2]);
-			results_file << scientific << setprecision(8) << curr_results[0] << ",";
-			results_file << scientific << -curr_results[1] << ",";
-			results_file << scientific << curr_results[2] << ",";
-			results_file << "\n";
-			results.nu.push_back(curr_results[0]);
-			results.nudot.push_back(curr_results[1]);
-			results.odds.push_back(curr_results[2]);
+			//if (curr_results[2] > 1e-4)
+			{
+				printf("Receiving Search, nu: %e, nudot: -%e, Odds: %e\n", 
+						curr_results[0], curr_results[1], curr_results[2]);
+				results_file << scientific << setprecision(8) << curr_results[0] << ",";
+				results_file << scientific << -curr_results[1] << ",";
+				results_file << scientific << curr_results[2] << ",";
+				results_file << "\n";
+				results.nu.push_back(curr_results[0]);
+				results.nudot.push_back(curr_results[1]);
+				results.odds.push_back(curr_results[2]);
+			}
 			//one more search received
 			recv ++;
 			//set back data_flag

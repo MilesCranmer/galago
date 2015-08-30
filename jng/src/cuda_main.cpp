@@ -198,11 +198,13 @@ int main(int argc, char * argv[])
 					//curr_results[2] *= settings.d_nu/nu;
 					//printf("Curr %e\n", curr_results[2]);
 					//curr_results[2] *= fabs(settings.d_nudot/nudot);
-					printf("Receiving Search, nu: %e, nudot: -%e, Odds: %e\n", 
-							curr_results[0], curr_results[1], curr_results[2]);
-					results.nu.push_back(curr_results[0]);
-					results.nudot.push_back(curr_results[1]);
-					results.odds.push_back(curr_results[2]);
+					if (odds > 1e-3){
+						printf("Receiving Search, nu: %e, nudot: -%e, Odds: %e\n", 
+								curr_results[0], curr_results[1], curr_results[2]);
+						results.nu.push_back(curr_results[0]);
+						results.nudot.push_back(curr_results[1]);
+						results.odds.push_back(curr_results[2]);
+					}
 				}
 				//printf("Sending Search to proc %d, nu: %e, nudot: %e\n", 
 				//	   i, curr_settings[0], curr_settings[1]);

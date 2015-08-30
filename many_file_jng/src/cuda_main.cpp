@@ -14,7 +14,7 @@
 #include "bin_write.cpp"//read/write of binary files
 #include "bin_read.cpp"
 //#include "functions.cu"//all statistical functions, search class
-#include "structures.h"
+//#include "structures.h"
 #define MVALS 8
 
 //Import the list of log factorials

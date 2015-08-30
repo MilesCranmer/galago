@@ -18,7 +18,7 @@
 #include <algorithm> //compute max of vector
 #include <numeric> //compute sum of vector (accumulate)
 #include <omp.h>
-//#include "structures.h"
+#include "structures.h"
 //speed not important for final statistics, so optimising this is silly
 #define PI 3.14159265359
 //this file contains the main statistics functions
@@ -403,10 +403,11 @@ double t_odds_two(double *counts_h, int length,
 		double om1 = 0;
 		int m;
 		int counter = 0;
+		SearchResults results;
 		for (double
 		     nu =  nu_min;
 			 nu <= nu_max;
-			 nu += d_nu)
+			 nu += 1e-5)
 		{
 		//	for (double
 		//		 nudot =  nudot_min;
@@ -473,6 +474,9 @@ double t_odds_two(double *counts_h, int length,
 				//if (odds > 1e-3)
 				odds /= 8;
 				odds *= d_nu/nu;
+				results.nu.push_back(nu);
+				results.nudot.push_back(nudot);
+				results.odds.push_back(odds);
 				//if (counter %50000==0 || odds > 1e-4)
 				if (verbosity == 2 || (verbosity == 1 && odds > 1e-3) || (verbosity == 0 && odds > 1e-1))
 				{
@@ -490,6 +494,10 @@ double t_odds_two(double *counts_h, int length,
 		//sort bins to be binned
 		counts_d.shrink_to_fit();
 		//keep reducing bins
+		int j = results.max_odds_i();
+		printf("\nThe best odds are: %e, which occur for nu of %e Hz and"
+			   " nudot of -%e Hz/s\n\n",
+				results.odds[j], results.nu[j], results.nudot[j]);
 		printf("%d searches completed\n",counter);
 		return 0;
 	}
