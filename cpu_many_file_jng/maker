@@ -1,2 +1,2 @@
 #!/bin/sh
-nvcc -Xcompiler -fopenmp -O3 --compiler-bindir mpic++ src/cuda_main.cpp src/functions.cu -o jng_gpu
+nvcc -Xcompiler -fopenmp -O3 --compiler-bindir mpic++ src/cuda_main.cpp src/functions.cu -o jng_gpu_alt_to_alt

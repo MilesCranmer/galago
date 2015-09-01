@@ -1,0 +1,25 @@
+Run baby run!
+Reading in files
+Reading in logFacts
+Process 6 completed. Exiting.
+Process 7 completed. Exiting.
+Applying search settings
+Parallel phase:
+Process 1 beginning search on data/source_candidates/region_31325.923_29366.083.bin
+Total 19858 counts spanning 1659382.104812 seconds
+Outputting best 5 odds to data/source_candidates/region_31325.923_29366.083.results 
+Process 4 beginning search on data/source_candidates/region_32891.787_28158.464.bin
+Total 22645 counts spanning 1760620.733267 seconds
+Outputting best 5 odds to data/source_candidates/region_32891.787_28158.464.results 
+Process 5 beginning search on data/source_candidates/region_32929.531_32873.154.bin
+Total 50000 counts spanning 1760626.756907 seconds
+Outputting best 5 odds to data/source_candidates/region_32929.531_32873.154.results 
+Process 0 beginning search on data/source_candidates/region_31189.628_33407.415.bin
+Total 87 counts spanning 1707228.316787 seconds
+Outputting best 5 odds to data/source_candidates/region_31189.628_33407.415.results 
+Process 3 beginning search on data/source_candidates/region_32840.313_32883.002.bin
+Total 55668 counts spanning 1760643.719860 seconds
+Outputting best 5 odds to data/source_candidates/region_32840.313_32883.002.results 
+Process 2 beginning search on data/source_candidates/region_32813.9_32837.136.bin
+Total 28989 counts spanning 1760464.604102 seconds
+Outputting best 5 odds to data/source_candidates/region_32813.9_32837.136.results 

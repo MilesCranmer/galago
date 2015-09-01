@@ -414,8 +414,9 @@ double t_odds_two(double *counts, int length,
 	double odds = 0;
 	double om1 = 0;
 	int m;
-	int counter = 0;
+	unsigned long counter = 0;
 	double best[5][3] = {0};
+	unsigned long opct = (unsigned long)(0.01*(nu_max-nu_min)/d_nu);
 	/*
 	   double best[0][] = {0,0,0};
 	   double best[1][] = {0,0,0};
@@ -443,7 +444,29 @@ double t_odds_two(double *counts, int length,
 				nudot <= nudot_max;
 				nudot += d_nudot)
 		{
-
+			counter ++;
+			if (counter >= opct)
+			{
+				counter = 0;
+				printf("%f percent of the way.\n",100.0*(nu-nu_min)/(nu_max-nu_min));
+				ofstream file(filename, ios::app);
+				file << "range,"; 
+				file << scientific << setprecision(10) << nu_min << "-";
+				file << scientific << setprecision(10) << nu << "!";
+				file << scientific << setprecision(10) << nu_max << ",";
+				file << scientific << nudot_min << "-";
+				file << scientific << nudot_max << "\n";
+				for (int i = 0; i < 5; i ++)
+				{
+					//printf("The %dth best odds are %e for a nu of %.9e and nudot -%.9e\n",
+					//i+1,best[i][0],best[i][1],best[i][2]);
+					file << scientific << best[i][0] << ",";
+					file << scientific << setprecision(10) << best[i][1] << ",";
+					file << scientific << -best[i][2];
+					file << "\n";
+				}
+				file.close();
+			}
 			int bins[256] = {0};
 			for (int i = 0; i < length; i ++)
 			{

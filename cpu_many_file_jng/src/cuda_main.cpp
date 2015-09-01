@@ -66,7 +66,7 @@ int main(int argc, char * argv[])
 	MPI_Status rstatus;
 	MPI_Request srequest;
 	//get filenames
-	ifstream filenames_file("data/alt_filenames.txt");
+	ifstream filenames_file("data/alt_alt_filenames.txt");
 	vector<string> filenames;
 
 	//char * srank;

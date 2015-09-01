@@ -1,0 +1,8 @@
+--------------------------------------------------------------------------
+There are not enough slots available in the system to satisfy the 8 slots 
+that were requested by the application:
+  ./jng_gpu
+
+Either request fewer slots for your application, or make more slots available
+for use.
+--------------------------------------------------------------------------

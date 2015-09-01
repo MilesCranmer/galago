@@ -1,0 +1,743 @@
+Run baby run!
+Reading in files
+Reading in logFacts
+Applying search settings
+Parallel phase:
+Process 8 beginning search on data/source_candidates/region_34247.125_32463.5.bin
+Total 34 counts spanning 1695715.066601 seconds
+Outputting best 5 odds to data/source_candidates/region_34247.125_32463.5.results 
+Process 84 beginning search on data/source_candidates/region_32709.56_32767.84.bin
+Total 153 counts spanning 1756566.291189 seconds
+Outputting best 5 odds to data/source_candidates/region_32709.56_32767.84.results 
+Process 13 beginning search on data/source_candidates/region_34015.574_32801.926.bin
+Total 225 counts spanning 1751078.168631 seconds
+Outputting best 5 odds to data/source_candidates/region_34015.574_32801.926.results 
+Process 139 beginning search on data/source_candidates/region_31419.057_31317.485.bin
+Total 1885 counts spanning 1760394.155596 seconds
+Outputting best 5 odds to data/source_candidates/region_31419.057_31317.485.results 
+Process 52 beginning search on data/source_candidates/region_32827.5_32203.14.bin
+Total 413 counts spanning 1752718.226275 seconds
+Outputting best 5 odds to data/source_candidates/region_32827.5_32203.14.results 
+Process 141 beginning search on data/source_candidates/region_31415.69_32831.786.bin
+Total 213 counts spanning 1756920.545385 seconds
+Outputting best 5 odds to data/source_candidates/region_31415.69_32831.786.results 
+Process 137 beginning search on data/source_candidates/region_31443.668_33221.685.bin
+Total 222 counts spanning 1753029.537186 seconds
+Outputting best 5 odds to data/source_candidates/region_31443.668_33221.685.results 
+Process 82 beginning search on data/source_candidates/region_32709.692_32839.692.bin
+Total 123 counts spanning 1754766.143736 seconds
+Outputting best 5 odds to data/source_candidates/region_32709.692_32839.692.results 
+Process 127 beginning search on data/source_candidates/region_32357.453_33709.43.bin
+Total 424 counts spanning 1758814.788161 seconds
+Outputting best 5 odds to data/source_candidates/region_32357.453_33709.43.results 
+Process 140 beginning search on data/source_candidates/region_31416.293_33026.041.bin
+Total 211 counts spanning 1744780.538059 seconds
+Outputting best 5 odds to data/source_candidates/region_31416.293_33026.041.results 
+Process 142 beginning search on data/source_candidates/region_31413.378_32949.255.bin
+Total 80 counts spanning 1753374.092301 seconds
+Outputting best 5 odds to data/source_candidates/region_31413.378_32949.255.results 
+Process 112 beginning search on data/source_candidates/region_32551.762_32687.238.bin
+Total 113 counts spanning 1722222.785190 seconds
+Outputting best 5 odds to data/source_candidates/region_32551.762_32687.238.results 
+Process 15 beginning search on data/source_candidates/region_33619.22_33249.653.bin
+Total 246 counts spanning 1759179.754180 seconds
+Outputting best 5 odds to data/source_candidates/region_33619.22_33249.653.results 
+Process 74 beginning search on data/source_candidates/region_32749.675_32905.526.bin
+Total 474 counts spanning 1755958.383588 seconds
+Outputting best 5 odds to data/source_candidates/region_32749.675_32905.526.results 
+Process 75 beginning search on data/source_candidates/region_32739.829_32981.778.bin
+Total 119 counts spanning 1742232.570961 seconds
+Outputting best 5 odds to data/source_candidates/region_32739.829_32981.778.results 
+Process 76 beginning search on data/source_candidates/region_32739.324_32951.967.bin
+Total 1253 counts spanning 1754239.217962 seconds
+Outputting best 5 odds to data/source_candidates/region_32739.324_32951.967.results 
+Process 91 beginning search on data/source_candidates/region_32685.199_32975.747.bin
+Total 356 counts spanning 1757132.517634 seconds
+Outputting best 5 odds to data/source_candidates/region_32685.199_32975.747.results 
+Process 92 beginning search on data/source_candidates/region_32685.104_32861.87.bin
+Total 378 counts spanning 1758087.745726 seconds
+Outputting best 5 odds to data/source_candidates/region_32685.104_32861.87.results 
+Process 80 beginning search on data/source_candidates/region_32713.56_32953.44.bin
+Total 108 counts spanning 1734646.289406 seconds
+Outputting best 5 odds to data/source_candidates/region_32713.56_32953.44.results 
+Process 135 beginning search on data/source_candidates/region_31597.323_34743.373.bin
+Total 3294 counts spanning 1760413.547933 seconds
+Outputting best 5 odds to data/source_candidates/region_31597.323_34743.373.results 
+Process 51 beginning search on data/source_candidates/region_32831.093_33103.143.bin
+Total 3256 counts spanning 1760043.973929 seconds
+Outputting best 5 odds to data/source_candidates/region_32831.093_33103.143.results 
+Process 55 beginning search on data/source_candidates/region_32815.28_33124.134.bin
+Total 120 counts spanning 1754432.602133 seconds
+Outputting best 5 odds to data/source_candidates/region_32815.28_33124.134.results 
+Process 117 beginning search on data/source_candidates/region_32481.247_33473.373.bin
+Total 139 counts spanning 1754085.698593 seconds
+Outputting best 5 odds to data/source_candidates/region_32481.247_33473.373.results 
+Process 119 beginning search on data/source_candidates/region_32475.823_32945.46.bin
+Total 151 counts spanning 1737687.184332 seconds
+Outputting best 5 odds to data/source_candidates/region_32475.823_32945.46.results 
+Process 72 beginning search on data/source_candidates/region_32751.303_33382.132.bin
+Total 372 counts spanning 1755253.692055 seconds
+Outputting best 5 odds to data/source_candidates/region_32751.303_33382.132.results 
+Process 83 beginning search on data/source_candidates/region_32709.583_32877.417.bin
+Total 121 counts spanning 1750830.804969 seconds
+Outputting best 5 odds to data/source_candidates/region_32709.583_32877.417.results 
+Process 28 beginning search on data/source_candidates/region_32985.405_34367.68.bin
+Total 921 counts spanning 1759286.676161 seconds
+Outputting best 5 odds to data/source_candidates/region_32985.405_34367.68.results 
+Process 29 beginning search on data/source_candidates/region_32983.214_33286.095.bin
+Total 345 counts spanning 1748284.572877 seconds
+Outputting best 5 odds to data/source_candidates/region_32983.214_33286.095.results 
+Process 22 beginning search on data/source_candidates/region_33155.441_32585.894.bin
+Total 301 counts spanning 1757509.189498 seconds
+Outputting best 5 odds to data/source_candidates/region_33155.441_32585.894.results 
+Process 18 beginning search on data/source_candidates/region_33289.392_32505.355.bin
+Total 263 counts spanning 1756416.606604 seconds
+Outputting best 5 odds to data/source_candidates/region_33289.392_32505.355.results 
+Process 17 beginning search on data/source_candidates/region_33337.69_33339.765.bin
+Total 279 counts spanning 1751425.293208 seconds
+Outputting best 5 odds to data/source_candidates/region_33337.69_33339.765.results 
+Process 20 beginning search on data/source_candidates/region_33189.688_32734.963.bin
+Total 218 counts spanning 1756858.491790 seconds
+Outputting best 5 odds to data/source_candidates/region_33189.688_32734.963.results 
+Process 21 beginning search on data/source_candidates/region_33173.723_33351.143.bin
+Total 1800 counts spanning 1759800.186600 seconds
+Outputting best 5 odds to data/source_candidates/region_33173.723_33351.143.results 
+Process 50 beginning search on data/source_candidates/region_32831.167_32845.34.bin
+Total 271 counts spanning 1757042.370627 seconds
+Outputting best 5 odds to data/source_candidates/region_32831.167_32845.34.results 
+Process 24 beginning search on data/source_candidates/region_33044.963_32805.992.bin
+Total 1156 counts spanning 1760171.067939 seconds
+Outputting best 5 odds to data/source_candidates/region_33044.963_32805.992.results 
+Process 26 beginning search on data/source_candidates/region_33039.088_32875.618.bin
+Total 111 counts spanning 1757459.900689 seconds
+Outputting best 5 odds to data/source_candidates/region_33039.088_32875.618.results 
+Process 71 beginning search on data/source_candidates/region_32752.019_32851.626.bin
+Total 1338 counts spanning 1760135.891162 seconds
+Outputting best 5 odds to data/source_candidates/region_32752.019_32851.626.results 
+Process 85 beginning search on data/source_candidates/region_32708.618_32924.803.bin
+Total 405 counts spanning 1751442.793028 seconds
+Outputting best 5 odds to data/source_candidates/region_32708.618_32924.803.results 
+Process 93 beginning search on data/source_candidates/region_32675.829_32917.253.bin
+Total 111 counts spanning 1756683.731525 seconds
+Outputting best 5 odds to data/source_candidates/region_32675.829_32917.253.results 
+Process 131 beginning search on data/source_candidates/region_32059.048_31885.883.bin
+Total 798 counts spanning 1759929.148285 seconds
+Outputting best 5 odds to data/source_candidates/region_32059.048_31885.883.results 
+Process 126 beginning search on data/source_candidates/region_32368.064_33072.206.bin
+Total 1668 counts spanning 1759480.010054 seconds
+Outputting best 5 odds to data/source_candidates/region_32368.064_33072.206.results 
+Process 7 beginning search on data/source_candidates/region_34276.753_32669.654.bin
+Total 158 counts spanning 1754625.447166 seconds
+Outputting best 5 odds to data/source_candidates/region_34276.753_32669.654.results 
+Process 104 beginning search on data/source_candidates/region_32596.934_32821.864.bin
+Total 148 counts spanning 1751877.665095 seconds
+Outputting best 5 odds to data/source_candidates/region_32596.934_32821.864.results 
+Process 94 beginning search on data/source_candidates/region_32675.789_32720.158.bin
+Total 306 counts spanning 1750303.784914 seconds
+Outputting best 5 odds to data/source_candidates/region_32675.789_32720.158.results 
+Process 95 beginning search on data/source_candidates/region_32671.753_33039.23.bin
+Total 1731 counts spanning 1759777.195256 seconds
+Outputting best 5 odds to data/source_candidates/region_32671.753_33039.23.results 
+Process 0 beginning search on data/source_candidates/region_34760.021_27673.191.bin
+Total 316 counts spanning 49166.142229 seconds
+Outputting best 5 odds to data/source_candidates/region_34760.021_27673.191.results 
+Process 81 beginning search on data/source_candidates/region_32712.208_32474.152.bin
+Total 1912 counts spanning 1753123.538909 seconds
+Outputting best 5 odds to data/source_candidates/region_32712.208_32474.152.results 
+Process 101 beginning search on data/source_candidates/region_32639.635_32489.127.bin
+Total 504 counts spanning 1757466.908223 seconds
+Outputting best 5 odds to data/source_candidates/region_32639.635_32489.127.results 
+Process 105 beginning search on data/source_candidates/region_32585.857_33083.431.bin
+Total 496 counts spanning 1756769.942642 seconds
+Outputting best 5 odds to data/source_candidates/region_32585.857_33083.431.results 
+Process 48 beginning search on data/source_candidates/region_32837.259_32963.404.bin
+Total 123 counts spanning 1758753.503585 seconds
+Outputting best 5 odds to data/source_candidates/region_32837.259_32963.404.results 
+Process 53 beginning search on data/source_candidates/region_32825.074_32955.19.bin
+Total 263 counts spanning 1758112.855510 seconds
+Outputting best 5 odds to data/source_candidates/region_32825.074_32955.19.results 
+Process 5 beginning search on data/source_candidates/region_34301.5_33071.107.bin
+Total 96 counts spanning 1704844.267735 seconds
+Outputting best 5 odds to data/source_candidates/region_34301.5_33071.107.results 
+Process 9 beginning search on data/source_candidates/region_34242.34_32557.088.bin
+Total 251 counts spanning 1734694.323413 seconds
+Outputting best 5 odds to data/source_candidates/region_34242.34_32557.088.results 
+Process 12 beginning search on data/source_candidates/region_34027.326_32871.848.bin
+Total 81 counts spanning 1732679.769836 seconds
+Outputting best 5 odds to data/source_candidates/region_34027.326_32871.848.results 
+Process 96 beginning search on data/source_candidates/region_32671.562_33005.648.bin
+Total 338 counts spanning 1760048.523344 seconds
+Outputting best 5 odds to data/source_candidates/region_32671.562_33005.648.results 
+Process 108 beginning search on data/source_candidates/region_32574.822_32215.245.bin
+Total 767 counts spanning 1759848.688002 seconds
+Outputting best 5 odds to data/source_candidates/region_32574.822_32215.245.results 
+Process 129 beginning search on data/source_candidates/region_32284.94_33471.127.bin
+Total 490 counts spanning 1760236.707876 seconds
+Outputting best 5 odds to data/source_candidates/region_32284.94_33471.127.results 
+Process 136 beginning search on data/source_candidates/region_31515.445_32277.983.bin
+Total 255 counts spanning 1757604.207967 seconds
+Outputting best 5 odds to data/source_candidates/region_31515.445_32277.983.results 
+Process 10 beginning search on data/source_candidates/region_34035.868_33023.447.bin
+Total 71 counts spanning 1728178.793813 seconds
+Outputting best 5 odds to data/source_candidates/region_34035.868_33023.447.results 
+Process 90 beginning search on data/source_candidates/region_32687.451_32635.817.bin
+Total 131 counts spanning 1751686.313283 seconds
+Outputting best 5 odds to data/source_candidates/region_32687.451_32635.817.results 
+Process 116 beginning search on data/source_candidates/region_32493.091_32891.328.bin
+Total 156 counts spanning 1727941.889263 seconds
+Outputting best 5 odds to data/source_candidates/region_32493.091_32891.328.results 
+Process 79 beginning search on data/source_candidates/region_32721.955_32729.182.bin
+Total 152 counts spanning 1755614.037413 seconds
+Outputting best 5 odds to data/source_candidates/region_32721.955_32729.182.results 
+Process 97 beginning search on data/source_candidates/region_32665.944_32819.737.bin
+Total 598 counts spanning 1752821.337221 seconds
+Outputting best 5 odds to data/source_candidates/region_32665.944_32819.737.results 
+Process 3 beginning search on data/source_candidates/region_34319.914_32877.983.bin
+Total 152 counts spanning 1755506.870409 seconds
+Outputting best 5 odds to data/source_candidates/region_34319.914_32877.983.results 
+Process 106 beginning search on data/source_candidates/region_32585.667_32703.033.bin
+Total 100 counts spanning 1747486.402134 seconds
+Outputting best 5 odds to data/source_candidates/region_32585.667_32703.033.results 
+Process 87 beginning search on data/source_candidates/region_32697.248_32895.441.bin
+Total 203 counts spanning 1752142.098156 seconds
+Outputting best 5 odds to data/source_candidates/region_32697.248_32895.441.results 
+Process 128 beginning search on data/source_candidates/region_32301.47_33987.828.bin
+Total 110 counts spanning 1756274.605473 seconds
+Outputting best 5 odds to data/source_candidates/region_32301.47_33987.828.results 
+Process 6 beginning search on data/source_candidates/region_34301.308_32754.808.bin
+Total 91 counts spanning 1753854.586026 seconds
+Outputting best 5 odds to data/source_candidates/region_34301.308_32754.808.results 
+Process 132 beginning search on data/source_candidates/region_31943.822_33759.353.bin
+Total 502 counts spanning 1759017.545281 seconds
+Outputting best 5 odds to data/source_candidates/region_31943.822_33759.353.results 
+Process 134 beginning search on data/source_candidates/region_31731.265_34786.761.bin
+Total 5865 counts spanning 1760442.157955 seconds
+Outputting best 5 odds to data/source_candidates/region_31731.265_34786.761.results 
+Process 120 beginning search on data/source_candidates/region_32455.013_35634.674.bin
+Total 10401 counts spanning 1760554.259374 seconds
+Outputting best 5 odds to data/source_candidates/region_32455.013_35634.674.results 
+Process 73 beginning search on data/source_candidates/region_32751.207_32811.728.bin
+Total 184 counts spanning 1757681.197597 seconds
+Outputting best 5 odds to data/source_candidates/region_32751.207_32811.728.results 
+Process 14 beginning search on data/source_candidates/region_33754.076_34759.954.bin
+Total 1011 counts spanning 1756513.155174 seconds
+Outputting best 5 odds to data/source_candidates/region_33754.076_34759.954.results 
+Process 124 beginning search on data/source_candidates/region_32402.02_32887.527.bin
+Total 441 counts spanning 1759178.496845 seconds
+Outputting best 5 odds to data/source_candidates/region_32402.02_32887.527.results 
+Process 125 beginning search on data/source_candidates/region_32386.822_33089.274.bin
+Total 267 counts spanning 1748967.830521 seconds
+Outputting best 5 odds to data/source_candidates/region_32386.822_33089.274.results 
+Process 138 beginning search on data/source_candidates/region_31423.761_33121.639.bin
+Total 221 counts spanning 1749697.689342 seconds
+Outputting best 5 odds to data/source_candidates/region_31423.761_33121.639.results 
+Process 122 beginning search on data/source_candidates/region_32411.357_33679.814.bin
+Total 111 counts spanning 1751571.109273 seconds
+Outputting best 5 odds to data/source_candidates/region_32411.357_33679.814.results 
+Process 123 beginning search on data/source_candidates/region_32406.646_33002.213.bin
+Total 1840 counts spanning 1759877.630581 seconds
+Outputting best 5 odds to data/source_candidates/region_32406.646_33002.213.results 
+Process 89 beginning search on data/source_candidates/region_32689.375_32961.967.bin
+Total 517 counts spanning 1755316.009731 seconds
+Outputting best 5 odds to data/source_candidates/region_32689.375_32961.967.results 
+Process 86 beginning search on data/source_candidates/region_32705.456_32903.311.bin
+Total 455 counts spanning 1755544.416312 seconds
+Outputting best 5 odds to data/source_candidates/region_32705.456_32903.311.results 
+Process 11 beginning search on data/source_candidates/region_34035.373_33135.391.bin
+Total 223 counts spanning 1745234.132035 seconds
+Outputting best 5 odds to data/source_candidates/region_34035.373_33135.391.results 
+Process 133 beginning search on data/source_candidates/region_31849.245_30791.171.bin
+Total 1492 counts spanning 1759309.790632 seconds
+Outputting best 5 odds to data/source_candidates/region_31849.245_30791.171.results 
+Process 88 beginning search on data/source_candidates/region_32690.16_32614.066.bin
+Total 505 counts spanning 1759481.314300 seconds
+Outputting best 5 odds to data/source_candidates/region_32690.16_32614.066.results 
+Process 143 beginning search on data/source_candidates/region_31325.923_29366.083.bin
+Total 19858 counts spanning 1659382.104812 seconds
+Outputting best 5 odds to data/source_candidates/region_31325.923_29366.083.results 
+Process 113 beginning search on data/source_candidates/region_32546.107_32947.041.bin
+Total 225 counts spanning 1754601.072740 seconds
+Outputting best 5 odds to data/source_candidates/region_32546.107_32947.041.results 
+Process 114 beginning search on data/source_candidates/region_32543.165_32727.612.bin
+Total 270 counts spanning 1752222.062886 seconds
+Outputting best 5 odds to data/source_candidates/region_32543.165_32727.612.results 
+Process 98 beginning search on data/source_candidates/region_32661.883_32556.144.bin
+Total 420 counts spanning 1758050.311433 seconds
+Outputting best 5 odds to data/source_candidates/region_32661.883_32556.144.results 
+Process 99 beginning search on data/source_candidates/region_32656.006_32765.017.bin
+Total 400 counts spanning 1755155.764167 seconds
+Outputting best 5 odds to data/source_candidates/region_32656.006_32765.017.results 
+Process 100 beginning search on data/source_candidates/region_32639.817_33059.427.bin
+Total 133 counts spanning 1744972.836273 seconds
+Outputting best 5 odds to data/source_candidates/region_32639.817_33059.427.results 
+Process 102 beginning search on data/source_candidates/region_32619.25_33281.045.bin
+Total 137 counts spanning 1747563.970166 seconds
+Outputting best 5 odds to data/source_candidates/region_32619.25_33281.045.results 
+Process 103 beginning search on data/source_candidates/region_32609.405_32965.087.bin
+Total 277 counts spanning 1756397.000645 seconds
+Outputting best 5 odds to data/source_candidates/region_32609.405_32965.087.results 
+Process 130 beginning search on data/source_candidates/region_32241.987_29558.406.bin
+Total 11395 counts spanning 1760344.033732 seconds
+Outputting best 5 odds to data/source_candidates/region_32241.987_29558.406.results 
+Process 35 beginning search on data/source_candidates/region_32927.928_33170.884.bin
+Total 606 counts spanning 1759144.580404 seconds
+Outputting best 5 odds to data/source_candidates/region_32927.928_33170.884.results 
+Process 36 beginning search on data/source_candidates/region_32915.393_32931.036.bin
+Total 172 counts spanning 1752077.637680 seconds
+Outputting best 5 odds to data/source_candidates/region_32915.393_32931.036.results 
+Process 37 beginning search on data/source_candidates/region_32913.154_32961.179.bin
+Total 139 counts spanning 1751276.125961 seconds
+Outputting best 5 odds to data/source_candidates/region_32913.154_32961.179.results 
+Process 38 beginning search on data/source_candidates/region_32905.019_33749.117.bin
+Total 299 counts spanning 1753258.711537 seconds
+Outputting best 5 odds to data/source_candidates/region_32905.019_33749.117.results 
+Process 33 beginning search on data/source_candidates/region_32941.038_32407.833.bin
+Total 116 counts spanning 1741575.559510 seconds
+Outputting best 5 odds to data/source_candidates/region_32941.038_32407.833.results 
+Process 32 beginning search on data/source_candidates/region_32947.627_32467.247.bin
+Total 125 counts spanning 1759297.027030 seconds
+Outputting best 5 odds to data/source_candidates/region_32947.627_32467.247.results 
+Process 34 beginning search on data/source_candidates/region_32929.531_32873.154.bin
+Total 50000 counts spanning 1760626.756907 seconds
+Outputting best 5 odds to data/source_candidates/region_32929.531_32873.154.results 
+Process 40 beginning search on data/source_candidates/region_32891.152_34387.09.bin
+Total 575 counts spanning 1757114.238581 seconds
+Outputting best 5 odds to data/source_candidates/region_32891.152_34387.09.results 
+Process 41 beginning search on data/source_candidates/region_32887.885_32502.054.bin
+Total 2305 counts spanning 1757984.930012 seconds
+Outputting best 5 odds to data/source_candidates/region_32887.885_32502.054.results 
+Process 110 beginning search on data/source_candidates/region_32556.888_33998.031.bin
+Total 672 counts spanning 1759717.477735 seconds
+Outputting best 5 odds to data/source_candidates/region_32556.888_33998.031.results 
+Process 27 beginning search on data/source_candidates/region_32985.682_32909.614.bin
+Total 122 counts spanning 1757950.044815 seconds
+Outputting best 5 odds to data/source_candidates/region_32985.682_32909.614.results 
+Process 25 beginning search on data/source_candidates/region_33043.825_33167.875.bin
+Total 133 counts spanning 1750749.619802 seconds
+Outputting best 5 odds to data/source_candidates/region_33043.825_33167.875.results 
+Process 23 beginning search on data/source_candidates/region_33144.904_29407.591.bin
+Total 3890 counts spanning 1760404.641408 seconds
+Outputting best 5 odds to data/source_candidates/region_33144.904_29407.591.results 
+Process 31 beginning search on data/source_candidates/region_32961.814_32579.129.bin
+Total 110 counts spanning 1744276.388662 seconds
+Outputting best 5 odds to data/source_candidates/region_32961.814_32579.129.results 
+Process 30 beginning search on data/source_candidates/region_32970.938_32783.667.bin
+Total 187 counts spanning 1755873.262048 seconds
+Outputting best 5 odds to data/source_candidates/region_32970.938_32783.667.results 
+Process 16 beginning search on data/source_candidates/region_33488.107_32347.5.bin
+Total 94 counts spanning 1744093.217762 seconds
+Outputting best 5 odds to data/source_candidates/region_33488.107_32347.5.results 
+Process 19 beginning search on data/source_candidates/region_33196.728_29747.333.bin
+Total 8976 counts spanning 1760196.869589 seconds
+Outputting best 5 odds to data/source_candidates/region_33196.728_29747.333.results 
+Process 107 beginning search on data/source_candidates/region_32577.81_32783.923.bin
+Total 125 counts spanning 1738849.852474 seconds
+Outputting best 5 odds to data/source_candidates/region_32577.81_32783.923.results 
+Process 54 beginning search on data/source_candidates/region_32815.296_32948.889.bin
+Total 160 counts spanning 1754050.682114 seconds
+Outputting best 5 odds to data/source_candidates/region_32815.296_32948.889.results 
+Process 46 beginning search on data/source_candidates/region_32841.43_32781.948.bin
+Total 2045 counts spanning 1759674.594960 seconds
+Outputting best 5 odds to data/source_candidates/region_32841.43_32781.948.results 
+Process 47 beginning search on data/source_candidates/region_32840.313_32883.002.bin
+Total 55668 counts spanning 1760643.719860 seconds
+Outputting best 5 odds to data/source_candidates/region_32840.313_32883.002.results 
+Process 44 beginning search on data/source_candidates/region_32871.125_32529.606.bin
+Total 295 counts spanning 1754531.618286 seconds
+Outputting best 5 odds to data/source_candidates/region_32871.125_32529.606.results 
+Process 1 beginning search on data/source_candidates/region_34598.071_34390.29.bin
+Total 239 counts spanning 614121.654366 seconds
+Outputting best 5 odds to data/source_candidates/region_34598.071_34390.29.results 
+Process 2 beginning search on data/source_candidates/region_34365.601_35590.696.bin
+Total 2080 counts spanning 1300248.204806 seconds
+Outputting best 5 odds to data/source_candidates/region_34365.601_35590.696.results 
+Process 4 beginning search on data/source_candidates/region_34311.691_32794.265.bin
+Total 240 counts spanning 1755615.441993 seconds
+Outputting best 5 odds to data/source_candidates/region_34311.691_32794.265.results 
+Process 111 beginning search on data/source_candidates/region_32555.42_32793.767.bin
+Total 108 counts spanning 1747638.986353 seconds
+Outputting best 5 odds to data/source_candidates/region_32555.42_32793.767.results 
+Process 78 beginning search on data/source_candidates/region_32727.419_33227.186.bin
+Total 238 counts spanning 1757778.405580 seconds
+Outputting best 5 odds to data/source_candidates/region_32727.419_33227.186.results 
+Process 61 beginning search on data/source_candidates/region_32789.675_32855.912.bin
+Total 694 counts spanning 1759475.786752 seconds
+Outputting best 5 odds to data/source_candidates/region_32789.675_32855.912.results 
+Process 62 beginning search on data/source_candidates/region_32789.619_32927.524.bin
+Total 138 counts spanning 1759443.531243 seconds
+Outputting best 5 odds to data/source_candidates/region_32789.619_32927.524.results 
+Process 118 beginning search on data/source_candidates/region_32477.76_33715.621.bin
+Total 326 counts spanning 1758808.129873 seconds
+Outputting best 5 odds to data/source_candidates/region_32477.76_33715.621.results 
+Process 121 beginning search on data/source_candidates/region_32431.5_32948.979.bin
+Total 360 counts spanning 1757935.177976 seconds
+Outputting best 5 odds to data/source_candidates/region_32431.5_32948.979.results 
+Process 57 beginning search on data/source_candidates/region_32813.839_36051.746.bin
+Total 2874 counts spanning 1759741.755804 seconds
+Outputting best 5 odds to data/source_candidates/region_32813.839_36051.746.results 
+Process 42 beginning search on data/source_candidates/region_32875.399_32939.664.bin
+Total 233 counts spanning 1741203.446155 seconds
+Outputting best 5 odds to data/source_candidates/region_32875.399_32939.664.results 
+Process 58 beginning search on data/source_candidates/region_32811.485_32811.966.bin
+Total 571 counts spanning 1758988.187722 seconds
+Outputting best 5 odds to data/source_candidates/region_32811.485_32811.966.results 
+Process 43 beginning search on data/source_candidates/region_32873.771_32735.929.bin
+Total 686 counts spanning 1759940.787618 seconds
+Outputting best 5 odds to data/source_candidates/region_32873.771_32735.929.results 
+Process 59 beginning search on data/source_candidates/region_32800.042_33015.873.bin
+Total 545 counts spanning 1758930.077874 seconds
+Outputting best 5 odds to data/source_candidates/region_32800.042_33015.873.results 
+Process 65 beginning search on data/source_candidates/region_32787.553_32945.793.bin
+Total 136 counts spanning 1738213.633440 seconds
+Outputting best 5 odds to data/source_candidates/region_32787.553_32945.793.results 
+Process 63 beginning search on data/source_candidates/region_32789.118_33503.735.bin
+Total 104 counts spanning 1739111.772741 seconds
+Outputting best 5 odds to data/source_candidates/region_32789.118_33503.735.results 
+Process 68 beginning search on data/source_candidates/region_32779.542_32923.332.bin
+Total 253 counts spanning 1749656.571274 seconds
+Outputting best 5 odds to data/source_candidates/region_32779.542_32923.332.results 
+Process 49 beginning search on data/source_candidates/region_32833.397_32829.603.bin
+Total 574 counts spanning 1755369.111636 seconds
+Outputting best 5 odds to data/source_candidates/region_32833.397_32829.603.results 
+Process 67 beginning search on data/source_candidates/region_32781.726_32331.666.bin
+Total 545 counts spanning 1756694.485606 seconds
+Outputting best 5 odds to data/source_candidates/region_32781.726_32331.666.results 
+Process 69 beginning search on data/source_candidates/region_32765.038_32791.28.bin
+Total 149 counts spanning 1750730.650097 seconds
+Outputting best 5 odds to data/source_candidates/region_32765.038_32791.28.results 
+Process 45 beginning search on data/source_candidates/region_32863.788_32903.99.bin
+Total 710 counts spanning 1755049.124121 seconds
+Outputting best 5 odds to data/source_candidates/region_32863.788_32903.99.results 
+Process 115 beginning search on data/source_candidates/region_32521.751_32966.948.bin
+Total 381 counts spanning 1752098.134289 seconds
+Outputting best 5 odds to data/source_candidates/region_32521.751_32966.948.results 
+Process 109 beginning search on data/source_candidates/region_32573.658_32667.991.bin
+Total 172 counts spanning 1752590.215624 seconds
+Outputting best 5 odds to data/source_candidates/region_32573.658_32667.991.results 
+Process 39 beginning search on data/source_candidates/region_32891.787_28158.464.bin
+Total 22645 counts spanning 1760620.733267 seconds
+Outputting best 5 odds to data/source_candidates/region_32891.787_28158.464.results 
+Process 60 beginning search on data/source_candidates/region_32799.521_32869.264.bin
+Total 502 counts spanning 1756945.770931 seconds
+Outputting best 5 odds to data/source_candidates/region_32799.521_32869.264.results 
+Process 64 beginning search on data/source_candidates/region_32788.011_32889.792.bin
+Total 245 counts spanning 1745392.337049 seconds
+Outputting best 5 odds to data/source_candidates/region_32788.011_32889.792.results 
+Process 66 beginning search on data/source_candidates/region_32787.128_32775.337.bin
+Total 152 counts spanning 1748834.478908 seconds
+Outputting best 5 odds to data/source_candidates/region_32787.128_32775.337.results 
+Process 56 beginning search on data/source_candidates/region_32813.9_32837.136.bin
+Total 28989 counts spanning 1760464.604102 seconds
+Outputting best 5 odds to data/source_candidates/region_32813.9_32837.136.results 
+Process 70 beginning search on data/source_candidates/region_32764.946_32903.855.bin
+Total 759 counts spanning 1753723.288635 seconds
+Outputting best 5 odds to data/source_candidates/region_32764.946_32903.855.results 
+Process 77 beginning search on data/source_candidates/region_32737.658_32877.bin
+Total 124 counts spanning 1754097.027524 seconds
+Outputting best 5 odds to data/source_candidates/region_32737.658_32877.results 
+[+] Process 0 completed search on data/source_candidates/region_34760.021_27673.191.bin with exit code 0
+Process 0 beginning search on data/source_candidates/region_31163.94_33213.74.bin
+Total 99 counts spanning 1740020.342801 seconds
+Outputting best 5 odds to data/source_candidates/region_31163.94_33213.74.results 
+[+] Process 1 completed search on data/source_candidates/region_34598.071_34390.29.bin with exit code 0
+Process 1 beginning search on data/source_candidates/region_31149.24_33069.058.bin
+Total 137 counts spanning 1760232.897918 seconds
+Outputting best 5 odds to data/source_candidates/region_31149.24_33069.058.results 
+[+] Process 8 completed search on data/source_candidates/region_34247.125_32463.5.bin with exit code 0
+Process 8 completed. Exiting.
+[+] Process 10 completed search on data/source_candidates/region_34035.868_33023.447.bin with exit code 0
+Process 10 completed. Exiting.
+[+] Process 142 completed search on data/source_candidates/region_31413.378_32949.255.bin with exit code 0
+Process 142 completed. Exiting.
+[+] Process 5 completed search on data/source_candidates/region_34301.5_33071.107.bin with exit code 0
+Process 5 beginning search on data/source_candidates/region_30847.803_36012.045.bin
+Total 35 counts spanning 48397.679032 seconds
+Outputting best 5 odds to data/source_candidates/region_30847.803_36012.045.results 
+[+] Process 6 completed search on data/source_candidates/region_34301.308_32754.808.bin with exit code 0
+Process 6 beginning search on data/source_candidates/region_30518.745_39958.531.bin
+Total 273 counts spanning 48532.088751 seconds
+Outputting best 5 odds to data/source_candidates/region_30518.745_39958.531.results 
+[+] Process 5 completed search on data/source_candidates/region_30847.803_36012.045.bin with exit code 0
+Process 5 completed. Exiting.
+[+] Process 63 completed search on data/source_candidates/region_32789.118_33503.735.bin with exit code 0
+Process 63 completed. Exiting.
+[+] Process 6 completed search on data/source_candidates/region_30518.745_39958.531.bin with exit code 0
+Process 6 completed. Exiting.
+[+] Process 80 completed search on data/source_candidates/region_32713.56_32953.44.bin with exit code 0
+Process 80 completed. Exiting.
+[+] Process 111 completed search on data/source_candidates/region_32555.42_32793.767.bin with exit code 0
+Process 111 completed. Exiting.
+[+] Process 31 completed search on data/source_candidates/region_32961.814_32579.129.bin with exit code 0
+Process 31 completed. Exiting.
+[+] Process 122 completed search on data/source_candidates/region_32411.357_33679.814.bin with exit code 0
+Process 122 completed. Exiting.
+[+] Process 93 completed search on data/source_candidates/region_32675.829_32917.253.bin with exit code 0
+Process 93 completed. Exiting.
+[+] Process 26 completed search on data/source_candidates/region_33039.088_32875.618.bin with exit code 0
+Process 26 completed. Exiting.
+[+] Process 128 completed search on data/source_candidates/region_32301.47_33987.828.bin with exit code 0
+Process 128 completed. Exiting.
+[+] Process 33 completed search on data/source_candidates/region_32941.038_32407.833.bin with exit code 0
+Process 33 completed. Exiting.
+[+] Process 75 completed search on data/source_candidates/region_32739.829_32981.778.bin with exit code 0
+Process 75 completed. Exiting.
+[+] Process 0 completed search on data/source_candidates/region_31163.94_33213.74.bin with exit code 0
+Process 0 completed. Exiting.
+[+] Process 55 completed search on data/source_candidates/region_32815.28_33124.134.bin with exit code 0
+Process 55 completed. Exiting.
+[+] Process 82 completed search on data/source_candidates/region_32709.692_32839.692.bin with exit code 0
+Process 82 completed. Exiting.
+[+] Process 77 completed search on data/source_candidates/region_32737.658_32877.bin with exit code 0
+Process 77 completed. Exiting.
+[+] Process 107 completed search on data/source_candidates/region_32577.81_32783.923.bin with exit code 0
+Process 107 completed. Exiting.
+[+] Process 48 completed search on data/source_candidates/region_32837.259_32963.404.bin with exit code 0
+Process 48 completed. Exiting.
+[+] Process 32 completed search on data/source_candidates/region_32947.627_32467.247.bin with exit code 0
+Process 32 completed. Exiting.
+[+] Process 100 completed search on data/source_candidates/region_32639.817_33059.427.bin with exit code 0
+Process 100 completed. Exiting.
+[+] Process 25 completed search on data/source_candidates/region_33043.825_33167.875.bin with exit code 0
+Process 25 completed. Exiting.
+[+] Process 112 completed search on data/source_candidates/region_32551.762_32687.238.bin with exit code 0
+Process 112 completed. Exiting.
+[+] Process 37 completed search on data/source_candidates/region_32913.154_32961.179.bin with exit code 0
+Process 37 completed. Exiting.
+[+] Process 62 completed search on data/source_candidates/region_32789.619_32927.524.bin with exit code 0
+Process 62 completed. Exiting.
+[+] Process 65 completed search on data/source_candidates/region_32787.553_32945.793.bin with exit code 0
+Process 65 completed. Exiting.
+[+] Process 83 completed search on data/source_candidates/region_32709.583_32877.417.bin with exit code 0
+Process 83 completed. Exiting.
+[+] Process 119 completed search on data/source_candidates/region_32475.823_32945.46.bin with exit code 0
+Process 119 completed. Exiting.
+[+] Process 104 completed search on data/source_candidates/region_32596.934_32821.864.bin with exit code 0
+Process 104 completed. Exiting.
+[+] Process 66 completed search on data/source_candidates/region_32787.128_32775.337.bin with exit code 0
+Process 66 completed. Exiting.
+[+] Process 3 completed search on data/source_candidates/region_34319.914_32877.983.bin with exit code 0
+Process 3 beginning search on data/source_candidates/region_31137.247_32735.942.bin
+Total 177 counts spanning 1754077.920875 seconds
+Outputting best 5 odds to data/source_candidates/region_31137.247_32735.942.results 
+[+] Process 79 completed search on data/source_candidates/region_32721.955_32729.182.bin with exit code 0
+Process 79 completed. Exiting.
+[+] Process 16 completed search on data/source_candidates/region_33488.107_32347.5.bin with exit code 0
+Process 16 completed. Exiting.
+[+] Process 116 completed search on data/source_candidates/region_32493.091_32891.328.bin with exit code 0
+Process 116 completed. Exiting.
+[+] Process 36 completed search on data/source_candidates/region_32915.393_32931.036.bin with exit code 0
+Process 36 completed. Exiting.
+[+] Process 7 completed search on data/source_candidates/region_34276.753_32669.654.bin with exit code 0
+Process 7 completed. Exiting.
+[+] Process 90 completed search on data/source_candidates/region_32687.451_32635.817.bin with exit code 0
+Process 90 completed. Exiting.
+[+] Process 102 completed search on data/source_candidates/region_32619.25_33281.045.bin with exit code 0
+Process 102 completed. Exiting.
+[+] Process 73 completed search on data/source_candidates/region_32751.207_32811.728.bin with exit code 0
+Process 73 completed. Exiting.
+[+] Process 69 completed search on data/source_candidates/region_32765.038_32791.28.bin with exit code 0
+Process 69 completed. Exiting.
+[+] Process 109 completed search on data/source_candidates/region_32573.658_32667.991.bin with exit code 0
+Process 109 completed. Exiting.
+[+] Process 141 completed search on data/source_candidates/region_31415.69_32831.786.bin with exit code 0
+Process 141 completed. Exiting.
+[+] Process 20 completed search on data/source_candidates/region_33189.688_32734.963.bin with exit code 0
+Process 20 completed. Exiting.
+[+] Process 137 completed search on data/source_candidates/region_31443.668_33221.685.bin with exit code 0
+Process 137 completed. Exiting.
+[+] Process 87 completed search on data/source_candidates/region_32697.248_32895.441.bin with exit code 0
+Process 87 completed. Exiting.
+[+] Process 30 completed search on data/source_candidates/region_32970.938_32783.667.bin with exit code 0
+Process 30 completed. Exiting.
+[+] Process 113 completed search on data/source_candidates/region_32546.107_32947.041.bin with exit code 0
+Process 113 completed. Exiting.
+[+] Process 12 completed search on data/source_candidates/region_34027.326_32871.848.bin with exit code 0
+Process 12 completed. Exiting.
+[+] Process 4 completed search on data/source_candidates/region_34311.691_32794.265.bin with exit code 0
+Process 4 beginning search on data/source_candidates/region_30974.74_31971.821.bin
+Total 739 counts spanning 808147.944836 seconds
+Outputting best 5 odds to data/source_candidates/region_30974.74_31971.821.results 
+[+] Process 9 completed search on data/source_candidates/region_34242.34_32557.088.bin with exit code 0
+Process 9 completed. Exiting.
+[+] Process 117 completed search on data/source_candidates/region_32481.247_33473.373.bin with exit code 0
+Process 117 completed. Exiting.
+[+] Process 15 completed search on data/source_candidates/region_33619.22_33249.653.bin with exit code 0
+Process 15 completed. Exiting.
+[+] Process 136 completed search on data/source_candidates/region_31515.445_32277.983.bin with exit code 0
+Process 136 completed. Exiting.
+[+] Process 54 completed search on data/source_candidates/region_32815.296_32948.889.bin with exit code 0
+Process 54 completed. Exiting.
+[+] Process 106 completed search on data/source_candidates/region_32585.667_32703.033.bin with exit code 0
+Process 106 completed. Exiting.
+[+] Process 140 completed search on data/source_candidates/region_31416.293_33026.041.bin with exit code 0
+Process 140 completed. Exiting.
+[+] Process 53 completed search on data/source_candidates/region_32825.074_32955.19.bin with exit code 0
+Process 53 completed. Exiting.
+[+] Process 138 completed search on data/source_candidates/region_31423.761_33121.639.bin with exit code 0
+Process 138 completed. Exiting.
+[+] Process 50 completed search on data/source_candidates/region_32831.167_32845.34.bin with exit code 0
+Process 50 completed. Exiting.
+[+] Process 84 completed search on data/source_candidates/region_32709.56_32767.84.bin with exit code 0
+Process 84 completed. Exiting.
+[+] Process 13 completed search on data/source_candidates/region_34015.574_32801.926.bin with exit code 0
+Process 13 completed. Exiting.
+[+] Process 44 completed search on data/source_candidates/region_32871.125_32529.606.bin with exit code 0
+Process 44 completed. Exiting.
+[+] Process 27 completed search on data/source_candidates/region_32985.682_32909.614.bin with exit code 0
+Process 27 completed. Exiting.
+[+] Process 121 completed search on data/source_candidates/region_32431.5_32948.979.bin with exit code 0
+Process 121 completed. Exiting.
+[+] Process 68 completed search on data/source_candidates/region_32779.542_32923.332.bin with exit code 0
+Process 68 completed. Exiting.
+[+] Process 96 completed search on data/source_candidates/region_32671.562_33005.648.bin with exit code 0
+Process 96 completed. Exiting.
+[+] Process 72 completed search on data/source_candidates/region_32751.303_33382.132.bin with exit code 0
+Process 72 completed. Exiting.
+[+] Process 18 completed search on data/source_candidates/region_33289.392_32505.355.bin with exit code 0
+Process 18 completed. Exiting.
+[+] Process 11 completed search on data/source_candidates/region_34035.373_33135.391.bin with exit code 0
+Process 11 completed. Exiting.
+[+] Process 42 completed search on data/source_candidates/region_32875.399_32939.664.bin with exit code 0
+Process 42 completed. Exiting.
+[+] Process 78 completed search on data/source_candidates/region_32727.419_33227.186.bin with exit code 0
+Process 78 completed. Exiting.
+[+] Process 64 completed search on data/source_candidates/region_32788.011_32889.792.bin with exit code 0
+Process 64 completed. Exiting.
+[+] Process 125 completed search on data/source_candidates/region_32386.822_33089.274.bin with exit code 0
+Process 125 completed. Exiting.
+[+] Process 114 completed search on data/source_candidates/region_32543.165_32727.612.bin with exit code 0
+Process 114 completed. Exiting.
+[+] Process 17 completed search on data/source_candidates/region_33337.69_33339.765.bin with exit code 0
+Process 17 completed. Exiting.
+[+] Process 103 completed search on data/source_candidates/region_32609.405_32965.087.bin with exit code 0
+Process 103 completed. Exiting.
+[+] Process 38 completed search on data/source_candidates/region_32905.019_33749.117.bin with exit code 0
+Process 38 completed. Exiting.
+[+] Process 22 completed search on data/source_candidates/region_33155.441_32585.894.bin with exit code 0
+Process 22 completed. Exiting.
+[+] Process 94 completed search on data/source_candidates/region_32675.789_32720.158.bin with exit code 0
+Process 94 completed. Exiting.
+[+] Process 52 completed search on data/source_candidates/region_32827.5_32203.14.bin with exit code 0
+Process 52 completed. Exiting.
+[+] Process 118 completed search on data/source_candidates/region_32477.76_33715.621.bin with exit code 0
+Process 118 completed. Exiting.
+[+] Process 91 completed search on data/source_candidates/region_32685.199_32975.747.bin with exit code 0
+Process 91 completed. Exiting.
+[+] Process 29 completed search on data/source_candidates/region_32983.214_33286.095.bin with exit code 0
+Process 29 completed. Exiting.
+[+] Process 1 completed search on data/source_candidates/region_31149.24_33069.058.bin with exit code 0
+Process 1 completed. Exiting.
+[+] Process 3 completed search on data/source_candidates/region_31137.247_32735.942.bin with exit code 0
+Process 3 completed. Exiting.
+[+] Process 124 completed search on data/source_candidates/region_32402.02_32887.527.bin with exit code 0
+Process 124 completed. Exiting.
+[+] Process 115 completed search on data/source_candidates/region_32521.751_32966.948.bin with exit code 0
+Process 115 completed. Exiting.
+[+] Process 92 completed search on data/source_candidates/region_32685.104_32861.87.bin with exit code 0
+Process 92 completed. Exiting.
+[+] Process 99 completed search on data/source_candidates/region_32656.006_32765.017.bin with exit code 0
+Process 99 completed. Exiting.
+[+] Process 85 completed search on data/source_candidates/region_32708.618_32924.803.bin with exit code 0
+Process 85 completed. Exiting.
+[+] Process 74 completed search on data/source_candidates/region_32749.675_32905.526.bin with exit code 0
+Process 74 completed. Exiting.
+[+] Process 98 completed search on data/source_candidates/region_32661.883_32556.144.bin with exit code 0
+Process 98 completed. Exiting.
+[+] Process 127 completed search on data/source_candidates/region_32357.453_33709.43.bin with exit code 0
+Process 127 completed. Exiting.
+[+] Process 86 completed search on data/source_candidates/region_32705.456_32903.311.bin with exit code 0
+Process 86 completed. Exiting.
+[+] Process 129 completed search on data/source_candidates/region_32284.94_33471.127.bin with exit code 0
+Process 129 completed. Exiting.
+[+] Process 105 completed search on data/source_candidates/region_32585.857_33083.431.bin with exit code 0
+Process 105 completed. Exiting.
+[+] Process 60 completed search on data/source_candidates/region_32799.521_32869.264.bin with exit code 0
+Process 60 completed. Exiting.
+[+] Process 132 completed search on data/source_candidates/region_31943.822_33759.353.bin with exit code 0
+Process 132 completed. Exiting.
+[+] Process 101 completed search on data/source_candidates/region_32639.635_32489.127.bin with exit code 0
+Process 101 completed. Exiting.
+[+] Process 88 completed search on data/source_candidates/region_32690.16_32614.066.bin with exit code 0
+Process 88 completed. Exiting.
+[+] Process 89 completed search on data/source_candidates/region_32689.375_32961.967.bin with exit code 0
+Process 89 completed. Exiting.
+[+] Process 59 completed search on data/source_candidates/region_32800.042_33015.873.bin with exit code 0
+Process 59 completed. Exiting.
+[+] Process 67 completed search on data/source_candidates/region_32781.726_32331.666.bin with exit code 0
+Process 67 completed. Exiting.
+[+] Process 49 completed search on data/source_candidates/region_32833.397_32829.603.bin with exit code 0
+Process 49 completed. Exiting.
+[+] Process 58 completed search on data/source_candidates/region_32811.485_32811.966.bin with exit code 0
+Process 58 completed. Exiting.
+[+] Process 40 completed search on data/source_candidates/region_32891.152_34387.09.bin with exit code 0
+Process 40 completed. Exiting.
+[+] Process 97 completed search on data/source_candidates/region_32665.944_32819.737.bin with exit code 0
+Process 97 completed. Exiting.
+[+] Process 35 completed search on data/source_candidates/region_32927.928_33170.884.bin with exit code 0
+Process 35 completed. Exiting.
+[+] Process 4 completed search on data/source_candidates/region_30974.74_31971.821.bin with exit code 0
+Process 4 completed. Exiting.
+[+] Process 110 completed search on data/source_candidates/region_32556.888_33998.031.bin with exit code 0
+Process 110 completed. Exiting.
+[+] Process 43 completed search on data/source_candidates/region_32873.771_32735.929.bin with exit code 0
+Process 43 completed. Exiting.
+[+] Process 61 completed search on data/source_candidates/region_32789.675_32855.912.bin with exit code 0
+Process 61 completed. Exiting.
+[+] Process 45 completed search on data/source_candidates/region_32863.788_32903.99.bin with exit code 0
+Process 45 completed. Exiting.
+[+] Process 70 completed search on data/source_candidates/region_32764.946_32903.855.bin with exit code 0
+Process 70 completed. Exiting.
+[+] Process 131 completed search on data/source_candidates/region_32059.048_31885.883.bin with exit code 0
+Process 131 completed. Exiting.
+[+] Process 108 completed search on data/source_candidates/region_32574.822_32215.245.bin with exit code 0
+Process 108 completed. Exiting.
+[+] Process 28 completed search on data/source_candidates/region_32985.405_34367.68.bin with exit code 0
+Process 28 completed. Exiting.
+[+] Process 14 completed search on data/source_candidates/region_33754.076_34759.954.bin with exit code 0
+Process 14 completed. Exiting.
+[+] Process 24 completed search on data/source_candidates/region_33044.963_32805.992.bin with exit code 0
+Process 24 completed. Exiting.
+[+] Process 76 completed search on data/source_candidates/region_32739.324_32951.967.bin with exit code 0
+Process 76 completed. Exiting.
+[+] Process 71 completed search on data/source_candidates/region_32752.019_32851.626.bin with exit code 0
+Process 71 completed. Exiting.
+[+] Process 2 completed search on data/source_candidates/region_34365.601_35590.696.bin with exit code 0
+Process 2 beginning search on data/source_candidates/region_31140.439_32855.712.bin
+Total 120 counts spanning 1753302.756685 seconds
+Outputting best 5 odds to data/source_candidates/region_31140.439_32855.712.results 
+[+] Process 133 completed search on data/source_candidates/region_31849.245_30791.171.bin with exit code 0
+Process 133 completed. Exiting.
+[+] Process 126 completed search on data/source_candidates/region_32368.064_33072.206.bin with exit code 0
+Process 126 completed. Exiting.
+[+] Process 95 completed search on data/source_candidates/region_32671.753_33039.23.bin with exit code 0
+Process 95 completed. Exiting.
+[+] Process 2 completed search on data/source_candidates/region_31140.439_32855.712.bin with exit code 0
+Process 2 completed. Exiting.
+[+] Process 123 completed search on data/source_candidates/region_32406.646_33002.213.bin with exit code 0
+Process 123 completed. Exiting.
+[+] Process 21 completed search on data/source_candidates/region_33173.723_33351.143.bin with exit code 0
+Process 21 completed. Exiting.
+[+] Process 139 completed search on data/source_candidates/region_31419.057_31317.485.bin with exit code 0
+Process 139 completed. Exiting.
+[+] Process 81 completed search on data/source_candidates/region_32712.208_32474.152.bin with exit code 0
+Process 81 completed. Exiting.
+[+] Process 46 completed search on data/source_candidates/region_32841.43_32781.948.bin with exit code 0
+Process 46 completed. Exiting.
+[+] Process 41 completed search on data/source_candidates/region_32887.885_32502.054.bin with exit code 0
+Process 41 completed. Exiting.
+[+] Process 57 completed search on data/source_candidates/region_32813.839_36051.746.bin with exit code 0
+Process 57 completed. Exiting.
+[+] Process 51 completed search on data/source_candidates/region_32831.093_33103.143.bin with exit code 0
+Process 51 completed. Exiting.
+[+] Process 135 completed search on data/source_candidates/region_31597.323_34743.373.bin with exit code 0
+Process 135 completed. Exiting.
+[+] Process 23 completed search on data/source_candidates/region_33144.904_29407.591.bin with exit code 0
+Process 23 completed. Exiting.
+[+] Process 134 completed search on data/source_candidates/region_31731.265_34786.761.bin with exit code 0
+Process 134 completed. Exiting.
+[+] Process 19 completed search on data/source_candidates/region_33196.728_29747.333.bin with exit code 0
+Process 19 completed. Exiting.
+[+] Process 120 completed search on data/source_candidates/region_32455.013_35634.674.bin with exit code 0
+Process 120 completed. Exiting.
+[+] Process 130 completed search on data/source_candidates/region_32241.987_29558.406.bin with exit code 0
+Process 130 completed. Exiting.
