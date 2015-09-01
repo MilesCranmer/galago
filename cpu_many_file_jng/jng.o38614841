@@ -1,0 +1,36 @@
+----------------------------------------
+Begin PBS Prologue Fri Aug 28 17:18:17 EDT 2015 1440796697
+Job ID:		38614841.gm-1r16-n04.guillimin.clumeq.ca
+Username:	mcranmer
+Group:		apa-511-01
+Nodes:		aw-4r14-n28
+End PBS Prologue Fri Aug 28 17:18:17 EDT 2015 1440796697
+----------------------------------------
+-------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code.. Per user-direction, the job has been aborted.
+-------------------------------------------------------
+--------------------------------------------------------------------------
+mpiexec detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[4192,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+----------------------------------------
+Begin PBS Epilogue Fri Aug 28 17:18:20 EDT 2015 1440796700
+Job ID:		38614841.gm-1r16-n04.guillimin.clumeq.ca
+Username:	mcranmer
+Group:		apa-511-01
+Job Name:	jng
+Session:	14183
+Limits:		neednodes=1:ppn=1:gpus=1,nodes=1:ppn=1:gpus=1,walltime=00:20:00
+Resources:	cput=00:00:00,energy_used=0,mem=148kb,vmem=1184kb,walltime=00:00:03
+Queue:		k20
+Account:	apa-511-aa
+Exit code:	0
+Nodes:	aw-4r14-n28
+Killing leftovers...
+
+End PBS Epilogue Fri Aug 28 17:18:20 EDT 2015 1440796700
+----------------------------------------

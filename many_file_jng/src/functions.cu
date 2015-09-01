@@ -14,7 +14,9 @@
 //#include <gmpxx.h> //for precision calculation
 #include <vector> //to hold search results
 #include <stdio.h>
+#include <fstream>
 #include <iterator>
+#include <iomanip>
 #include <algorithm> //compute max of vector
 #include <numeric> //compute sum of vector (accumulate)
 #include <omp.h>
@@ -384,7 +386,7 @@ __global__ void fake_bins(unsigned char *t_binning, int length)
 double t_odds_two(double *counts_h, int length,
 				  double nu_min, double nu_max,
 				  double nudot_min, double nudot_max,
-				  int verbosity)
+				  int verbosity, const char* filename)
 {
 	//the entered mvals should be 2^1 up to 2^8
 	try
@@ -403,7 +405,14 @@ double t_odds_two(double *counts_h, int length,
 		double om1 = 0;
 		int m;
 		int counter = 0;
-		SearchResults results;
+		double best[5][3] = {0};
+		/*
+		double best[0][] = {0,0,0};
+		double best[1][] = {0,0,0};
+		double best[2][] = {0,0,0};
+		double best[3][] = {0,0,0};
+		double best[4][] = {0,0,0};
+		*/
 		for (double
 		     nu =  nu_min;
 			 nu <= nu_max;
@@ -447,11 +456,13 @@ double t_odds_two(double *counts_h, int length,
 				odds += exp(om1);
 				for (int k = 1; k < 8; k++)
 				{
+					/*
 					for (int x = 0; x < m; x ++)
 					{
 						printf("%d,",binned[x]);
 					}
 					printf("\n");
+					*/
 					m = m >> 1;
 					//printf("m=%d\n",m);
 					//make the pointers
@@ -474,10 +485,11 @@ double t_odds_two(double *counts_h, int length,
 				//if (odds > 1e-3)
 				odds /= 8;
 				odds *= d_nu/nu;
-				results.nu.push_back(nu);
-				results.nudot.push_back(nudot);
-				results.odds.push_back(odds);
+				//results.nu.push_back(nu);
+				//results.nudot.push_back(nudot);
+				//results.odds.push_back(odds);
 				//if (counter %50000==0 || odds > 1e-4)
+				/*
 				if (verbosity == 2 || (verbosity == 1 && odds > 1e-3) || (verbosity == 0 && odds > 1e-1))
 				{
 					printf("Search %d gives odds of %e for nu %.9e and nudot -%.9e\n",counter,odds,nu,nudot);
@@ -486,25 +498,74 @@ double t_odds_two(double *counts_h, int length,
 				{
 					printf("On search %d, and nu=%.9e Hz\n",counter,nu);	
 				}
+				*/
 				
+				if (odds > best[4][0])
+				{
+					for (int i = 3; i >= 0; i --)
+					{
+						if (odds < best[i][0])
+						{
+							for (int j = 3; j >= i + 1; j--) 
+							{
+								best[j+1][0] = best[j][0];
+								best[j+1][1] = best[j][1];
+								best[j+1][2] = best[j][2];
+							}
+							best[i+1][0] = odds;
+							best[i+1][1] = nu;
+							best[i+1][2] = nudot;
+							break;
+						}
+						else if (i == 0)
+						{
+							for (int j = 3; j >= 0; j--) 
+							{
+								best[j+1][0] = best[j][0];
+								best[j+1][1] = best[j][1];
+								best[j+1][2] = best[j][2];
+							}
+							best[0][0] = odds;
+							best[0][1] = nu;
+							best[0][2] = nudot;
+						}
+					}
+				}
 			}
 		}
 		//clear up space
 		counts_d.clear();
-		//sort bins to be binned
 		counts_d.shrink_to_fit();
+		ofstream file(filename, ios::app);
+		file << "range,"; 
+		file << scientific << setprecision(10) << nu_min << "-";
+		file << scientific << setprecision(10) << nu_max << ",";
+		file << scientific << nudot_min << "-";
+		file << scientific << nudot_max << "\n";
+		for (int i = 0; i < 5; i ++)
+		{
+			//printf("The %dth best odds are %e for a nu of %.9e and nudot -%.9e\n",
+				   //i+1,best[i][0],best[i][1],best[i][2]);
+			file << scientific << best[i][0] << ",";
+			file << scientific << setprecision(10) << best[i][1] << ",";
+			file << scientific << -best[i][2];
+			file << "\n";
+		}
+		file.close();
+		//results.write_best(10,filename);
+		//best[5][3];
 		//keep reducing bins
-		int j = results.max_odds_i();
-		printf("\nThe best odds are: %e, which occur for nu of %e Hz and"
-			   " nudot of -%e Hz/s\n\n",
-				results.odds[j], results.nu[j], results.nudot[j]);
-		printf("%d searches completed\n",counter);
+		//int j = results.max_odds_i();
+		//printf("\nThe best odds are: %e, which occur for nu of %e Hz and"
+			   //" nudot of -%e Hz/s\n\n",
+		//		results.odds[j], results.nu[j], results.nudot[j]);
+		//printf("%d searches completed\n",counter);
 		return 0;
 	}
 	catch(thrust::system_error &err)
 	{
 		std::cerr << "Error doing this: " << err.what() << std::endl;
-		exit(-1);
+		return 1;
 	}
 }
 

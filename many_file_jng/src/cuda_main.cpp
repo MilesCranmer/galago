@@ -31,7 +31,7 @@ unsigned char *get_bins(double*,int,double*,int*,int*,int,double,double);
 void free_data(double*,int*);
 double bins_to_odds(unsigned char*,int,int*,int);
 double t_odds(double*,int,double,double,int*,int);
-double t_odds_two(double*,int,double,double,double,double,int);
+double t_odds_two(double*,int,double,double,double,double,int,const char*);
 
 int main(int argc, char * argv[])
 {
@@ -58,6 +58,8 @@ int main(int argc, char * argv[])
 	MPI_Init(&argc, &argv);
 	//get the process rank
 	MPI_Comm_rank(comm,&rank);
+	if (!rank)
+		printf("Run baby run!\n");
 	//get the number of processes
 	MPI_Comm_size(comm,&size);
 	//receiver status
@@ -72,6 +74,8 @@ int main(int argc, char * argv[])
 	//string null_s(srank);
 	//null_s += "_results.csv";
 	//ofstream results_file(null_s.c_str());
+	if (!rank)
+		printf("Reading in files\n");
 
 	string null_s = "";
 	while (filenames_file.good())
@@ -95,11 +99,14 @@ int main(int argc, char * argv[])
 
 	//as the root process, read in the data
 	//if (rank == 0)
-	{
-		//load in values from data
-		logFacts = bin_read((char*)"data/log_facs.bin");
-		maxFact = bin_size((char*)"data/log_facs.bin");
-	}
+	if(!rank)
+		printf("Reading in logFacts\n");
+	
+
+	//load in values from data
+	logFacts = bin_read((char*)"data/log_facs.bin");
+	maxFact = bin_size((char*)"data/log_facs.bin");
+
 	//share sizing details - all of the following 
 	//must be blocking to insure nothing funny happens
 	/*
@@ -129,6 +136,8 @@ int main(int argc, char * argv[])
 	//counts = bin_read((char*)"data/B1821_counts.bin");
 	//length = bin_size((char*)"data/B1821_counts.bin");
 	//set up search
+	if (!rank)
+		printf("Applying search settings\n");
 	int verbosity = 1;
 	double nu_min,nu_max,nudot_min,nudot_max;
 	if (argc == 6)
@@ -141,26 +150,45 @@ int main(int argc, char * argv[])
 	}
 	else
 	{
-		printf("You entered %d args\n",argc);
+		if (!rank)
+			printf("You entered %d args instead of 5 \n",argc-1);
 		nu_min = 50; 
 		nu_max = 500;
 		nudot_min = 2.5e-19;//-1736.5e-16 
 		nudot_max = 2.5e-11;//1736.5e-16;
 	}
+	if (!rank)
+		printf("Parallel phase:\n");
 	for (int file_i = 0; file_i < filenames.size(); file_i ++)
 	{
 		counts = bin_read((char*)filenames[file_i].c_str());
 		length = bin_size((char*)filenames[file_i].c_str());
 		//normalize the counts
 		normalize_counts(counts, length);
+		string results_filename = filenames[file_i].substr(0,filenames[file_i].size()-3)+"results";
+		printf("Process %d beginning search on %s\n"
+			   "Total %d counts spanning %f seconds\n"
+			   "Outputting best 5 odds to %s \n",
+			   rank,filenames[file_i].c_str(),
+			   length,counts[length-1],results_filename.c_str());
 
-
-		
 		
 		int i = t_odds_two(counts, length, 
 						   nu_min,nu_max,
 						   nudot_min,nudot_max,
-						   verbosity);
+						   verbosity,results_filename.c_str());
+		if (!i)
+		{
+			printf("[+] Process %d completed search on %s"
+				   " with exit code %d\n", rank,filenames[file_i].c_str(),
+				   i);
+		}
+		else
+		{
+			printf("[-] Process %d exited search on %s"
+				   " with code %d\n", rank,filenames[file_i].c_str(),
+				   i);
+		}
 
 		//display some initial stats
 		/*
@@ -220,6 +248,7 @@ int main(int argc, char * argv[])
 		printf("Total searches: %d\n", i);
 		*/
 	}
+	printf("Process %d completed. Exiting.\n", rank);
 	MPI_Finalize();
 	free(logFacts);
 	free(counts);

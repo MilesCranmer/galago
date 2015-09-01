@@ -1,0 +1,6 @@
+
+jng:32707 terminated with signal 11 at PC=408100 SP=7ffc6a43ba78.  Backtrace:
+./jng[0x408100]
+./jng[0x406468]
+/lib64/libc.so.6(__libc_start_main+0xfd)[0x3f7ce1ed5d]
+./jng[0x405d39]

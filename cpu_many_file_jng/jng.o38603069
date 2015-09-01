@@ -1,0 +1,64 @@
+----------------------------------------
+Begin PBS Prologue Fri Aug 28 13:38:40 EDT 2015 1440783520
+Job ID:		38603069.gm-1r16-n04.guillimin.clumeq.ca
+Username:	mcranmer
+Group:		apa-511-01
+Nodes:		aw-4r14-n32
+End PBS Prologue Fri Aug 28 13:38:40 EDT 2015 1440783520
+----------------------------------------
+The settings for this search are:
+
+Min nu: 3.272000e+02 Hz, Max nu: 3.275000e+02 Hz
+nu Interval: 1.621870e-06 Hz
+Min nudot: 1.736500e-13 Hz/s, Max nudot: 1.736500e-13 Hz/s
+nudot Interval: 1.000000e-08 Hz/s
+Max number of bins: 15
+
+*******************************
+Starting search!
+*******************************
+
+Receiving Good Search, nu: 3.272075595e+02, nudot: -1.736500000e-13, Odds: 1.081e-08
+Receiving Good Search, nu: 3.272084516e+02, nudot: -1.736500000e-13, Odds: 1.597e-08
+Receiving Good Search, nu: 3.272084775e+02, nudot: -1.736500000e-13, Odds: 1.960e-08
+Receiving Good Search, nu: 3.272178876e+02, nudot: -1.736500000e-13, Odds: 1.972e-08
+Receiving Good Search, nu: 3.272220445e+02, nudot: -1.736500000e-13, Odds: 1.078e-08
+Receiving Good Search, nu: 3.272247595e+02, nudot: -1.736500000e-13, Odds: 1.984e-08
+Receiving Good Search, nu: 3.272253774e+02, nudot: -1.736500000e-13, Odds: 3.706e-08
+Receiving Good Search, nu: 3.272305933e+02, nudot: -1.736500000e-13, Odds: 4.484e-08
+Receiving Good Search, nu: 3.272413042e+02, nudot: -1.736500000e-13, Odds: 1.310e-08
+Receiving Good Search, nu: 3.272445090e+02, nudot: -1.736500000e-13, Odds: 4.482e-08
+Receiving Good Search, nu: 3.272466515e+02, nudot: -1.736500000e-13, Odds: 1.077e-08
+Receiving Good Search, nu: 3.272484063e+02, nudot: -1.736500000e-13, Odds: 2.944e-08
+Receiving Good Search, nu: 3.272508910e+02, nudot: -1.736500000e-13, Odds: 5.567e-08
+Receiving Good Search, nu: 3.272549425e+02, nudot: -1.736500000e-13, Odds: 6.964e-08
+Receiving Good Search, nu: 3.272599962e+02, nudot: -1.736500000e-13, Odds: 2.394e-08
+Receiving Good Search, nu: 3.272618160e+02, nudot: -1.736500000e-13, Odds: 1.312e-08
+Receiving Good Search, nu: 3.272654360e+02, nudot: -1.736500000e-13, Odds: 2.711e-07
+Receiving Good Search, nu: 3.272679547e+02, nudot: -1.736500000e-13, Odds: 1.957e-08
+Receiving Good Search, nu: 3.272737124e+02, nudot: -1.736500000e-13, Odds: 1.961e-08
+Receiving Good Search, nu: 3.272763041e+02, nudot: -1.736500000e-13, Odds: 1.354e-07
+Receiving Good Search, nu: 3.272783363e+02, nudot: -1.736500000e-13, Odds: 1.597e-08
+Receiving Good Search, nu: 3.272836220e+02, nudot: -1.736500000e-13, Odds: 1.599e-08
+Receiving Good Search, nu: 3.272854271e+02, nudot: -1.736500000e-13, Odds: 1.350e-07
+Receiving Good Search, nu: 3.272870587e+02, nudot: -1.736500000e-13, Odds: 1.957e-08
+Receiving Good Search, nu: 3.272938008e+02, nudot: -1.736500000e-13, Odds: 1.978e-08
+Receiving Good Search, nu: 3.272993185e+02, nudot: -1.736500000e-13, Odds: 1.952e-08
+Receiving Good Search, nu: 3.273003856e+02, nudot: -1.736500000e-13, Odds: 2.148e-07
+----------------------------------------
+Begin PBS Epilogue Fri Aug 28 13:41:12 EDT 2015 1440783672
+Job ID:		38603069.gm-1r16-n04.guillimin.clumeq.ca
+Username:	mcranmer
+Group:		apa-511-01
+Job Name:	jng
+Session:	14619
+Limits:		neednodes=1:ppn=1:gpus=1,nodes=1:ppn=1:gpus=1,walltime=00:02:00
+Resources:	cput=00:02:23,energy_used=0,mem=473868kb,vmem=97539988kb,walltime=00:02:32
+Queue:		k20
+Account:	apa-511-aa
+Exit code:	-11
+Nodes:	aw-4r14-n32
+Killing leftovers...
+
+End PBS Epilogue Fri Aug 28 13:41:12 EDT 2015 1440783672
+----------------------------------------

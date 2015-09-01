@@ -1,0 +1,13 @@
+
+jng:30155 terminated with signal 6 at PC=3f53232625 SP=7ffce9b52e48.  Backtrace:
+/lib64/libc.so.6(gsignal+0x35)[0x3f53232625]
+/lib64/libc.so.6(abort+0x175)[0x3f53233e05]
+/usr/lib64/libstdc++.so.6(_ZN9__gnu_cxx27__verbose_terminate_handlerEv+0x12d)[0x3f5d6bea7d]
+/usr/lib64/libstdc++.so.6[0x3f5d6bcbd6]
+/usr/lib64/libstdc++.so.6[0x3f5d6bcc03]
+/usr/lib64/libstdc++.so.6[0x3f5d6bcd22]
+./jng[0x41b983]
+./jng[0x408db7]
+./jng[0x4064a3]
+/lib64/libc.so.6(__libc_start_main+0xfd)[0x3f5321ed5d]
+./jng[0x405ce9]

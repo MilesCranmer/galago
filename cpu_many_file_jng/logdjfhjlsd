@@ -1,0 +1,12 @@
+Run baby run!
+Reading in files
+Reading in logFacts
+Applying search settings
+Parallel phase:
+Process 0 beginning search on data/source_candidates/region_30518.745_39958.531.bin
+Total 273 counts spanning 48532.088751 seconds
+Outputting best 5 odds to data/source_candidates/region_30518.745_39958.531.results 
+[+] Process 0 completed search on data/source_candidates/region_30518.745_39958.531.bin with exit code 0
+Process 0 beginning search on data/source_candidates/region_30974.74_31971.821.bin
+Total 739 counts spanning 808147.944836 seconds
+Outputting best 5 odds to data/source_candidates/region_30974.74_31971.821.results 

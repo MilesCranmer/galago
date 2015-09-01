@@ -1,0 +1,13 @@
+
+jng:17324 terminated with signal 6 at PC=307e232625 SP=7ffc97fb2a38.  Backtrace:
+/lib64/libc.so.6(gsignal+0x35)[0x307e232625]
+/lib64/libc.so.6(abort+0x175)[0x307e233e05]
+/usr/lib64/libstdc++.so.6(_ZN9__gnu_cxx27__verbose_terminate_handlerEv+0x12d)[0x30886bea7d]
+/usr/lib64/libstdc++.so.6[0x30886bcbd6]
+/usr/lib64/libstdc++.so.6[0x30886bcc03]
+/usr/lib64/libstdc++.so.6[0x30886bcd22]
+./jng[0x41c303]
+./jng[0x409929]
+./jng[0x4068cf]
+/lib64/libc.so.6(__libc_start_main+0xfd)[0x307e21ed5d]
+./jng[0x406119]

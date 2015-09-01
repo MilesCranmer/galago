@@ -1,0 +1,27 @@
+----------------------------------------
+Begin PBS Prologue Sun Aug 30 20:28:44 EDT 2015 1440980924
+Job ID:		38710313.gm-1r16-n04.guillimin.clumeq.ca
+Username:	mcranmer
+Group:		apa-511-01
+Nodes:		aw-4r14-n03 aw-4r14-n18 aw-4r14-n19 aw-4r14-n33 aw-4r14-n34 
+aw-4r14-n35 aw-4r14-n36 aw-4r14-n37 aw-4r14-n39 aw-4r14-n40
+End PBS Prologue Sun Aug 30 20:28:44 EDT 2015 1440980924
+----------------------------------------
+----------------------------------------
+Begin PBS Epilogue Sun Aug 30 20:52:39 EDT 2015 1440982359
+Job ID:		38710313.gm-1r16-n04.guillimin.clumeq.ca
+Username:	mcranmer
+Group:		apa-511-01
+Job Name:	jng
+Session:	19012
+Limits:		neednodes=10:ppn=2:gpus=2,nodes=10:ppn=2:gpus=2,walltime=06:00:00
+Resources:	cput=06:07:52,energy_used=0,mem=2281364kb,vmem=3311518848kb,walltime=00:23:55
+Queue:		k20
+Account:	apa-511-aa
+Exit code:	271
+Nodes:	aw-4r14-n03 aw-4r14-n18 aw-4r14-n19 aw-4r14-n33 aw-4r14-n34 aw-4r14-n35 
+aw-4r14-n36 aw-4r14-n37 aw-4r14-n39 aw-4r14-n40
+Killing leftovers...
+
+End PBS Epilogue Sun Aug 30 20:52:39 EDT 2015 1440982359
+----------------------------------------
