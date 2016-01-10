@@ -1,6 +1,6 @@
 #compiler
-#CC = g++
-CC = mpic++
+CC = g++
+#CC = mpic++
 
 #flags for compiler - try to optimize
 CFLAGS = -c -Wall -g -O3 -I/usr/lib64/

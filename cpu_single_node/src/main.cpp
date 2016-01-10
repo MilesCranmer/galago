@@ -3,7 +3,7 @@
 //call everything
 #include <stdio.h> //simple output
 #include <stdlib.h>
-#include <mpi.h> //incorporates mpi capabilities
+//#include <mpi.h> //incorporates mpi capabilities
 #include <fstream> //file writing
 #include <iomanip> //setprecision()
 #include <iostream>
@@ -40,7 +40,7 @@ int main(int argc, char * argv[])
 #pragma omp parallel for
     for (int i = 0; i < 100; i ++)
     {
-        printf("Integer %d\n",i);
+        printf("Integer %d, threads %d\n",i, omp_get_num_threads());
     }
 	//read in some counts to practice on
 	double *counts;
