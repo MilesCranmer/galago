@@ -3,10 +3,10 @@ CC = g++
 #CC = mpic++
 
 #flags for compiler - try to optimize
-CFLAGS = -c -Wall -g -I/usr/lib64/
+CFLAGS = -c -Wall -g -O3 -I/usr/lib64/
 
-#Linker settings (need -lgmpxx -lgmp for gmp, -fopenmp for omp)
-LDFLAGS = -fopenmp -lprofiler
+#Linker settings (need -lgmpxx -lgmp for gmp, -fopenmp for omp, -lprofiler for gperftools)
+LDFLAGS = -fopenmp 
 
 #where sources and objects are
 SOURCES = src/main.cpp
@@ -17,7 +17,7 @@ EXE = galago
 all: $(EXE)
 
 $(EXE): $(OBJ)
-	$(CC) $(OBJ) -o $@ -Wl,--no-as-needed -fopenmp -lprofiler -Wl,--as-needed
+	$(CC) $(OBJ) -o $@ -Wl,--no-as-needed $(LDFLAGS) -Wl,--as-needed
 
 build/%.o: src/%.cpp
 	$(CC) $(CFLAGS) $(LDFLAGS) $< -o $@ 

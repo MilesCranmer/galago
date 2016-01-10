@@ -255,6 +255,8 @@ __global__ void create_binnings(double *counts, int *mvals,
 }
 */
 //function gets decimal portion of double
+//profiled to be the fasttest possible way
+//compared with mod, floor, remainder.
 double get_decimal (double x) {return x - (int)x;}
 
 /*
@@ -400,7 +402,6 @@ __global__ void fake_bins(unsigned char *t_binning, int length)
 }
 */
 
-
 double t_odds_two(double *counts, int length,
 				  double nu_min, double nu_max,
 				  double nudot_min, double nudot_max,
@@ -453,7 +454,10 @@ double t_odds_two(double *counts, int length,
 			int bins[256] = {0};
 			for (int i = 0; i < length; i ++)
 			{
-				bins[(unsigned char)(get_decimal(counts[i]*(nu+0.5*counts[i]*nudot))*256)]++;
+                //With nudot
+				//bins[(unsigned char)(get_decimal(counts[i]*(nu+0.5*counts[i]*nudot))*256)]++;
+                //without nudot
+				bins[(unsigned char)(get_decimal(counts[i]*nu)*256)]++;
 			}
 			m = 256;
 			odds = 0;
