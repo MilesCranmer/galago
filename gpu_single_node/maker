@@ -1,0 +1,2 @@
+#!/bin/sh
+nvcc -Xcompiler -fopenmp -O3 --compiler-bindir mpic++ src/cuda_main.cpp src/functions.cu -o jng
