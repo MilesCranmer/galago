@@ -3,10 +3,10 @@ CC = g++
 #CC = mpic++
 
 #flags for compiler - try to optimize
-CFLAGS = -c -Wall -g -O3 -I/usr/lib64/
+CFLAGS = -c -Wall -g -I/usr/lib64/ -pg
 
 #Linker settings (need -lgmpxx -lgmp for gmp, -fopenmp for omp)
-LDFLAGS = -fopenmp
+LDFLAGS = -fopenmp 
 
 #where sources and objects are
 SOURCES = src/main.cpp
