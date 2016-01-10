@@ -13,6 +13,7 @@
 #include "bin_write.cpp"//read/write of binary files
 #include "bin_read.cpp"
 #include "functions.cpp"//all statistical functions, search class
+#include <gperftools/profiler.h>
 //#include "structures.h"
 //#include <gmp.h>
 #define MVALS 8
@@ -37,6 +38,7 @@ double t_odds_two(double*,int,double,double,double,double,int,const char*);
 
 int main(int argc, char * argv[])
 {
+    ProfilerStart("/tmp/prof.out");
 #pragma omp parallel for
     for (int i = 0; i < 100; i ++)
     {
@@ -120,5 +122,6 @@ int main(int argc, char * argv[])
 	printf("Process completed. Exiting.\n");
 	free(logFacts);
 	free(counts);
+    ProfilerStop();
 	return 0;
 }
