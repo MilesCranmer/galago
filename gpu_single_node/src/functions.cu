@@ -383,10 +383,107 @@ __global__ void fake_bins(unsigned char *t_binning, int length)
 	t_binning[length+idx] = (unsigned char) idx;
 }
 
+__global__ void best_five(double *counts, int length, double *odds, 
+                          unsigned long long per, double nu_min,
+                          double d_nu, double *logFacts)
+{
+    //get ID of this core.
+	int idx = blockIdx.x*blockDim.x+threadIdx.x;
+    //make sure last piece
+	if (idx < length-1)
+	{
+        double start = per*d_nu*idx+nu_min;
+        double end = start + per*d_nu;
+		for (double
+		     nu =  start;
+			 nu <= end;
+			 nu += d_nu)
+        {
+            double odds = 0;
+            double om1 = 0;
+            int m;
+            //nudot=-Pdot/P^2=-v^2*Pdot
+            //d_nudot=-nu^2*d_nudot
+            //dPdot=Pmin/T^2*P=1/(numax*T^2*nu)
+            //for (double
+            //        nudot =  nudot_min;
+            //        nudot <= nudot_max;
+            //        nudot += d_nudot)
+            {
+                int bins[256] = {0};
+                for (int i = 0; i < length; i ++)
+                {
+                    //With nudot
+                    //bins[(unsigned char)(get_decimal(counts[i]*(nu+0.5*counts[i]*nudot))*256)]++;
+                    //without nudot
+                    bins[(unsigned char)(get_decimal(counts[i]*nu)*256)]++;
+                }
+                m = 256;
+                odds = 0;
+                om1 = 0;
+                for (int j = 0; j < 256; j++)
+                {
+                    om1+=logFacts[bins[j]];
+                }
+                om1  += logFacts[255]-logFacts[length+255]+((double)length)*log(256);
+                odds += exp(om1);
+                for (int k = 1; k < 8; k++)
+                {
+                    /*
+                       for (int x = 0; x < m; x ++)
+                       {
+                       printf("%d,",binned[x]);
+                       }
+                       printf("\n");
+                     */
+                    m = m >> 1;
+                    //make the pointers
+                    reduce_bins_two(bins,m);
+                    //	histogram.resize(m);
+                    //	binned.resize(m);
+                    om1 = 0;
+                    //for (int j = 0; j < m; j++)
+                    //printf("%d,",binned[j]);
+                    //printf("\n");
+                    for (int j = 0; j < m; j++)
+                    {
+                        om1+=logFacts[bins[j]];
+                    }
+                    om1  += logFacts[m-1]-logFacts[length+m-1]+((double)length)*log(m);
+                    odds += exp(om1);
+                }
+                //if (odds > 1e-3)
+                odds /= 8;
+                odds *= d_nu/nu;
+        }
+	}
+}
+
+
 double t_odds_two(double *counts_h, int length,
-				  double nu_min, double nu_max,
-				  double nudot_min, double nudot_max,
-				  int verbosity, const char* filename)
+                  double nu_min, double nu_max,
+                  double nudot_min, double nudot_max,
+                  int verbosity, const char* filename)
+{
+    //GTX 970 has 1664 cuda cores. 832 per block
+    int cores = 1664;
+    double d_nu = 1/counts_h[length-1];
+    thrust::device_vector<double> counts_d(counts_h, counts_h+length);
+    double *counts_d_pointer = thrust::raw_pointer_cast(counts_d.data());
+    //calculate number of frequencies to iterate
+    unsigned long long op = (unsigned long long)(nu_max-nu_min)/(d_nu);
+    unsigned long long per = (unsigned long long)(op/1664.);
+    //each thread gets 5 odds allocated to it. Should give the best.
+    thrust::device_vector<double> odds(5*cores);
+
+    return 0;
+}
+				 
+
+double t_odds_two_old(double *counts_h, int length,
+				      double nu_min, double nu_max,
+				      double nudot_min, double nudot_max,
+				      int verbosity, const char* filename)
 {
 	//the entered mvals should be 2^1 up to 2^8
 	try
