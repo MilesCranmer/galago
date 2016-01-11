@@ -383,15 +383,25 @@ __global__ void fake_bins(unsigned char *t_binning, int length)
 	t_binning[length+idx] = (unsigned char) idx;
 }
 
+__device__ void reduce_bins(int* bins, int m)
+{
+    for (int i = 0; i < m; i ++)
+    {
+        bins[i] = bins[2*i]+bins[2*i+1];
+    }
+}
+
 __global__ void best_five(double *counts, int length, double *odds, 
                           unsigned long long per, double nu_min,
-                          double d_nu, double *logFacts)
+                          double d_nu, double *logFacts_d,
+                          double *nus)
 {
     //get ID of this core.
 	int idx = blockIdx.x*blockDim.x+threadIdx.x;
     //make sure last piece
 	if (idx < length-1)
 	{
+        double best[5][3]={0};
         double start = per*d_nu*idx+nu_min;
         double end = start + per*d_nu;
 		for (double
@@ -402,6 +412,7 @@ __global__ void best_five(double *counts, int length, double *odds,
             double odds = 0;
             double om1 = 0;
             int m;
+            double nudot = 0;
             //nudot=-Pdot/P^2=-v^2*Pdot
             //d_nudot=-nu^2*d_nudot
             //dPdot=Pmin/T^2*P=1/(numax*T^2*nu)
@@ -423,22 +434,15 @@ __global__ void best_five(double *counts, int length, double *odds,
                 om1 = 0;
                 for (int j = 0; j < 256; j++)
                 {
-                    om1+=logFacts[bins[j]];
+                    om1+=logFacts_d[bins[j]];
                 }
-                om1  += logFacts[255]-logFacts[length+255]+((double)length)*log(256);
+                om1  += logFacts_d[255]-logFacts_d[length+255]+((double)length)*log(256.0);
                 odds += exp(om1);
                 for (int k = 1; k < 8; k++)
                 {
-                    /*
-                       for (int x = 0; x < m; x ++)
-                       {
-                       printf("%d,",binned[x]);
-                       }
-                       printf("\n");
-                     */
                     m = m >> 1;
                     //make the pointers
-                    reduce_bins_two(bins,m);
+                    reduce_bins(bins,m);
                     //	histogram.resize(m);
                     //	binned.resize(m);
                     om1 = 0;
@@ -447,16 +451,50 @@ __global__ void best_five(double *counts, int length, double *odds,
                     //printf("\n");
                     for (int j = 0; j < m; j++)
                     {
-                        om1+=logFacts[bins[j]];
+                        om1+=logFacts_d[bins[j]];
                     }
-                    om1  += logFacts[m-1]-logFacts[length+m-1]+((double)length)*log(m);
+                    om1  += logFacts_d[m-1]-logFacts_d[length+m-1]+((double)length)*log((double)m);
                     odds += exp(om1);
                 }
                 //if (odds > 1e-3)
                 odds /= 8;
                 odds *= d_nu/nu;
+                //put in new best.
+				if (odds > 0.1 && odds > best[4][0])
+				{
+					for (int i = 3; i >= 0; i --)
+					{
+						if (odds < best[i][0])
+						{
+							for (int j = 3; j >= i + 1; j--) 
+							{
+								best[j+1][0] = best[j][0];
+								best[j+1][1] = best[j][1];
+								best[j+1][2] = best[j][2];
+							}
+							best[i+1][0] = odds;
+							best[i+1][1] = nu;
+							best[i+1][2] = nudot;
+							break;
+						}
+						else if (i == 0)
+						{
+							for (int j = 3; j >= 0; j--) 
+							{
+								best[j+1][0] = best[j][0];
+								best[j+1][1] = best[j][1];
+								best[j+1][2] = best[j][2];
+							}
+							best[0][0] = odds;
+							best[0][1] = nu;
+							best[0][2] = nudot;
+						}
+					}
+				}
+            }
         }
-	}
+    }
+    return;
 }
 
 
@@ -474,8 +512,24 @@ double t_odds_two(double *counts_h, int length,
     unsigned long long op = (unsigned long long)(nu_max-nu_min)/(d_nu);
     unsigned long long per = (unsigned long long)(op/1664.);
     //each thread gets 5 odds allocated to it. Should give the best.
-    thrust::device_vector<double> odds(5*cores);
-
+    thrust::device_vector<double> odds_d(5*cores);
+    double *odds_pointer = thrust::raw_pointer_cast(odds_d.data());
+    thrust::device_vector<double>   nus(5*cores);
+    double *nus_pointer = thrust::raw_pointer_cast(nus.data());
+    thrust::device_vector<double> logFacts_d(logFacts, logFacts+maxFact);
+    double *logFacts_d_pointer = thrust::raw_pointer_cast(logFacts_d.data());
+    best_five<<<2,1024>>>(counts_d_pointer,length,odds_pointer,per,
+                          nu_min,d_nu,logFacts_d_pointer,nus_pointer);
+                        
+				//t_bin_counts_two<<<blocks,1024>>>(counts_d_pointer, length, t_binning_pointer, nu, nudot);
+/*__global__ void best_five(double *counts, int length, double *odds, 
+                          unsigned long long per, double nu_min,
+                          double d_nu, double *logFacts,
+__global__ void best_five(double *counts, int length, double *odds, 
+                          unsigned long long per, double nu_min,
+                          double d_nu, double *logFacts_d,
+                          double *nus)
+*/
     return 0;
 }
 				 
