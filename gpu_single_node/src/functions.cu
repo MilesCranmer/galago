@@ -408,13 +408,6 @@ double t_odds_two(double *counts_h, int length,
 		int counter = 0;
 		double best[5][3] = {0};
 		unsigned long opct = (unsigned long)(0.01*(nu_max-nu_min)/d_nu);
-		/*
-		double best[0][] = {0,0,0};
-		double best[1][] = {0,0,0};
-		double best[2][] = {0,0,0};
-		double best[3][] = {0,0,0};
-		double best[4][] = {0,0,0};
-		*/
 		for (double
 		     nu =  nu_min;
 			 nu <= nu_max;

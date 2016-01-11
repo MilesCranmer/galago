@@ -1,4 +1,3 @@
-/*
 #include <thrust/advance.h>
 #include <thrust/system_error.h>
 #include <thrust/transform.h>
@@ -11,17 +10,16 @@
 #include <thrust/adjacent_difference.h>
 #include <thrust/iterator/constant_iterator.h>
 #include <thrust/iterator/counting_iterator.h>
-*/
 #include <math.h> //for math
 //#include <gmpxx.h> //for precision calculation
 #include <vector> //to hold search results
-#include <omp.h>
 #include <stdio.h>
 #include <fstream>
 #include <iterator>
 #include <iomanip>
 #include <algorithm> //compute max of vector
 #include <numeric> //compute sum of vector (accumulate)
+#include <omp.h>
 #include "structures.h"
 //speed not important for final statistics, so optimising this is silly
 #define PI 3.14159265359
@@ -255,11 +253,8 @@ __global__ void create_binnings(double *counts, int *mvals,
 }
 */
 //function gets decimal portion of double
-//profiled to be the fasttest possible way
-//compared with mod, floor, remainder.
-double get_decimal (double x) {return x - (int)x;}
+__device__ double get_decimal (double x) {return x - (int)x;}
 
-/*
 __global__ void create_binnings(double *counts, int *mvals,
 								int length,
 								int n_mvals, double nu, double nudot,
@@ -279,12 +274,9 @@ __global__ void create_binnings(double *counts, int *mvals,
 		}
 	}
 }
-*/
 
 //function makes CUDA calls
-/*
 unsigned char *get_bins(double *counts_d, int length, double *counts_h,
-
 						  int *mvals_d, int *mvals_h, int n_mvals, double nu, double nudot)
 {
 	unsigned char *binning_h;
@@ -320,14 +312,12 @@ unsigned char *get_bins(double *counts_d, int length, double *counts_h,
 	cudaFree(mvals_d);
 	return binning_h;
 }
-*/
 
 /*__global__ void t_bin_counts(thrust::device_vector<double> counts,
 							 thrust::device_vector<unsigned char> t_binning,
 							 double nu, double nudot,
 							 thrust::device_vector<int> mvals)
 							 */
-/*
 __global__ void t_bin_counts(double* counts, int length,
 							 unsigned char* t_binning,
 							 double nu, double nudot,
@@ -347,9 +337,7 @@ __global__ void t_bin_counts(double* counts, int length,
 		}
 	}
 }
-*/
 
-/*
 __global__ void t_bin_counts_two(double* counts, int length,
 							 unsigned char* t_binning,
 							 double nu, double nudot)
@@ -360,9 +348,7 @@ __global__ void t_bin_counts_two(double* counts, int length,
 		t_binning[idx] = (unsigned char)(get_decimal(counts[idx]*(nu+0.5*counts[idx]*nudot))*256);
 	}
 }
-*/
 
-/*
 __global__ void count_bins(unsigned char *bins, int *histogram_ss, int length)
 {
 
@@ -384,162 +370,222 @@ __global__ void get_histo (int *histogram, int *histogram_ss)
 	if (histogram_ss[256+idx] != -1 && histogram_ss[idx] != -1)
 		histogram[idx] = histogram_ss[256+idx] - histogram[idx];
 }
-*/
 //function reduces bins by a factor of two
-void reduce_bins_two(int* bins, int m)
+__global__ void reduce_bins_two(int* bins)
 {
-	for (int i = 0; i < m; i ++)
-	{
-		bins[i] = bins[2*i]+bins[2*i+1];
-	}
+	int idx = threadIdx.x;	
+	bins[idx] = bins[2*idx]+bins[2*idx+1];
 }
 
-/*
 __global__ void fake_bins(unsigned char *t_binning, int length)
 {
 	int idx = threadIdx.x;
 	t_binning[length+idx] = (unsigned char) idx;
 }
-*/
 
-double t_odds_two(double *counts, int length,
+double t_odds_two(double *counts_h, int length,
 				  double nu_min, double nu_max,
 				  double nudot_min, double nudot_max,
 				  int verbosity, const char* filename)
 {
 	//the entered mvals should be 2^1 up to 2^8
-	double d_nu = 1/counts[length-1];
-	//double d_nu = 1e-5;
-	//double d_nudot = 1e-8;
-	//printf("Length: %d\n",length);
-	unsigned long long opct = (unsigned long long)(0.01*(nu_max-nu_min)/d_nu);
-	/*
-	   double best[0][] = {0,0,0};
-	   double best[1][] = {0,0,0};
-	   double best[2][] = {0,0,0};
-	   double best[3][] = {0,0,0};
-	   double best[4][] = {0,0,0};
-	   */
-	/*for    (nu = nu_min;
-			nu <= nu_max;
-			nu += d_nu)
-            */
-    ofstream blank_file;
-    blank_file.open(filename,ofstream::out | ofstream::trunc);
-    blank_file.close();
-
-#pragma omp parallel for 
-    for        (unsigned long long i = 0; 
-                i < opct*100;
-                i++)
+	try
 	{
-        double odds = 0;
-        double om1 = 0;
-        int m;
+		double d_nu = 1/counts_h[length-1];
+		//double d_nu = 1e-5;
+		//double d_nudot = 1e-8;
+		//printf("Length: %d\n",length);
+		thrust::device_vector<double> counts_d(counts_h, counts_h+length);
+		thrust::device_vector<unsigned char> t_binning(length,0);
+		thrust::host_vector<int> binned(256,0);
+		double *counts_d_pointer = thrust::raw_pointer_cast(counts_d.data());
+		unsigned char *t_binning_pointer = thrust::raw_pointer_cast(t_binning.data());
+		unsigned int blocks = (unsigned int)(length/1024.0 + 1.0);
+		unsigned long counteri = 0;
+		double odds = 0;
+		double om1 = 0;
+		int m;
+		int counter = 0;
+		double best[5][3] = {0};
+		unsigned long opct = (unsigned long)(0.01*(nu_max-nu_min)/d_nu);
+		for (double
+		     nu =  nu_min;
+			 nu <= nu_max;
+			 nu += d_nu)
+		{
 		//	for (double
 		//		 nudot =  nudot_min;
 		//		 nudot <= nudot_max;
 		//		 nudot += d_nudot)
-        double nu = nu_min + i*d_nu;
-		//double d_pdot = d_nu*d_nu/(nu_max*nu);
-		double d_nudot = nu*d_nu*d_nu/(nu_max);
-		//nudot=-Pdot/P^2=-v^2*Pdot
-		//d_nudot=-nu^2*d_nudot
-		//dPdot=Pmin/T^2*P=1/(numax*T^2*nu)
-		for (double
-				nudot =  nudot_min;
-				nudot <= nudot_max;
-				nudot += d_nudot)
-		{
-			int bins[256] = {0};
-			for (int i = 0; i < length; i ++)
+			
+			//double d_pdot = d_nu*d_nu/(nu_max*nu);
+			double d_nudot = nu*d_nu*d_nu/(nu_max);
+			//nudot=-Pdot/P^2=-v^2*Pdot
+			//d_nudot=-nu^2*d_nudot
+			//dPdot=Pmin/T^2*P=1/(numax*T^2*nu)
+			for (double
+				 nudot =  nudot_min;
+				 nudot <= nudot_max;
+				 nudot += d_nudot)
 			{
-                //With nudot
-				//bins[(unsigned char)(get_decimal(counts[i]*(nu+0.5*counts[i]*nudot))*256)]++;
-                //without nudot
-				bins[(unsigned char)(get_decimal(counts[i]*nu)*256)]++;
+
+				counteri ++;
+				if (counteri >= opct)
+				{
+					counteri = 0;
+					printf("%f percent of the way.\n",100.0*(nu-nu_min)/(nu_max-nu_min));
+					ofstream file(filename, ios::app);
+					file << "range,"; 
+					file << scientific << setprecision(10) << nu_min << "-";
+					file << scientific << setprecision(10) << nu << "!";
+					file << scientific << setprecision(10) << nu_max << ",";
+					file << scientific << nudot_min << "-";
+					file << scientific << nudot_max << "\n";
+					for (int i = 0; i < 5; i ++)
+					{
+						//printf("The %dth best odds are %e for a nu of %.9e and nudot -%.9e\n",
+						//i+1,best[i][0],best[i][1],best[i][2]);
+						file << scientific << best[i][0] << ",";
+						file << scientific << setprecision(10) << best[i][1] << ",";
+						file << scientific << -best[i][2];
+						file << "\n";
+					}
+					file.close();
+				}
+				t_bin_counts_two<<<blocks,1024>>>(counts_d_pointer, length, t_binning_pointer, nu, nudot);
+				thrust::sort(t_binning.begin(), t_binning.end());
+				thrust::device_vector<int> histogram(256,0);
+
+				thrust::counting_iterator<int> search_begin(0);
+				thrust::upper_bound(t_binning.begin(), t_binning.end(),
+									search_begin, search_begin + 256,
+									histogram.begin());
+				thrust::adjacent_difference(histogram.begin(), histogram.end(),
+										    histogram.begin());
+				binned=histogram;
+				m = 256;
+				odds = 0;
+				om1 = 0;
+				for (int j = 0; j < 256; j++)
+				{
+					om1+=logFacts[binned[j]];
+				}
+				om1  += logFacts[255]-logFacts[length+255]+((double)length)*log(256);
+				odds += exp(om1);
+				for (int k = 1; k < 8; k++)
+				{
+					/*
+					for (int x = 0; x < m; x ++)
+					{
+						printf("%d,",binned[x]);
+					}
+					printf("\n");
+					*/
+					m = m >> 1;
+					//printf("m=%d\n",m);
+					//make the pointers
+					int *bins_d = thrust::raw_pointer_cast(histogram.data());
+					reduce_bins_two<<<1,m>>>(bins_d);
+				//	histogram.resize(m);
+				//	binned.resize(m);
+					binned = histogram;
+					om1 = 0;
+					//for (int j = 0; j < m; j++)
+					//printf("%d,",binned[j]);
+					//printf("\n");
+					for (int j = 0; j < m; j++)
+					{
+						om1+=logFacts[binned[j]];
+					}
+					om1  += logFacts[m-1]-logFacts[length+m-1]+((double)length)*log(m);
+					odds += exp(om1);
+				}
+				//if (odds > 1e-3)
+				odds /= 8;
+				odds *= d_nu/nu;
+				//results.nu.push_back(nu);
+				//results.nudot.push_back(nudot);
+				//results.odds.push_back(odds);
+				//if (counter %50000==0 || odds > 1e-4)
+				/*
+				if (verbosity == 2 || (verbosity == 1 && odds > 1e-3) || (verbosity == 0 && odds > 1e-1))
+				{
+					printf("Search %d gives odds of %e for nu %.9e and nudot -%.9e\n",counter,odds,nu,nudot);
+				}
+				else if (verbosity == 1 && counter%50000==0)
+				{
+					printf("On search %d, and nu=%.9e Hz\n",counter,nu);	
+				}
+				*/
+				
+				if (odds > best[4][0])
+				{
+					for (int i = 3; i >= 0; i --)
+					{
+						if (odds < best[i][0])
+						{
+							for (int j = 3; j >= i + 1; j--) 
+							{
+								best[j+1][0] = best[j][0];
+								best[j+1][1] = best[j][1];
+								best[j+1][2] = best[j][2];
+							}
+							best[i+1][0] = odds;
+							best[i+1][1] = nu;
+							best[i+1][2] = nudot;
+							break;
+						}
+						else if (i == 0)
+						{
+							for (int j = 3; j >= 0; j--) 
+							{
+								best[j+1][0] = best[j][0];
+								best[j+1][1] = best[j][1];
+								best[j+1][2] = best[j][2];
+							}
+							best[0][0] = odds;
+							best[0][1] = nu;
+							best[0][2] = nudot;
+						}
+					}
+				}
 			}
-			m = 256;
-			odds = 0;
-            om1 = 0;
-            for (int j = 0; j < 256; j++)
-            {
-                om1+=logFacts[bins[j]];
-            }
-            om1  += logFacts[255]-logFacts[length+255]+((double)length)*log(256);
-            odds += exp(om1);
-            for (int k = 1; k < 8; k++)
-            {
-                /*
-                   for (int x = 0; x < m; x ++)
-                   {
-                   printf("%d,",binned[x]);
-                   }
-                   printf("\n");
-                   */
-                m = m >> 1;
-                //make the pointers
-                reduce_bins_two(bins,m);
-                //	histogram.resize(m);
-                //	binned.resize(m);
-                om1 = 0;
-                //for (int j = 0; j < m; j++)
-                //printf("%d,",binned[j]);
-                //printf("\n");
-                for (int j = 0; j < m; j++)
-                {
-                    om1+=logFacts[bins[j]];
-                }
-                om1  += logFacts[m-1]-logFacts[length+m-1]+((double)length)*log(m);
-                odds += exp(om1);
-            }
-            //if (odds > 1e-3)
-            odds /= 8;
-            odds *= d_nu/nu;
-            //results.nu.push_back(nu);
-            //results.nudot.push_back(nudot);
-            //results.odds.push_back(odds);
-            //if (counter %50000==0 || odds > 1e-4)
-            /*
-               if (verbosity == 2 || (verbosity == 1 && odds > 1e-3) || (verbosity == 0 && odds > 1e-1))
-               {
-               printf("Search %d gives odds of %e for nu %.9e and nudot -%.9e\n",counter,odds,nu,nudot);
-               }
-               else if (verbosity == 1 && counter%50000==0)
-               {
-               printf("On search %d, and nu=%.9e Hz\n",counter,nu);	
-               }
-               */
-
-
-            //only output good odds
-            if (odds > 1)
-            {
-                printf("Odds are %e for nu=%e\n",odds,nu);
-                ofstream file(filename, ios::app);
-                for (int i = 0; i < 5; i ++)
-                {
-                    file << scientific << odds << ",";
-                    file << scientific << setprecision(10) << nu << ",";
-                    file << scientific << nudot;
-                    file << "\n";
-                }
-                file.close();
-            }
-        }
-    }
-    //results.write_best(10,filename);
-    //best[5][3];
-    //keep reducing bins
-    //int j = results.max_odds_i();
-    //printf("\nThe best odds are: %e, which occur for nu of %e Hz and"
-    //" nudot of -%e Hz/s\n\n",
-    //		results.odds[j], results.nu[j], results.nudot[j]);
-    //printf("%d searches completed\n",counter);
-    return 0;
-
+		}
+		//clear up space
+		counts_d.clear();
+		counts_d.shrink_to_fit();
+		ofstream file(filename, ios::app);
+		file << "range,"; 
+		file << scientific << setprecision(10) << nu_min << "-";
+		file << scientific << setprecision(10) << nu_max << ",";
+		file << scientific << nudot_min << "-";
+		file << scientific << nudot_max << "\n";
+		for (int i = 0; i < 5; i ++)
+		{
+			//printf("The %dth best odds are %e for a nu of %.9e and nudot -%.9e\n",
+				   //i+1,best[i][0],best[i][1],best[i][2]);
+			file << scientific << best[i][0] << ",";
+			file << scientific << setprecision(10) << best[i][1] << ",";
+			file << scientific << -best[i][2];
+			file << "\n";
+		}
+		file.close();
+		//results.write_best(10,filename);
+		//best[5][3];
+		//keep reducing bins
+		//int j = results.max_odds_i();
+		//printf("\nThe best odds are: %e, which occur for nu of %e Hz and"
+			   //" nudot of -%e Hz/s\n\n",
+		//		results.odds[j], results.nu[j], results.nudot[j]);
+		//printf("%d searches completed\n",counter);
+		return 0;
+	}
+	catch(thrust::system_error &err)
+	{
+		std::cerr << "Error doing this: " << err.what() << std::endl;
+		return 1;
+	}
 }
-/*
 
 
 double t_odds(double *counts_h, int length,
@@ -648,7 +694,7 @@ double bins_to_odds(unsigned char *bins, int length,
 		{
 			n[bins[k]]++;
 		}
-	
+		/*
 		#pragma omp parallel
 		{
 			int ni[m];
@@ -667,7 +713,7 @@ double bins_to_odds(unsigned char *bins, int length,
 				n[q] += ni[q];	
 			}
 		}
-		
+		*/
 		for (int l = 0; l < m; l++)
 		{
 			//part of odds equation
@@ -678,11 +724,9 @@ double bins_to_odds(unsigned char *bins, int length,
 	}
 	return odds;
 }
-*/
 
 				
 
-/*
 //Equation from gregory and loredo paper to calcluate odds ratio
 //of m-binned stepwise model w.r.t. constant model
 double log_m_odds_ratio(double *counts, int length, int m, 
@@ -749,8 +793,6 @@ double log_m_odds_ratio(double *counts, int length, int m,
 	om1 += logFacts[m-1]-logFacts[length+m-1]+((double)length)*log(m);
 	return om1;
 }
-*/
-/*
 
 //Equation from gregory and loredo paper to calcluate total odds
 //ratio
@@ -804,4 +846,4 @@ double min_interval(double *counts, int length)
 	}
 	return smallest;
 }
-*/
+
