@@ -391,13 +391,14 @@ __device__ void reduce_bins(int* bins, int m)
     }
 }
 
-__global__ void best_five(double *counts, int length, double *odds, 
+__global__ void best_five(double *counts, int length, double *odds_d, 
                           unsigned long long per, double nu_min,
                           double d_nu, double *logFacts_d,
-                          double *nus)
+                          double *nus_d)
 {
     //get ID of this core.
 	int idx = blockIdx.x*blockDim.x+threadIdx.x;
+    //printf("idx=%d\n",idx);
     //make sure last piece
 	if (idx < length-1)
 	{
@@ -460,8 +461,9 @@ __global__ void best_five(double *counts, int length, double *odds,
                 odds /= 8;
                 odds *= d_nu/nu;
                 //put in new best.
-				if (odds > 0.1 && odds > best[4][0])
+				if (odds > best[4][0])
 				{
+                    //printf("OREONO\n");
 					for (int i = 3; i >= 0; i --)
 					{
 						if (odds < best[i][0])
@@ -493,6 +495,11 @@ __global__ void best_five(double *counts, int length, double *odds,
 				}
             }
         }
+        for (int i = 0; i < 5; i++)
+        {
+            odds_d[i+idx*5] = best[i][0];
+            nus_d[i+idx*5]  = best[i][1];
+        }
     }
     return;
 }
@@ -506,6 +513,7 @@ double t_odds_two(double *counts_h, int length,
     //GTX 970 has 1664 cuda cores. 832 per block
     int cores = 1664;
     double d_nu = 1/counts_h[length-1];
+    printf("Loading counts...\n");
     thrust::device_vector<double> counts_d(counts_h, counts_h+length);
     double *counts_d_pointer = thrust::raw_pointer_cast(counts_d.data());
     //calculate number of frequencies to iterate
@@ -514,13 +522,23 @@ double t_odds_two(double *counts_h, int length,
     //each thread gets 5 odds allocated to it. Should give the best.
     thrust::device_vector<double> odds_d(5*cores);
     double *odds_pointer = thrust::raw_pointer_cast(odds_d.data());
-    thrust::device_vector<double>   nus(5*cores);
-    double *nus_pointer = thrust::raw_pointer_cast(nus.data());
+    thrust::device_vector<double>   nus_d(5*cores);
+    double *nus_pointer = thrust::raw_pointer_cast(nus_d.data());
+    printf("Loading factorials...\n");
     thrust::device_vector<double> logFacts_d(logFacts, logFacts+maxFact);
     double *logFacts_d_pointer = thrust::raw_pointer_cast(logFacts_d.data());
+    printf("Starting search!\n");
     best_five<<<2,1024>>>(counts_d_pointer,length,odds_pointer,per,
                           nu_min,d_nu,logFacts_d_pointer,nus_pointer);
-                        
+    cudaDeviceSynchronize();
+    printf("Search complete. Retrieving results.\n");
+    thrust::host_vector<double> odds_h = odds_d;
+    thrust::host_vector<double>  nus_h =  nus_d;
+    for (int i = 0; i < nus_h.size(); i++)
+    {
+        if (odds_h[i] > 0)
+            printf("odds = %e, nu = %e\n",odds_h[i],nus_h[i]);
+    }
 				//t_bin_counts_two<<<blocks,1024>>>(counts_d_pointer, length, t_binning_pointer, nu, nudot);
 /*__global__ void best_five(double *counts, int length, double *odds, 
                           unsigned long long per, double nu_min,

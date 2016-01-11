@@ -1,2 +1,3 @@
 #!/bin/sh
-nvcc -Xcompiler -fopenmp -O3 --compiler-bindir mpic++ src/main.cpp src/functions.cu -o galago
+#nvcc -Xcompiler -fopenmp -O3 --compiler-bindir mpic++ src/main.cpp src/functions.cu -o galago
+nvcc -O3 src/main.cpp src/functions.cu -o galago
