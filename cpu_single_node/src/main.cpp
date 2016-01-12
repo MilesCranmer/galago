@@ -13,7 +13,7 @@
 #include "bin_write.cpp"//read/write of binary files
 #include "bin_read.cpp"
 #include "functions.cpp"//all statistical functions, search class
-//#include <gperftools/profiler.h>
+#include <gperftools/profiler.h>
 //#include "structures.h"
 //#include <gmp.h>
 #define MVALS 8

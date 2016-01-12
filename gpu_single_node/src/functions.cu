@@ -41,148 +41,6 @@ using namespace std;
 double log_odds_ratio(double *counts, int length, int m_max, 
 					  double nu, double nudot, bool verbose);
 
-/*
-//Holds the result of searches, and the displaying functions
-//faster to have vectors of the variables within, 
-//rather than a vector of the class
-struct SearchResults
-{
-	//the settings of the search
-	vector<double> nu, nudot;
-	//The odds that this model fits
-	vector<double> odds;
-	//Get average and maximum odds
-	double avg_odds();
-	//return max odds
-	double max_odds()
-	{return *max_element(odds.begin(),odds.end());};
-	//get the position of the max
-	int max_odds_i()
-	{return max_element(odds.begin(), odds.end()) - odds.begin();};
-	//print settings for a specific search
-	void print_settings(int i){printf("%lf\n",nu[i]);};
-	//print all settings
-	void print_stats();
-};
-
-//This object organizes the entire search
-struct PeakSearch
-{
-	//the bounds on the nu search
-	double nu_min,nu_max; 
-	//interval between searches w.r.t nu
-	double d_nu; 
-	//the max number of bins
-	int m_max; 
-	//the bounds on the nudot search
-	//In terms of radians
-	double nudot_min, nudot_max;
-	//interval between searches w.r.t nudot
-	double d_nudot; 
-	//set default parameters
-	void default_params();
-	//Print all of the above parameters
-	void print_params();
-	SearchResults search(double *counts, int length, bool verbose);
-};
-
-//gets the average odds
-double SearchResults::avg_odds()
-{
-	//compute the sum of the odds ratios
-	double sum = accumulate(odds.begin(), odds.end(),0);
-	//get the average, and return
-	return sum/odds.size();
-}
-
-//print some stats about the search
-void SearchResults::print_stats()
-{
-	printf("\nSTATS:\n");
-	printf("The average odds for the search ");
-	printf("are %lf\n",avg_odds());
-	//Get position of max
-	int max_i = max_odds_i();
-	printf("The best odds occur for ");
-	printf("a nu of %lf seconds ",nu[max_i]);
-	printf("and a nudot of %lf radians, which ",nudot[max_i]);
-	printf("give odds of %lf\n",odds[max_i]);
-}
-
-//set defaults
-void PeakSearch::default_params()
-{
-	//the bounds on the nu search
-	//in terms of Hz
-	nu_min = 5;
-	nu_max = 10;
-	//interval between searches w.r.t nu
-	d_nu = (nu_max-nu_min)/30;
-	//the max number of bins
-	m_max = 30;
-	//the bounds on the nudot search
-	//In terms of Hz/s
-	nudot_min = 1e-100;
-	//don't repeat first nudot
-	nudot_max = 2e-100;
-	//interval between searches w.r.t nudot
-	d_nudot = 1e-100;
-}
-
-//Print out all settings
-void PeakSearch::print_params()
-{
-	printf("The nu is tested from %lf to %lf seconds\n",
-		   nu_min,nu_max);
-	printf("The interval of this search is %lf seconds\n",d_nu);
-	printf("The nudot is tested from %lf to %lf radians\n",
-		   nudot_min,nudot_max);
-	printf("The interval of this search is %lf radians\n",d_nudot);
-	printf("The maximum number of bins in the stepwise model is %d\n"
-		,m_max);
-}
-//double log_odds_ratio(double *counts, int length, int m_max, 
-//					  double nu, double nudot, double nu)
-//searches through all settings
-//length is the number of counts, and verbose
-//tells the program how much it should talk
-SearchResults PeakSearch::search(double *counts, int length,
-								 bool verbose)
-{
-	//holds all search settings
-	//an array of three element arrays.
-	SearchResults searches;
-	if(verbose)
-		printf("Starting searches\n");
-	//iterate through possible nus and nudots
-	for (double nu = nu_min; nu <= nu_max; 
-		 nu += d_nu)
-	{
-		for (double nudot = nudot_min; nudot <= nudot_max;
-			 nudot += d_nudot)
-		{
-			//each setting will be in the same index,
-			//so can be accessed later
-			searches.nu.push_back(nu);
-			searches.nudot.push_back(nudot);
-			//finalodds = 1./nmvals/ log(nu_max/nu_min)/log(nudot_max/nudot_min) * dnu/nu * nudotfrac * moddsratio; 
-			double odds = 1;
-			odds *= 1/m_max/log(nu_max/nu_min)/log(nudot_max/nudot_min)*d_nu/nu*fabs(d_nudot/nudot);
-			odds *= log_odds_ratio(counts, length, m_max, 
-								   nu, nudot, verbose);
-			printf("Odds: %f\n", odds);
-			searches.odds.push_back(odds);
-			if(verbose)
-			{	
-				printf("nu=%lf,nudot=%lf,odds=%lf\n",
-						nu,nudot,odds);
-			}
-		}
-	}
-	//return all computed searches
-	return searches;
-}
-*/
 
 //This function returns the choose function
 double log_choose(int first, int second)
@@ -391,10 +249,10 @@ __device__ void reduce_bins(int* bins, int m)
     }
 }
 
-__global__ void best_five(double *counts, int length, double *odds_d, 
+__global__ void best_five(double *counts, int length,// double *odds_d, 
                           unsigned long long per, double nu_min,
-                          double d_nu, double *logFacts_d,
-                          double *nus_d)
+                          double d_nu, double *logFacts_d)
+                         // double *nus_d)
 {
     //get ID of this core.
 	int idx = blockIdx.x*blockDim.x+threadIdx.x;
@@ -402,7 +260,9 @@ __global__ void best_five(double *counts, int length, double *odds_d,
     //make sure last piece
 	if (idx < length-1)
 	{
-        double best[5][3]={0};
+        double odds, om1, nudot;
+        int m, bins[256]={0};
+        //double best[5][3]={0};
         double start = per*d_nu*idx+nu_min;
         double end = start + per*d_nu;
 		for (double
@@ -410,10 +270,9 @@ __global__ void best_five(double *counts, int length, double *odds_d,
 			 nu <= end;
 			 nu += d_nu)
         {
-            double odds = 0;
-            double om1 = 0;
-            int m;
-            double nudot = 0;
+            odds = 0;
+            om1 = 0;
+            nudot = 0;
             //nudot=-Pdot/P^2=-v^2*Pdot
             //d_nudot=-nu^2*d_nudot
             //dPdot=Pmin/T^2*P=1/(numax*T^2*nu)
@@ -422,7 +281,10 @@ __global__ void best_five(double *counts, int length, double *odds_d,
             //        nudot <= nudot_max;
             //        nudot += d_nudot)
             {
-                int bins[256] = {0};
+                for (int i = 0; i < 256; i++)
+                {
+                    bins[i] = 0;
+                }
                 for (int i = 0; i < length; i ++)
                 {
                     //With nudot
@@ -437,8 +299,8 @@ __global__ void best_five(double *counts, int length, double *odds_d,
                 {
                     om1+=logFacts_d[bins[j]];
                 }
-                om1  += logFacts_d[255]-logFacts_d[length+255]+((double)length)*log(256.0);
-                odds += exp(om1);
+                om1  += logFacts_d[255]-logFacts_d[length+255]+((double)length)*__log(256.0);
+                odds += __exp(om1);
                 for (int k = 1; k < 8; k++)
                 {
                     m = m >> 1;
@@ -461,8 +323,10 @@ __global__ void best_five(double *counts, int length, double *odds_d,
                 odds /= 8;
                 odds *= d_nu/nu;
                 //put in new best.
-				if (odds > best[4][0])
+				if (odds > 0.1)
 				{
+                    printf("nu = %e, odds= %e\n", nu, odds);
+                    /*
                     //printf("OREONO\n");
 					for (int i = 3; i >= 0; i --)
 					{
@@ -492,14 +356,17 @@ __global__ void best_five(double *counts, int length, double *odds_d,
 							best[0][2] = nudot;
 						}
 					}
+                    */
 				}
             }
         }
+        /*
         for (int i = 0; i < 5; i++)
         {
             odds_d[i+idx*5] = best[i][0];
             nus_d[i+idx*5]  = best[i][1];
         }
+        */
     }
     return;
 }
@@ -510,44 +377,65 @@ double t_odds_two(double *counts_h, int length,
                   double nudot_min, double nudot_max,
                   int verbosity, const char* filename)
 {
-    //GTX 970 has 1664 cuda cores. 832 per block
-    int cores = 1664;
-    double d_nu = 1/counts_h[length-1];
-    printf("Loading counts...\n");
-    thrust::device_vector<double> counts_d(counts_h, counts_h+length);
-    double *counts_d_pointer = thrust::raw_pointer_cast(counts_d.data());
-    //calculate number of frequencies to iterate
-    unsigned long long op = (unsigned long long)(nu_max-nu_min)/(d_nu);
-    unsigned long long per = (unsigned long long)(op/1664.);
-    //each thread gets 5 odds allocated to it. Should give the best.
-    thrust::device_vector<double> odds_d(5*cores);
-    double *odds_pointer = thrust::raw_pointer_cast(odds_d.data());
-    thrust::device_vector<double>   nus_d(5*cores);
-    double *nus_pointer = thrust::raw_pointer_cast(nus_d.data());
-    printf("Loading factorials...\n");
-    thrust::device_vector<double> logFacts_d(logFacts, logFacts+maxFact);
-    double *logFacts_d_pointer = thrust::raw_pointer_cast(logFacts_d.data());
-    printf("Starting search!\n");
-    best_five<<<2,1024>>>(counts_d_pointer,length,odds_pointer,per,
-                          nu_min,d_nu,logFacts_d_pointer,nus_pointer);
-    cudaDeviceSynchronize();
-    printf("Search complete. Retrieving results.\n");
-    thrust::host_vector<double> odds_h = odds_d;
-    thrust::host_vector<double>  nus_h =  nus_d;
-    for (int i = 0; i < nus_h.size(); i++)
+    try
     {
-        if (odds_h[i] > 0)
-            printf("odds = %e, nu = %e\n",odds_h[i],nus_h[i]);
+        //GTX 970 has 1664 cuda cores. 832 per block
+        int cores = 1664;
+        double d_nu = 1/counts_h[length-1];
+        printf("Loading counts...\n");
+        thrust::device_vector<double> counts_d(counts_h, counts_h+length);
+        double *counts_d_pointer = thrust::raw_pointer_cast(counts_d.data());
+        printf("Loading factorials...\n");
+        thrust::device_vector<double> logFacts_d(logFacts, logFacts+maxFact);
+        double *logFacts_d_pointer = thrust::raw_pointer_cast(logFacts_d.data());
+
+        //calculate number of frequencies to iterate
+        unsigned long long op = (unsigned long long)(nu_max-nu_min)/(d_nu);
+        unsigned long long per = (unsigned long long)(op/1664.);
+        //each thread gets 5 odds allocated to it. Should give the best.
+        /*
+        thrust::device_vector<double> odds_d(5*cores);
+        double *odds_pointer = thrust::raw_pointer_cast(odds_d.data());
+        thrust::device_vector<double>   nus_d(5*cores);
+        double *nus_pointer = thrust::raw_pointer_cast(nus_d.data());
+        */
+        printf("Starting search!\n");
+        best_five<<<2,1024>>>(counts_d_pointer,length,//odds_pointer,
+                per,
+                nu_min,d_nu,logFacts_d_pointer);//,nus_pointer);
+	    cudaError_t error = cudaThreadSynchronize();	
+	    if (error!=cudaSuccess) {printf("Error! %s\n",cudaGetErrorString(error));}
+        printf("Search complete\n");
+        //printf("Search complete. Retrieving results.\n");
+        /*
+        thrust::host_vector<double> odds_h = odds_d;
+        thrust::host_vector<double>  nus_h =  nus_d;
+        for (int i = 0; i < nus_h.size(); i++)
+        {
+            if (odds_h[i] > 0.1)
+                printf("odds = %e, nu = %e\n",odds_h[i],nus_h[i]);
+        }
+        */
+        counts_d.clear();
+        counts_d.shrink_to_fit();
+        //odds_d.clear();
+        //odds_d.shrink_to_fit();
+        logFacts_d.clear();
+        logFacts_d.shrink_to_fit();
+        //nus_d.clear();
+        //nus_d.shrink_to_fit();
+        /*
+        odds_h.clear();
+        odds_h.shrink_to_fit();
+        nus_h.clear();
+        nus_h.shrink_to_fit();
+        */
     }
-				//t_bin_counts_two<<<blocks,1024>>>(counts_d_pointer, length, t_binning_pointer, nu, nudot);
-/*__global__ void best_five(double *counts, int length, double *odds, 
-                          unsigned long long per, double nu_min,
-                          double d_nu, double *logFacts,
-__global__ void best_five(double *counts, int length, double *odds, 
-                          unsigned long long per, double nu_min,
-                          double d_nu, double *logFacts_d,
-                          double *nus)
-*/
+    catch(thrust::system_error &e)
+    {
+        std::cerr << "Error: "<<e.what() << std::endl;
+        exit(-1);
+    }
     return 0;
 }
 				 
